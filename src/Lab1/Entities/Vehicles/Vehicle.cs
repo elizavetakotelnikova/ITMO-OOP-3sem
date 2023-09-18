@@ -16,7 +16,8 @@ public abstract class Vehicle
     public Frame? Frame { get; set; }
     public int Speed { get; set; }
     public Sizes SizeCharacteristics { get; set; }
-
     private protected abstract void TakeDamage(Obstacle obstacle);
+    
+    //calculate price
 
 }
