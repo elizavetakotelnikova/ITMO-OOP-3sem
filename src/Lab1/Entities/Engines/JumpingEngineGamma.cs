@@ -6,6 +6,7 @@ public class JumpingEngineGamma : JumpingEngine
     {
        // _specialfuel = 0;
        SpecialFuel = 0;
+       Range = 100000;
     }
 
     private protected override double CalculateConsumption(double distance)
@@ -13,7 +14,7 @@ public class JumpingEngineGamma : JumpingEngine
         return double.Log(distance);
     }
 
-    private protected override double CalculatePrice(double distance)
+    public override double CalculatePrice(double distance)
     {
         double specialFuel = CalculateConsumption(distance);
         return specialFuel * 1000;

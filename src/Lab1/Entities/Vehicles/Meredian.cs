@@ -16,6 +16,7 @@ public class Meredian : Vehicle
         Frame = new SecondFrame();
         SizeCharacteristics = Sizes.Middle;
         Deflector = new SecondClassDeflector();
-        _hasAntiNeutronEmitter = false;
+        HasAntiNeutronEmitter = false;
+        // _hasAntiNeutronEmitter = false;
     }
 }

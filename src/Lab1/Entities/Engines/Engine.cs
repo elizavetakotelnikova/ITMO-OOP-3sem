@@ -8,5 +8,5 @@ public abstract class Engine
 
     private protected abstract double CalculateConsumption(double distance);
 
-    private protected abstract double CalculatePrice(double distance);
+    public abstract double CalculatePrice(double distance);
 }

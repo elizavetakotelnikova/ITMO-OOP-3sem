@@ -16,6 +16,7 @@ public class Vaclass : Vehicle
         Frame = new SecondFrame();
         SizeCharacteristics = Sizes.Middle;
         Deflector = new FirstClassDeflector();
-        _hasAntiNeutronEmitter = false;
+        HasAntiNeutronEmitter = false;
+        // _hasAntiNeutronEmitter = false;
     }
 }

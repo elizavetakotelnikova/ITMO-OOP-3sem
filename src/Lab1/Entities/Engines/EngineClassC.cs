@@ -12,7 +12,7 @@ public class EngineClassC : Engine
     {
         return distance * 2;
     }
-    private protected override double CalculatePrice(double distance)
+    public override double CalculatePrice(double distance)
     {
         double fuel = CalculateConsumption(distance);
         return fuel * 100;
