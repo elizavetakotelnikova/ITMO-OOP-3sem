@@ -1,3 +1,4 @@
+using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
 using Itmo.ObjectOrientedProgramming.Lab1.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Deflectors;
@@ -7,19 +8,23 @@ public class ThirdClassDeflector : Deflector
     public ThirdClassDeflector()
     {
         SettedPhotonDeflector = null;
-        _health = 200;
+        Health = 200;
         Status = 1;
     }
 
     public override void TakeDamage(Obstacle obstacle)
     {
-        if (obstacle.Size == Sizes.Small)
+        if (obstacle == null)
         {
-            _health -= obstacle.Damage * 0.5;
             return;
         }
 
-        _health -= obstacle.Damage;
+        if (obstacle.Size == Sizes.Small)
+        {
+            Health -= obstacle.Damage * 0.5;
+            return;
+        }
 
+        Health -= obstacle.Damage;
     }
 }

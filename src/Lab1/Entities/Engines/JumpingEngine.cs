@@ -6,5 +6,5 @@ public abstract class JumpingEngine : Engine
     public double SpecialFuel { get; set; }
     public int Range { get; set; }
 
-    //private protected abstract double CalculateConsumption(double distance);
+    // private protected abstract double CalculateConsumption(double distance);
 }

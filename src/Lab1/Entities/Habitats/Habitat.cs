@@ -6,6 +6,6 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Habitats;
 
 public abstract class Habitat
 {
-    public IEnumerable<Engine> EngineTypeAllowed { get; set; }
-    public IEnumerable<Obstacle> ObstacleTypeAllowed { get; set; }
+    public IEnumerable<Engine>? EngineTypeAllowed { get; set; }
+    public IEnumerable<Obstacle>? ObstacleTypeAllowed { get; set; }
 }

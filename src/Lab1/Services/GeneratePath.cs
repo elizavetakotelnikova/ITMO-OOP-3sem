@@ -7,7 +7,7 @@ using Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Services;
 
-public class GeneratePath
+/*public class GeneratePath
 {
     /*public IEnumerable<PathPart> CreatePath(IEnumerable<Habitat> habitats, IEnumerable<Obstacle> obstacles, IEnumerable<Vehicle> vehicles)
     {
@@ -17,9 +17,9 @@ public class GeneratePath
             allParts.Append()
         }
     }*/
-    public PathPart CreatePart(Habitat habitat, IEnumerable<Obstacle> obstacles, IEnumerable<Vehicle> vehicles)
+    /*public PathPart CreatePart(Habitat habitat, IEnumerable<Obstacle> obstacles, IEnumerable<Vehicle> vehicles)
     {
         var currentPart = new PathPart();
         PathPart
     }
-}
+}*/

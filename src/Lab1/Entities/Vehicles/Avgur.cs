@@ -6,17 +6,16 @@ using Itmo.ObjectOrientedProgramming.Lab1.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 
-public class Avgur : Vehicle 
+public class Avgur : Vehicle
 {
     public Avgur()
     {
         ShipStatus = ShipStatus.Working;
-        Speed = 1500; 
-        Engines = new List<Engine>() { new EngineClassE() };
+        Speed = 1500;
+        Engines = new List<Engine>() { new EngineClassE(), new JumpingEngineAlpha() };
         Frame = new SecondFrame();
         SizeCharacteristics = Sizes.Small;
         Deflector = new SecondClassDeflector();
-        HasAntiNeutronEmitter = false;
-        // _hasAntiNeutronEmitter = false;
+        HasAntiNeutronEmitter = false; // _hasAntiNeutronEmitter = false;
     }
 }

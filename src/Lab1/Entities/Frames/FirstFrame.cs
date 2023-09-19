@@ -7,19 +7,24 @@ public class FirstFrame : Frame
 {
     public FirstFrame()
     {
-        _health = 15;
-        Status = 1;
-        // AsteroidsDeleted = 1;
-        // MeteoritsDeleted = 0;
+        // _health = 15;
+        Health = 15;
+        Status = 1; // AsteroidsDeleted = 1; // MeteoritsDeleted = 0;
     }
 
     public override void TakeDamage(Obstacles.Obstacle obstacle, Vehicle ship) // или по одному?
     {
-        if (obstacle.Size > Sizes.Small)
+        if (obstacle == null)
         {
-            _health -= obstacle.Damage * 2;
             return;
         }
-        _health -= obstacle.Damage;
+
+        if (obstacle.Size > Sizes.Small)
+        {
+            Health -= obstacle.Damage * 2;
+            return;
+        }
+
+        Health -= obstacle.Damage;
     }
 }

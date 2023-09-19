@@ -6,7 +6,7 @@ using Itmo.ObjectOrientedProgramming.Lab1.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 
-public class Vaclass : Vehicle 
+public class Vaclass : Vehicle
 {
     public Vaclass()
     {
@@ -16,7 +16,6 @@ public class Vaclass : Vehicle
         Frame = new SecondFrame();
         SizeCharacteristics = Sizes.Middle;
         Deflector = new FirstClassDeflector();
-        HasAntiNeutronEmitter = false;
-        // _hasAntiNeutronEmitter = false;
+        HasAntiNeutronEmitter = false; // _hasAntiNeutronEmitter = false;
     }
 }

@@ -6,17 +6,16 @@ using Itmo.ObjectOrientedProgramming.Lab1.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 
-public class Meredian : Vehicle 
+public class Meredian : Vehicle
 {
-    public Meredian() //анти-нитринным излучателем?????
+    public Meredian()
     {
         ShipStatus = ShipStatus.Working;
-        Speed = 1500; //поменять 
+        Speed = 1500; // поменять
         Engines = new List<Engine>() { new EngineClassE() };
         Frame = new SecondFrame();
         SizeCharacteristics = Sizes.Middle;
         Deflector = new SecondClassDeflector();
-        HasAntiNeutronEmitter = false;
-        // _hasAntiNeutronEmitter = false;
+        HasAntiNeutronEmitter = false; // _hasAntiNeutronEmitter = false;
     }
 }

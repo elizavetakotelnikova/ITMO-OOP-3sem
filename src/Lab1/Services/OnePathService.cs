@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Engines;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Habitats;
@@ -9,30 +8,32 @@ using Itmo.ObjectOrientedProgramming.Lab1.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Pathes;
 
-public class PathPart
+public class OnePathService
 {
-    public PathPart()
+    public OnePathService()
     {
         Length = 0;
         Habitat = null;
         Vehicles = new List<Vehicle>();
         Obstacles = new List<Obstacle>();
         Results = new List<ShipStatus>();
+        SuccessVehicles = new List<Vehicle>();
     }
 
-    public PathPart(double userLength, Habitat userHabitat, IEnumerable<Vehicle> userVehicles, IEnumerable<Obstacle>? userObstacles)
+    public OnePathService(double userLength, Habitat userHabitat, IEnumerable<Vehicle> userVehicles, IEnumerable<Obstacle>? userObstacles)
     {
         Length = userLength;
         Habitat = userHabitat;
         Vehicles = userVehicles;
         Obstacles = new List<Obstacle>();
         Results = new List<ShipStatus>();
+        SuccessVehicles = new List<Vehicle>();
         BestShip = null;
         if (userObstacles != null)
         {
             foreach (Obstacle element in userObstacles)
             {
-                if (Habitat.ObstacleTypeAllowed.Contains(element))
+                if (Habitat != null && Habitat.ObstacleTypeAllowed != null && Habitat.ObstacleTypeAllowed.Contains(element))
                 {
                     Obstacles.Add(element);
                 }
@@ -46,65 +47,26 @@ public class PathPart
     public IEnumerable<Vehicle> Vehicles { get; set; }
     public IList<Obstacle> Obstacles { get; }
     public IList<ShipStatus> Results { get; }
+    public IList<Vehicle> SuccessVehicles { get; }
 
-    public void SeeResult(IEnumerable<Vehicle> allVehicles)
+    public static void CheckRange(Vehicle currentShip, Habitat currentHabitat, double currentLength)
     {
-        IList<Vehicle> successVehicles;
-        foreach (var ship in allVehicles)
+        if (currentShip == null || currentHabitat == null)
         {
-            CheckHabitat(ship);
-            if (ship.ShipStatus != ShipStatus.Working)
-            {
-                Results.Add(ship.ShipStatus);
-            }
-
-            CheckObstacles(Obstacles, ship);
-            if (ship.ShipStatus != ShipStatus.Working)
-            {
-                Results.Add(ship.ShipStatus);
-            }
-
-            CheckRange(ship, Habitat, Length);
-            if (ship.ShipStatus != ShipStatus.Working)
-            {
-                Results.Add(ship.ShipStatus);
-            }
-
-            Results.Add(ShipStatus.Success);
-            successVehicles.Add(ship);
+            return;
         }
 
-        BestShip = BetterShip(Length, successVehicles);
-    }
-    public void CheckHabitat(Vehicle currentShip)
-    {
-        bool allowed = false;
-        foreach (var x in currentShip.Engines)
+        if (currentShip.Engines == null)
         {
-            if (Habitat.EngineTypeAllowed.Contains(x))
-            {
-                allowed = true;
-            }
+            return;
         }
 
-        if (!allowed)
-        {
-            // return ShipStatus.ShipDestroyed;
-            currentShip.ShipStatus = ShipStatus.ShipDestroyed;
-        }
-
-        // return ShipStatus.Working;
-        currentShip.ShipStatus = ShipStatus.Working;
-    }
-
-    public void CheckRange(Vehicle currentShip, Habitat currentHabitat, double currentLength)
-    {
         if (currentHabitat is not HighDensityArea)
         {
             currentShip.ShipStatus = ShipStatus.Fail;
         }
 
-        foreach (var x in currentShip.Engines)
+        foreach (Engine x in currentShip.Engines)
         {
             if (x is JumpingEngine)
             {
@@ -121,9 +83,14 @@ public class PathPart
         currentShip.ShipStatus = ShipStatus.ShipLost;
     }
 
-    public void CheckObstacles(IList<Obstacle> currentObstacles, Vehicle currentShip)
+    public static void CheckObstacles(IList<Obstacle> currentObstacles, Vehicle currentShip)
     {
-        foreach (var x in currentObstacles)
+        if (currentShip == null || currentObstacles == null)
+        {
+            return;
+        }
+
+        foreach (Obstacle x in currentObstacles)
         {
             currentShip.TakeDamage(x);
             /*if (currentShip.ShipStatus > ShipStatus.Working)
@@ -140,10 +107,20 @@ public class PathPart
         Vehicle? optimalVehicle = null;
         double max_price = 0;
         double price;
-        foreach (var x in ships)
+        if (ships == null || Habitat == null)
+        {
+            return null;
+        }
+
+        foreach (Vehicle x in ships)
         {
             price = 0;
-            foreach (var y in x.Engines)
+            if (x.Engines == null || Habitat.EngineTypeAllowed == null)
+            {
+                continue;
+            }
+
+            foreach (Engine y in x.Engines)
             {
                 if (Habitat.EngineTypeAllowed.Contains(y))
                 {
@@ -174,5 +151,71 @@ public class PathPart
         }
 
         return optimalVehicle;
+    }
+
+    public void SeeResult(IEnumerable<Vehicle> allVehicles)
+    {
+        if (allVehicles == null || Habitat == null)
+        {
+            return;
+        }
+
+        foreach (Vehicle ship in allVehicles)
+        {
+            CheckHabitat(ship);
+            if (ship.ShipStatus != ShipStatus.Working)
+            {
+                Results.Add(ship.ShipStatus);
+            }
+
+            CheckObstacles(Obstacles, ship);
+            if (ship.ShipStatus != ShipStatus.Working)
+            {
+                Results.Add(ship.ShipStatus);
+            }
+
+            CheckRange(ship, Habitat, Length);
+            if (ship.ShipStatus != ShipStatus.Working)
+            {
+                Results.Add(ship.ShipStatus);
+            }
+
+            Results.Add(ShipStatus.Success);
+            SuccessVehicles.Add(ship);
+        }
+
+        BestShip = BetterShip(Length, SuccessVehicles);
+    }
+
+    public void CheckHabitat(Vehicle currentShip)
+    {
+        if (currentShip == null || Habitat == null)
+        {
+            return;
+        }
+
+        if (currentShip.Engines == null || Habitat.EngineTypeAllowed == null)
+        {
+            currentShip.ShipStatus = ShipStatus.Fail;
+            return;
+        }
+
+        bool allowed = false;
+        foreach (Engine x in currentShip.Engines)
+        {
+            if (Habitat.EngineTypeAllowed.Contains(x))
+            {
+                allowed = true;
+            }
+        }
+
+        if (!allowed)
+        {
+            // return ShipStatus.ShipDestroyed;
+            currentShip.ShipStatus = ShipStatus.ShipDestroyed;
+        }
+
+        // return ShipStatus.Working;
+        currentShip.ShipStatus = ShipStatus.Working;
     }
 }

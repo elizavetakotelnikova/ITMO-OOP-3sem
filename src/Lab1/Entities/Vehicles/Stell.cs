@@ -6,7 +6,7 @@ using Itmo.ObjectOrientedProgramming.Lab1.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 
-public class Stell : Vehicle 
+public class Stell : Vehicle
 {
     public Stell()
     {
@@ -16,7 +16,6 @@ public class Stell : Vehicle
         Frame = new FirstFrame();
         SizeCharacteristics = Sizes.Small;
         Deflector = new FirstClassDeflector();
-        HasAntiNeutronEmitter = false;
-        // _hasAntiNeutronEmitter = false;
+        HasAntiNeutronEmitter = false; // _hasAntiNeutronEmitter = false;
     }
 }

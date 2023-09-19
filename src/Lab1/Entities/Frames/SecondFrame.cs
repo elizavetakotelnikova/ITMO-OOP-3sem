@@ -7,19 +7,24 @@ public class SecondFrame : Frame
 {
     public SecondFrame()
     {
-        _health = 35; // can take 5 small asteroids or 2 meteorits
+        Health = 35; // can take 5 small asteroids or 2 meteorits
         Status = 1;
     }
 
-    public override void TakeDamage(Obstacles.Obstacle obstacle, Vehicle ship) 
+    public override void TakeDamage(Obstacles.Obstacle obstacle, Vehicle ship)
     {
+        if (obstacle == null)
+        {
+            return;
+        }
+
         if (obstacle.Size == Sizes.Small)
         {
-            _health -= obstacle.Damage * 0.6;
+            Health -= obstacle.Damage * 0.6;
         }
         else
         {
-            _health -= obstacle.Damage * 0.4; 
+            Health -= obstacle.Damage * 0.4;
         }
     }
 }

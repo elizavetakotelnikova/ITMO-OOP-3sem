@@ -8,18 +8,22 @@ public class PhotonDeflector : Deflector
     {
         SettedPhotonDeflector = null;
         Status = 1;
-        _health = 300;
-
+        Health = 300;
     }
 
     public override void TakeDamage(Obstacle obstacle)
     {
+        if (obstacle == null)
+        {
+            return;
+        }
+
         if (obstacle is not Antimatter)
         {
             Status = 0;
             return;
         }
 
-        _health -= obstacle.Damage;
+        Health -= obstacle.Damage;
     }
-} 
+}

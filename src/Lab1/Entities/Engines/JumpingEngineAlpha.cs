@@ -9,14 +9,14 @@ public class JumpingEngineAlpha : JumpingEngine
         Range = 50000;
     }
 
-    private protected override double CalculateConsumption(double distance)
-    {
-        return distance * 2;
-    }
-
     public override double CalculatePrice(double distance)
     {
         double specialFuel = CalculateConsumption(distance);
         return specialFuel * 1000;
+    }
+
+    private protected override double CalculateConsumption(double distance)
+    {
+        return distance * 2;
     }
 }

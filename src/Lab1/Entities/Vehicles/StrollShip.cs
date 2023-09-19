@@ -16,49 +16,6 @@ public class StrollShip : Vehicle
         Frame = new FirstFrame();
         SizeCharacteristics = Sizes.Small;
         Deflector = null;
-        HasAntiNeutronEmitter = false;
-        //_hasAntiNeutronEmitter = false;
-    }
-
-    public override void TakeDamage(Obstacle obstacle)
-    {
-        if (obstacle is CosmoWhale)
-        {
-            /*if (_hasAntiNeutronEmitter)
-            {
-                return;
-            }*/
-            if (HasAntiNeutronEmitter)
-            {
-                return;
-            }
-        }
-
-        if (obstacle is Antimatter)
-        {
-            if (Deflector == null || Deflector.SettedPhotonDeflector == null
-                                  || Deflector.Status == 0 || Deflector.SettedPhotonDeflector.Status == 0)
-            {
-                ShipStatus = ShipStatus.CrewKilled;
-                return;
-            }
-
-            if (Deflector.SettedPhotonDeflector != null && Deflector.SettedPhotonDeflector.Status == 1)
-            {
-                Deflector.SettedPhotonDeflector.TakeDamage(obstacle);
-                Deflector.SettedPhotonDeflector.CheckStatus();
-                return;
-            }
-        }
-
-        if (Deflector != null && Deflector.Status == 1)
-        {
-            Deflector.TakeDamage(obstacle);
-            Deflector.CheckStatus();
-        }
-        else
-        {
-            Frame.TakeDamage(obstacle, this);
-        }
+        HasAntiNeutronEmitter = false; // _hasAntiNeutronEmitter = false;
     }
 }

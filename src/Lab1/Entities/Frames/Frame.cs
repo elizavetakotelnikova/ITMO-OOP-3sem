@@ -4,7 +4,8 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Frames;
 
 public abstract class Frame
 {
-    private protected double _health;
+    // private protected double _health;
+    public double Health { get; set; }
     public ushort Status { get; set; }
     /*private protected int _asteroidsDeleted;
     private protected int _meteoritsDeleted;*/
@@ -12,7 +13,7 @@ public abstract class Frame
 
     public void CheckStatus()
     {
-        if (_health <= 0)
+        if (Health <= 0)
         {
             Status = 0;
         }

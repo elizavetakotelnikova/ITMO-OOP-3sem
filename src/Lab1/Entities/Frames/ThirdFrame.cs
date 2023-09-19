@@ -6,12 +6,17 @@ public class ThirdFrame : Frame
 {
     public ThirdFrame()
     {
-        _health = 103; // can defeat 20 asteroids or 5 meteorits
+        Health = 103; // can defeat 20 asteroids or 5 meteorits
         Status = 1;
     }
 
-    public override void TakeDamage(Obstacles.Obstacle obstacle, Vehicle ship) 
+    public override void TakeDamage(Obstacles.Obstacle obstacle, Vehicle ship)
     {
-        _health = obstacle.Damage * 0.5;
+        if (obstacle == null)
+        {
+            return;
+        }
+
+        Health = obstacle.Damage * 0.5;
     }
 }
