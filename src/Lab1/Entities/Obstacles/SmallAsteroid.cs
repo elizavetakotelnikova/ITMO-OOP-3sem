@@ -7,6 +7,7 @@ public class SmallAsteroid : Obstacle
     public SmallAsteroid()
     {
         Damage = 10;
+        Category = ObstaclesTypes.Asteroid;
         Size = Sizes.Small;
     }
 }

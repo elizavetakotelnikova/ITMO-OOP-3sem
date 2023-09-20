@@ -7,6 +7,7 @@ public class Meteorit : Obstacle
     public Meteorit()
     {
         Damage = 40;
+        Category = ObstaclesTypes.Meteorit;
         Size = Sizes.Middle;
     }
 }

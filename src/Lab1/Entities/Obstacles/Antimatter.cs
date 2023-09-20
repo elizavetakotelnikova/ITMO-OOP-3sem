@@ -7,6 +7,7 @@ public class Antimatter : Obstacle
     public Antimatter()
     {
         Damage = 100;
+        Category = ObstaclesTypes.Antimatter;
         Size = Sizes.Big;
     }
 }

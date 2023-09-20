@@ -33,7 +33,7 @@ public class OnePathService
         {
             foreach (Obstacle element in userObstacles)
             {
-                if (Habitat != null && Habitat.ObstacleTypeAllowed != null && Habitat.ObstacleTypeAllowed.Contains(element))
+                if (Habitat != null && Habitat.ObstacleTypeAllowed != null && Habitat.ObstacleTypeAllowed.Contains(element.Category))
                 {
                     Obstacles.Add(element);
                 }
@@ -64,6 +64,7 @@ public class OnePathService
         if (currentHabitat is not HighDensityArea)
         {
             currentShip.ShipStatus = ShipStatus.Fail;
+            return;
         }
 
         foreach (Engine x in currentShip.Engines)
@@ -74,7 +75,7 @@ public class OnePathService
                 if (currentLength < y.Range)
                 {
                     // return ShipStatus.Working;
-                    currentShip.ShipStatus = ShipStatus.Working;
+                    return;
                 }
             }
         }
@@ -93,13 +94,17 @@ public class OnePathService
         foreach (Obstacle x in currentObstacles)
         {
             currentShip.TakeDamage(x);
-            /*if (currentShip.ShipStatus > ShipStatus.Working)
-            {
-                return currentShip.ShipStatus;
-            }*/
+        }
+    }
+
+    public static bool CheckStatus(Vehicle ship)
+    {
+        if (ship?.ShipStatus == ShipStatus.Working)
+        {
+            return true;
         }
 
-        // return currentShip.ShipStatus;
+        return false;
     }
 
     public Vehicle? BetterShip(double distance, IEnumerable<Vehicle> ships)
@@ -122,7 +127,7 @@ public class OnePathService
 
             foreach (Engine y in x.Engines)
             {
-                if (Habitat.EngineTypeAllowed.Contains(y))
+                if (Habitat.EngineTypeAllowed.Contains(y.Category))
                 {
                     if (y is JumpingEngine)
                     {
@@ -163,21 +168,24 @@ public class OnePathService
         foreach (Vehicle ship in allVehicles)
         {
             CheckHabitat(ship);
-            if (ship.ShipStatus != ShipStatus.Working)
+            if (!CheckStatus(ship))
             {
                 Results.Add(ship.ShipStatus);
+                continue;
             }
 
             CheckObstacles(Obstacles, ship);
-            if (ship.ShipStatus != ShipStatus.Working)
+            if (!CheckStatus(ship))
             {
                 Results.Add(ship.ShipStatus);
+                continue;
             }
 
             CheckRange(ship, Habitat, Length);
-            if (ship.ShipStatus != ShipStatus.Working)
+            if (!CheckStatus(ship))
             {
                 Results.Add(ship.ShipStatus);
+                continue;
             }
 
             Results.Add(ShipStatus.Success);
@@ -203,7 +211,7 @@ public class OnePathService
         bool allowed = false;
         foreach (Engine x in currentShip.Engines)
         {
-            if (Habitat.EngineTypeAllowed.Contains(x))
+            if (Habitat.EngineTypeAllowed.Contains(x.Category))
             {
                 allowed = true;
             }
@@ -213,9 +221,9 @@ public class OnePathService
         {
             // return ShipStatus.ShipDestroyed;
             currentShip.ShipStatus = ShipStatus.ShipDestroyed;
+            return;
         }
 
         // return ShipStatus.Working;
-        currentShip.ShipStatus = ShipStatus.Working;
     }
 }

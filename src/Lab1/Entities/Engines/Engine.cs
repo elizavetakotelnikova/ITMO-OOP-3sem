@@ -1,8 +1,11 @@
+using Itmo.ObjectOrientedProgramming.Lab1.Models;
+
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Engines;
 
 public abstract class Engine
 {
     // private protected double _fuel;
+    public EngineTypes Category { get; set; }
     public double Fuel { get; set; } // private protected double _speed;
 
     public abstract double CalculatePrice(double distance);

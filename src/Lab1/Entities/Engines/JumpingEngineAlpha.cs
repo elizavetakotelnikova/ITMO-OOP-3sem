@@ -1,3 +1,5 @@
+using Itmo.ObjectOrientedProgramming.Lab1.Models;
+
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Engines;
 
 public class JumpingEngineAlpha : JumpingEngine
@@ -5,6 +7,7 @@ public class JumpingEngineAlpha : JumpingEngine
     public JumpingEngineAlpha()
     {
         // _specialfuel = 0;
+        Category = EngineTypes.Jumping;
         SpecialFuel = 0;
         Range = 50000;
     }

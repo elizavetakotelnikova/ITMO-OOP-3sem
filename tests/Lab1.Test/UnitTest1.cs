@@ -26,6 +26,7 @@ public class UnitTest1
             return;
         }
 
-        Assert.True(result.Equals(checking.SuccessVehicles));
+        Assert(result[0] == ShipStatus.Fail);
+        Assert(result.Equals(checking.SuccessVehicles));
     }
 }

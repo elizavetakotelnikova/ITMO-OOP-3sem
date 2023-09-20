@@ -1,9 +1,12 @@
+using Itmo.ObjectOrientedProgramming.Lab1.Models;
+
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Engines;
 
 public class EngineClassC : Engine
 {
     public EngineClassC()
     {
+        Category = EngineTypes.ImpulseDriveStandard;
         Fuel = 0;  // _speed = 1000;  средней  величины
     }
 
