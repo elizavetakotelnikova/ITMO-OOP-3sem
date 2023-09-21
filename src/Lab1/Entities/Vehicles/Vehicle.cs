@@ -50,6 +50,15 @@ public abstract class Vehicle
             }
         }
 
+        if (obstacle is CosmoWhale)
+        {
+            if (Deflector is not ThirdClassDeflector)
+            {
+                ShipStatus = ShipStatus.ShipDestroyed;
+                return;
+            }
+        }
+
         if (Deflector != null && Deflector.Status == 1)
         {
             Deflector.TakeDamage(obstacle);

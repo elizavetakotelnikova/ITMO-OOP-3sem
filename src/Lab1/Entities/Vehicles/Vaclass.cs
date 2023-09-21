@@ -12,7 +12,7 @@ public class Vaclass : Vehicle
     {
         ShipStatus = ShipStatus.Working;
         Speed = 1500;
-        Engines = new List<Engine>() { new EngineClassC(), new JumpingEngineGamma() };
+        Engines = new List<Engine>() { new EngineClassE(), new JumpingEngineGamma() };
         Frame = new SecondFrame();
         SizeCharacteristics = Sizes.Middle;
         Deflector = new FirstClassDeflector();

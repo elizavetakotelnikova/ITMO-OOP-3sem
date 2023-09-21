@@ -17,5 +17,7 @@ public class FirstClassDeflector : Deflector
         {
             Health -= obstacle.Damage;
         }
+
+        CheckStatus();
     }
 }

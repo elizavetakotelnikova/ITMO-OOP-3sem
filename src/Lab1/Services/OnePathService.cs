@@ -63,7 +63,7 @@ public class OnePathService
 
         if (currentHabitat is not HighDensityArea)
         {
-            currentShip.ShipStatus = ShipStatus.Fail;
+            // currentShip.ShipStatus = ShipStatus.Fail;
             return;
         }
 
@@ -72,7 +72,7 @@ public class OnePathService
             if (x is JumpingEngine)
             {
                 var y = (JumpingEngine)x;
-                if (currentLength < y.Range)
+                if (currentLength <= y.Range)
                 {
                     // return ShipStatus.Working;
                     return;
@@ -146,6 +146,7 @@ public class OnePathService
                 if (max_price == 0)
                 {
                     max_price = price;
+                    optimalVehicle = x;
                 }
 
                 if (price < max_price)

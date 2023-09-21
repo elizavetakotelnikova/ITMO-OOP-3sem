@@ -26,5 +26,6 @@ public class SecondClassDeflector : Deflector
         }
 
         Health -= obstacle.Damage;
+        CheckStatus();
     }
 }

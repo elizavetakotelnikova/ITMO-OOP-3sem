@@ -13,7 +13,7 @@ public class Nebula : Habitat
         {
             new EngineClassE(),
         };*/
-        EngineTypeAllowed = new List<EngineTypes>() { EngineTypes.ImpulseDriveStandard };
+        EngineTypeAllowed = new List<EngineTypes>() { EngineTypes.ImpulseDriveExp };
 
         ObstacleTypeAllowed = new List<ObstaclesTypes>() { ObstaclesTypes.CosmoWhale };
     }

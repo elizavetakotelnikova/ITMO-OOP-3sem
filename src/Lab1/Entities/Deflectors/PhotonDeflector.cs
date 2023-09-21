@@ -25,5 +25,6 @@ public class PhotonDeflector : Deflector
         }
 
         Health -= obstacle.Damage;
+        CheckStatus();
     }
 }

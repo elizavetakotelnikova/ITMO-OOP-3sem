@@ -15,7 +15,7 @@ public class Avgur : Vehicle
         Engines = new List<Engine>() { new EngineClassE(), new JumpingEngineAlpha() };
         Frame = new SecondFrame();
         SizeCharacteristics = Sizes.Small;
-        Deflector = new SecondClassDeflector();
+        Deflector = new ThirdClassDeflector();
         HasAntiNeutronEmitter = false; // _hasAntiNeutronEmitter = false;
     }
 }

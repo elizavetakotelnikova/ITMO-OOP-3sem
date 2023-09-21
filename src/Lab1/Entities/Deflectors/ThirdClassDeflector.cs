@@ -8,7 +8,7 @@ public class ThirdClassDeflector : Deflector
     public ThirdClassDeflector()
     {
         SettedPhotonDeflector = null;
-        Health = 200;
+        Health = 201;
         Status = 1;
     }
 
@@ -26,5 +26,6 @@ public class ThirdClassDeflector : Deflector
         }
 
         Health -= obstacle.Damage;
+        CheckStatus();
     }
 }
