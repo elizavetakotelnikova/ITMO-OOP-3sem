@@ -8,7 +8,7 @@ public class PhotonDeflector : Deflector
     {
         SettedPhotonDeflector = null;
         Status = 1;
-        Health = 300;
+        HealthPoints = 300;
     }
 
     public override void TakeDamage(Obstacle obstacle)
@@ -24,7 +24,7 @@ public class PhotonDeflector : Deflector
             return;
         }
 
-        Health -= obstacle.Damage;
+        HealthPoints -= obstacle.Damage;
         CheckStatus();
     }
 }

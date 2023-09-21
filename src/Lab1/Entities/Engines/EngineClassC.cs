@@ -7,7 +7,8 @@ public class EngineClassC : Engine
     public EngineClassC()
     {
         Category = EngineTypes.ImpulseDriveStandard;
-        Fuel = 0;  // _speed = 1000;  средней  величины
+        Fuel = 0;
+        Speed = 10000;
     }
 
     public override double CalculatePrice(double distance)

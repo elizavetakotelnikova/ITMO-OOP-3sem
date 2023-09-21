@@ -1,5 +1,4 @@
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
-using Itmo.ObjectOrientedProgramming.Lab1.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Deflectors;
 
@@ -7,25 +6,25 @@ public class SecondClassDeflector : Deflector
 {
     public SecondClassDeflector()
     {
-        SettedPhotonDeflector = null;
-        Health = 95; // can defeat 10 asteroids and 3 meteorits; посмотреть
+        HealthPoints = 100;
         Status = 1;
+        SettedPhotonDeflector = null;
     }
 
     public override void TakeDamage(Obstacle obstacle)
     {
-        if (obstacle == null)
+        if (obstacle == null || obstacle is Antimatter)
         {
             return;
         }
 
-        if (obstacle.Size == Sizes.Middle)
+        if (obstacle is Meteorit)
         {
-            Health -= obstacle.Damage * 0.8;
+            HealthPoints -= obstacle.Damage * 0.8;
             return;
         }
 
-        Health -= obstacle.Damage;
+        HealthPoints -= obstacle.Damage;
         CheckStatus();
     }
 }

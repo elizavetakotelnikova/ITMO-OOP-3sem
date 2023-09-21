@@ -128,4 +128,23 @@ public class UnitTest1
         // IList<ShipStatus> answer = checking.Results;
         Assert.True(bestShip == secondShip);
     }
+
+    [Fact]
+    public void Test8()
+    {
+        var firstShip = new StrollShip();
+        var secondShip = new Vaclass();
+        IEnumerable<Vehicle> ships = new List<Vehicle>() { firstShip, secondShip };
+        IEnumerable<Obstacle> obstacles = new List<Obstacle>() { new Meteorit(), new Meteorit(), new Meteorit(), new SmallAsteroid() };
+        Habitat densityHabitat = new UsualSpace();
+        double distance = 49000; // middle distance
+        var checking = new OnePathService(distance, densityHabitat, ships, obstacles);
+
+        checking.SeeResult(ships);
+
+        Vehicle? bestShip = checking.BestShip;
+
+        IList<ShipStatus> answer = checking.Results;
+        Assert.True(answer[1] == ShipStatus.ShipDestroyed);
+    }
 }

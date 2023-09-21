@@ -1,3 +1,4 @@
+using System;
 using Itmo.ObjectOrientedProgramming.Lab1.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Engines;
@@ -7,7 +8,8 @@ public class EngineClassE : Engine
     public EngineClassE()
     {
         Category = EngineTypes.ImpulseDriveExp;
-        Fuel = 0; // _speed = 10000; экспоненциальная зависимость
+        Fuel = 0;
+        Speed = Math.Exp(2);
     }
 
     public override double CalculatePrice(double distance)

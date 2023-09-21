@@ -94,6 +94,7 @@ public class OnePathService
         foreach (Obstacle x in currentObstacles)
         {
             currentShip.TakeDamage(x);
+            currentShip.CheckArmorStatus();
         }
     }
 

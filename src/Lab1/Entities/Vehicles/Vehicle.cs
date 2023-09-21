@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Net;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Deflectors;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Engines;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Frames;
@@ -10,23 +9,17 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 
 public abstract class Vehicle
 {
-    // private protected bool _hasAntiNeutronEmitter;
     public bool HasAntiNeutronEmitter { get; set; }
-    public Deflector? Deflector { get; set; }
-    public IEnumerable<Engine>? Engines { get; set; }
+    public Deflector? Deflector { get; protected init; }
+    public IEnumerable<Engine>? Engines { get; protected init; }
     public ShipStatus ShipStatus { get; set; }
-    public Frame? Frame { get; set; } // nullable?
-    public int Speed { get; set; }
+    public Frame? Frame { get; protected init; }
     public Sizes SizeCharacteristics { get; set; }
 
     public void TakeDamage(Obstacle obstacle)
     {
         if (obstacle is CosmoWhale)
         {
-            /*if (_hasAntiNeutronEmitter)
-            {
-                return;
-            }*/
             if (HasAntiNeutronEmitter)
             {
                 return;
@@ -42,7 +35,7 @@ public abstract class Vehicle
                 return;
             }
 
-            if (/*Deflector.SettedPhotonDeflector != null && */Deflector.SettedPhotonDeflector.Status == 1)
+            if (Deflector.SettedPhotonDeflector.Status == 1)
             {
                 Deflector.SettedPhotonDeflector.TakeDamage(obstacle);
                 Deflector.SettedPhotonDeflector.CheckStatus();
@@ -66,7 +59,15 @@ public abstract class Vehicle
         }
         else
         {
-            Frame?.TakeDamage(obstacle, this);
+            Frame?.TakeDamage(obstacle);
+        }
+    }
+
+    public void CheckArmorStatus()
+    {
+        if (Frame?.Status == 0)
+        {
+            ShipStatus = ShipStatus.ShipDestroyed;
         }
     }
 }

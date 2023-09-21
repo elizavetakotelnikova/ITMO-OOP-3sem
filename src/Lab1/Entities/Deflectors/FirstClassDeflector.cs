@@ -6,16 +6,25 @@ public class FirstClassDeflector : Deflector
 {
     public FirstClassDeflector()
     {
-        SettedPhotonDeflector = null;
-        Health = 20; // can defeat 2 asteroids or 1 meteorit;
+        HealthPoints = 20;
         Status = 1;
+        SettedPhotonDeflector = null;
     }
 
     public override void TakeDamage(Obstacle obstacle)
     {
-        if (obstacle != null)
+        if (obstacle == null || obstacle is Antimatter)
         {
-            Health -= obstacle.Damage;
+            return;
+        }
+
+        if (obstacle is SmallAsteroid)
+        {
+            HealthPoints -= obstacle.Damage;
+        }
+        else
+        {
+            HealthPoints -= obstacle.Damage * 0.5;
         }
 
         CheckStatus();

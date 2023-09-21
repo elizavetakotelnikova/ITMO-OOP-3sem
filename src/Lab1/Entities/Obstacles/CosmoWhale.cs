@@ -6,7 +6,7 @@ public class CosmoWhale : Obstacle
 {
     public CosmoWhale()
     {
-        Damage = 200;
+        Damage = 400;
         Category = ObstaclesTypes.CosmoWhale;
         Size = Sizes.Huge;
     }

@@ -11,11 +11,10 @@ public class Vaclass : Vehicle
     public Vaclass()
     {
         ShipStatus = ShipStatus.Working;
-        Speed = 1500;
-        Engines = new List<Engine>() { new EngineClassE(), new JumpingEngineGamma() };
+        Engines = new List<Engine>() { new EngineClassC(), new EngineClassE(), new JumpingEngineGamma() };
         Frame = new SecondFrame();
         SizeCharacteristics = Sizes.Middle;
         Deflector = new FirstClassDeflector();
-        HasAntiNeutronEmitter = false; // _hasAntiNeutronEmitter = false;
+        HasAntiNeutronEmitter = false;
     }
 }

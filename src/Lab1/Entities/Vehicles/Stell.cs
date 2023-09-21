@@ -11,11 +11,10 @@ public class Stell : Vehicle
     public Stell()
     {
         ShipStatus = ShipStatus.Working;
-        Speed = 1500;
         Engines = new List<Engine>() { new EngineClassC(), new JumpingEngineOmega() };
         Frame = new FirstFrame();
         SizeCharacteristics = Sizes.Small;
         Deflector = new FirstClassDeflector();
-        HasAntiNeutronEmitter = false; // _hasAntiNeutronEmitter = false;
+        HasAntiNeutronEmitter = false;
     }
 }

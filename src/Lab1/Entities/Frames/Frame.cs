@@ -1,19 +1,16 @@
-using Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
+using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Frames;
 
-public abstract class Frame
+public abstract class Frame : ICanTakeDamage
 {
-    // private protected double _health;
-    public double Health { get; set; }
-    public ushort Status { get; set; }
-    /*private protected int _asteroidsDeleted;
-    private protected int _meteoritsDeleted;*/
-    public abstract void TakeDamage(Obstacles.Obstacle obstacle, Vehicle ship);
+    public double HealthPoints { get; set; }
+    public ushort Status { get; protected set; }
+    public abstract void TakeDamage(Obstacle obstacle);
 
     public void CheckStatus()
     {
-        if (Health <= 0)
+        if (HealthPoints < 0)
         {
             Status = 0;
         }

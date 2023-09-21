@@ -6,10 +6,10 @@ public class JumpingEngineAlpha : JumpingEngine
 {
     public JumpingEngineAlpha()
     {
-        // _specialfuel = 0;
         Category = EngineTypes.Jumping;
         SpecialFuel = 0;
         Range = 50000;
+        Speed = 50000;
     }
 
     public override double CalculatePrice(double distance)
