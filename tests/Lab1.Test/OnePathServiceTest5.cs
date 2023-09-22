@@ -2,13 +2,13 @@ using Itmo.ObjectOrientedProgramming.Lab1.Entities.Habitats;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Pathes;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
-using Itmo.ObjectOrientedProgramming.Lab1.Models;
 
 namespace Lab1.Test;
+
 [TestFixture]
-public class OnePathServiceTest1
+public class OnePathServiceTest5
 {
-    private IEnumerable<Vehicle>? _ships;
+    private IList<Vehicle>? _ships;
     private Habitat? _habitat;
     private double _distance;
     private OnePathService? _checking;
@@ -16,24 +16,26 @@ public class OnePathServiceTest1
     [SetUp]
     public void Setup()
     {
-        _ships = new List<Vehicle>() { new StrollShip(), new Avgur() };
-        _habitat = new HighDensityArea();
-        _distance = 100000; // middle distance
+        var firstShip = new Avgur();
+        var secondShip = new Stell();
         _obstacles = null;
+        _ships = new List<Vehicle>() { firstShip, secondShip };
+        _habitat = new HighDensityArea();
+        _distance = 80000; // middle distance
         _checking = new OnePathService(_distance, _habitat, _ships, _obstacles);
     }
 
     [Test]
-    public void OnePathServiceStrollShipandAvgurInHighDensityAreaShipDestroyedShipLOstreturned() // underscore is prohibited by the IDE
+    public void OnePathServiceUsualSpaceWithCosmoWhaleFirstShipreturned() // underscore is prohibited by the IDE
     {
-        var result = new List<ShipStatus>() { ShipStatus.ShipDestroyed, ShipStatus.ShipLost };
         if (_ships == null || _checking == null)
         {
             return;
         }
 
+        // var result = new List<ShipStatus>() { ShipStatus.ShipDestroyed, ShipStatus.Success, ShipStatus.Success };
         _checking.SeeResult(_ships);
-        IList<ShipStatus> answer = _checking.Results;
-        Assert.True(result.SequenceEqual(answer));
+        Vehicle? bestShip = _checking.BestShip;
+        Assert.True(bestShip == _ships[1]);
     }
 }

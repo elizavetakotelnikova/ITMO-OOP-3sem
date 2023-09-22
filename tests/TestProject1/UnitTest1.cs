@@ -52,7 +52,7 @@ public class UnitTest1
         IEnumerable<Vehicle> ships = new List<Vehicle>() { new Vaclass(), secondShip };
         IEnumerable<Obstacle> obstacles = new List<Obstacle>() { new Antimatter() };
         Habitat densityHabitat = new HighDensityArea();
-        double distance = 49000; // middle distance
+        double distance = 49000;
         var checking = new OnePathService(distance, densityHabitat, ships, obstacles);
         var result = new List<ShipStatus>() { ShipStatus.CrewKilled, ShipStatus.Success };
         checking.SeeResult(ships);
