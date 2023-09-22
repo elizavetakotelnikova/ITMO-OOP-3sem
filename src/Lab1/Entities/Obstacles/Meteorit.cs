@@ -5,9 +5,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
 public class Meteorit : Obstacle
 {
     public Meteorit()
+        : base(40, ObstaclesTypes.Meteorit, Sizes.Middle)
     {
-        Damage = 40;
-        Category = ObstaclesTypes.Meteorit;
-        Size = Sizes.Middle;
     }
 }

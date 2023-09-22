@@ -3,14 +3,13 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Frames;
 public class ThirdFrame : Frame
 {
     public ThirdFrame()
+        : base(103)
     {
-        HealthPoints = 103;
-        Status = 1;
     }
 
     public override void TakeDamage(Obstacles.Obstacle obstacle)
     {
-        if (obstacle == null)
+        if (obstacle is null)
         {
             return;
         }

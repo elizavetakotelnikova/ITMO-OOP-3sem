@@ -8,7 +8,6 @@ public class UsualSpace : Habitat
     public UsualSpace()
     {
         EngineTypeAllowed = new List<EngineTypes>() { EngineTypes.ImpulseDriveStandard };
-
         ObstacleTypeAllowed = new List<ObstaclesTypes>() { ObstaclesTypes.Asteroid, ObstaclesTypes.Meteorit };
     }
 }

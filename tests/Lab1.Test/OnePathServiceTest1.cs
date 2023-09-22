@@ -8,10 +8,12 @@ namespace Lab1.Test;
 [TestFixture]
 public class OnePathServiceTest1
 {
-    private IEnumerable<Vehicle>? _ships;
+    private IList<Vehicle> _ships = new List<Vehicle>();
     private Habitat? _habitat;
     private double _distance;
-    private OnePathService? _checking;
+    private OnePart? _checking;
+
+    // private OnePathService? _checking;
     private IEnumerable<Obstacle>? _obstacles;
     [SetUp]
     public void Setup()
@@ -19,8 +21,10 @@ public class OnePathServiceTest1
         _ships = new List<Vehicle>() { new StrollShip(), new Avgur() };
         _habitat = new HighDensityArea();
         _distance = 100000; // middle distance
-        _obstacles = null;
-        _checking = new OnePathService(_distance, _habitat, _ships, _obstacles);
+        _obstacles = new List<Obstacle>();
+        _checking = new OnePart(_distance, _habitat, _ships, _obstacles);
+
+        // _checking = new OnePathService(_distance, _habitat, _ships, _obstacles);
     }
 
     [Test]
@@ -32,7 +36,7 @@ public class OnePathServiceTest1
             return;
         }
 
-        _checking.SeeResult(_ships);
+        OnePathService.SeeResult(_checking);
         IList<ShipStatus> answer = _checking.Results;
         Assert.True(result.SequenceEqual(answer));
     }

@@ -5,9 +5,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
 public class SmallAsteroid : Obstacle
 {
     public SmallAsteroid()
+        : base(10, ObstaclesTypes.Asteroid, Sizes.Small)
     {
-        Damage = 10;
-        Category = ObstaclesTypes.Asteroid;
-        Size = Sizes.Small;
     }
 }

@@ -6,10 +6,8 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Engines;
 public class EngineClassE : Engine
 {
     public EngineClassE()
+        : base(EngineTypes.ImpulseDriveExp, Math.Exp(2))
     {
-        Category = EngineTypes.ImpulseDriveExp;
-        Fuel = 0;
-        Speed = Math.Exp(2);
     }
 
     public override double CalculatePrice(double distance)
@@ -18,8 +16,9 @@ public class EngineClassE : Engine
         return fuel * 100;
     }
 
-    private protected override double CalculateConsumption(double distance)
+    public override double CalculateConsumption(double distance)
     {
+        Fuel += distance * 5;
         return distance * 5;
     }
 }

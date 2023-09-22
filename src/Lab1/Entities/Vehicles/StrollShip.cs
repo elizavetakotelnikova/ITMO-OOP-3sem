@@ -8,12 +8,8 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 public class StrollShip : Vehicle
 {
     public StrollShip()
+        : base(null, new FirstFrame(), Sizes.Small, false)
     {
-        ShipStatus = ShipStatus.Working;
         Engines = new List<Engine>() { new EngineClassC() };
-        Frame = new FirstFrame();
-        SizeCharacteristics = Sizes.Small;
-        Deflector = null;
-        HasAntiNeutronEmitter = false;
     }
 }

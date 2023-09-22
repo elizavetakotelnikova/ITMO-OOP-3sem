@@ -9,12 +9,8 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 public class Meredian : Vehicle
 {
     public Meredian()
+        : base(new SecondClassDeflector(false), new SecondFrame(), Sizes.Middle, true)
     {
-        ShipStatus = ShipStatus.Working;
         Engines = new List<Engine>() { new EngineClassE() };
-        Frame = new SecondFrame();
-        SizeCharacteristics = Sizes.Middle;
-        Deflector = new SecondClassDeflector();
-        HasAntiNeutronEmitter = false;
     }
 }

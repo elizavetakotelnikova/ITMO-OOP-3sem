@@ -9,10 +9,12 @@ namespace Lab1.Test;
 [TestFixture]
 public class OnePathServiceTest3
 {
-    private IEnumerable<Vehicle>? _ships;
+    private IList<Vehicle> _ships = new List<Vehicle>();
     private Habitat? _habitat;
     private double _distance;
-    private OnePathService? _checking;
+    private OnePart? _checking;
+
+    // private OnePathService? _checking;
     private IEnumerable<Obstacle>? _obstacles;
     [SetUp]
     public void Setup()
@@ -25,7 +27,7 @@ public class OnePathServiceTest3
         _ships = new List<Vehicle>() { firstShip, secondShip, thirdShip };
         _habitat = new Nebula();
         _distance = 49000; // short distance
-        _checking = new OnePathService(_distance, _habitat, _ships, _obstacles);
+        _checking = new OnePart(_distance, _habitat, _ships, _obstacles);
     }
 
     [Test]
@@ -37,7 +39,7 @@ public class OnePathServiceTest3
             return;
         }
 
-        _checking.SeeResult(_ships);
+        OnePathService.SeeResult(_checking);
         IList<ShipStatus> answer = _checking.Results;
         Assert.True(result.SequenceEqual(answer));
     }

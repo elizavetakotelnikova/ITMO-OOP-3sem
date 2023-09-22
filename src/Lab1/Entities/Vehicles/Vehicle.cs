@@ -7,15 +7,31 @@ using Itmo.ObjectOrientedProgramming.Lab1.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 
-public abstract class Vehicle
+public abstract class Vehicle : ICanTakeDamage
 {
-    public bool HasAntiNeutronEmitter { get; set; }
-    public Deflector? Deflector { get; protected init; }
-    public IEnumerable<Engine>? Engines { get; protected init; }
-    public ShipStatus ShipStatus { get; set; }
-    public Frame? Frame { get; protected init; }
-    public Sizes SizeCharacteristics { get; set; }
+    protected Vehicle(Deflector? deflector, Frame? frame, Sizes shipSize, bool flag)
+    {
+        HasAntiNeutronEmitter = flag;
+        Deflector = deflector;
+        Frame = frame;
+        SizeCharacteristics = shipSize;
+        Time = 0;
+        Price = 0;
+        ConsumptedFuel = 0;
+        ShipStatus = ShipStatus.Working;
+        Engines = new List<Engine>();
+    }
 
+    public bool HasAntiNeutronEmitter { get; set; }
+    public Deflector? Deflector { get; }
+    public IEnumerable<Engine> Engines { get; protected init; }
+    public ShipStatus ShipStatus { get; set; }
+    public Frame? Frame { get; }
+    public Sizes SizeCharacteristics { get; set; }
+    public double Time { get; set; }
+    public double Price { get; set; }
+
+    public double ConsumptedFuel { get; set; }
     public void TakeDamage(Obstacle obstacle)
     {
         if (obstacle is CosmoWhale)
@@ -28,7 +44,7 @@ public abstract class Vehicle
 
         if (obstacle is Antimatter)
         {
-            if (Deflector == null || Deflector.SettedPhotonDeflector == null
+            if (Deflector is null || Deflector.SettedPhotonDeflector is null
                                   || Deflector.Status == 0 || Deflector.SettedPhotonDeflector.Status == 0)
             {
                 ShipStatus = ShipStatus.CrewKilled;
@@ -63,11 +79,21 @@ public abstract class Vehicle
         }
     }
 
-    public void CheckArmorStatus()
+    public void CheckStatus()
     {
-        if (Frame?.Status == 0)
+        if (Frame?.IsWorking == false)
         {
             ShipStatus = ShipStatus.ShipDestroyed;
         }
+    }
+
+    public bool IsShipWorking()
+    {
+        if (ShipStatus == ShipStatus.Working)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -8,7 +8,6 @@ public class Nebula : Habitat
     public Nebula()
     {
         EngineTypeAllowed = new List<EngineTypes>() { EngineTypes.ImpulseDriveExp };
-
         ObstacleTypeAllowed = new List<ObstaclesTypes>() { ObstaclesTypes.CosmoWhale };
     }
 }

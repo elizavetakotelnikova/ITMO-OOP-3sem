@@ -6,14 +6,13 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Frames;
 public class FirstFrame : Frame, ICanTakeDamage
 {
     public FirstFrame()
+        : base(15)
     {
-        HealthPoints = 15;
-        Status = 1;
     }
 
     public override void TakeDamage(Obstacle obstacle)
     {
-        if (obstacle == null)
+        if (obstacle is null)
         {
             return;
         }

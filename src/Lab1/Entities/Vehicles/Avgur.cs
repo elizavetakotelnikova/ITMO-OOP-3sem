@@ -9,12 +9,8 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 public class Avgur : Vehicle
 {
     public Avgur()
+        : base(new ThirdClassDeflector(false), new ThirdFrame(), Sizes.Small, false)
     {
-        ShipStatus = ShipStatus.Working;
         Engines = new List<Engine>() { new EngineClassE(), new JumpingEngineAlpha() };
-        Frame = new SecondFrame();
-        SizeCharacteristics = Sizes.Small;
-        Deflector = new ThirdClassDeflector();
-        HasAntiNeutronEmitter = false;
     }
 }

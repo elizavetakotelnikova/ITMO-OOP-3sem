@@ -5,15 +5,15 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Deflectors;
 public class PhotonDeflector : Deflector
 {
     public PhotonDeflector()
+        : base(300)
     {
+        IfPhotonDeflectorSetted = false;
         SettedPhotonDeflector = null;
-        Status = 1;
-        HealthPoints = 300;
     }
 
     public override void TakeDamage(Obstacle obstacle)
     {
-        if (obstacle == null)
+        if (obstacle is null)
         {
             return;
         }

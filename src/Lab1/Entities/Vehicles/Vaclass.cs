@@ -9,12 +9,8 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 public class Vaclass : Vehicle
 {
     public Vaclass()
+        : base(new FirstClassDeflector(false), new SecondFrame(), Sizes.Middle, false)
     {
-        ShipStatus = ShipStatus.Working;
         Engines = new List<Engine>() { new EngineClassC(), new EngineClassE(), new JumpingEngineGamma() };
-        Frame = new SecondFrame();
-        SizeCharacteristics = Sizes.Middle;
-        Deflector = new FirstClassDeflector();
-        HasAntiNeutronEmitter = false;
     }
 }

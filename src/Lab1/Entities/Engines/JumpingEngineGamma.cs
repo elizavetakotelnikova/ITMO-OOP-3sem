@@ -1,15 +1,10 @@
-using Itmo.ObjectOrientedProgramming.Lab1.Models;
-
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Engines;
 
 public class JumpingEngineGamma : JumpingEngine
 {
     public JumpingEngineGamma()
+        : base(100000, 100000)
     {
-       Category = EngineTypes.Jumping;
-       SpecialFuel = 0;
-       Range = 100000;
-       Speed = 100000;
     }
 
     public override double CalculatePrice(double distance)
@@ -18,8 +13,9 @@ public class JumpingEngineGamma : JumpingEngine
         return specialFuel * 1000;
     }
 
-    private protected override double CalculateConsumption(double distance)
+    public override double CalculateConsumption(double distance)
     {
+        SpecialFuel += double.Log(distance);
         return double.Log(distance);
     }
 }

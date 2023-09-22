@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Engines;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Habitats;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
@@ -8,60 +7,40 @@ using Itmo.ObjectOrientedProgramming.Lab1.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Pathes;
 
-public class OnePathService
+public static class OnePathService
 {
-    public OnePathService()
+    public static void CheckObstacles(IList<Obstacle> currentObstacles, Vehicle currentShip)
     {
-        Length = 0;
-        Habitat = null;
-        Vehicles = new List<Vehicle>();
-        Obstacles = new List<Obstacle>();
-        Results = new List<ShipStatus>();
-        SuccessVehicles = new List<Vehicle>();
-    }
-
-    public OnePathService(double userLength, Habitat userHabitat, IEnumerable<Vehicle> userVehicles, IEnumerable<Obstacle>? userObstacles)
-    {
-        Length = userLength;
-        Habitat = userHabitat;
-        Vehicles = userVehicles;
-        Obstacles = new List<Obstacle>();
-        Results = new List<ShipStatus>();
-        SuccessVehicles = new List<Vehicle>();
-        BestShip = null;
-        if (userObstacles != null)
-        {
-            foreach (Obstacle element in userObstacles)
-            {
-                if (Habitat != null && Habitat.ObstacleTypeAllowed != null && Habitat.ObstacleTypeAllowed.Contains(element.Category))
-                {
-                    Obstacles.Add(element);
-                }
-            }
-        }
-    }
-
-    public double Length { get; }
-    public Habitat? Habitat { get; }
-    public Vehicle? BestShip { get; set; } // добавить про расчет цены для нескольких участков сразу
-    public IEnumerable<Vehicle> Vehicles { get; set; }
-    public IList<Obstacle> Obstacles { get; }
-    public IList<ShipStatus> Results { get; }
-    public IList<Vehicle> SuccessVehicles { get; }
-
-    public static void CheckRange(Vehicle currentShip, Habitat currentHabitat, double currentLength)
-    {
-        if (currentShip == null || currentHabitat == null)
+        if (currentShip is null || currentObstacles is null)
         {
             return;
         }
 
-        if (currentShip.Engines == null)
+        foreach (Obstacle x in currentObstacles)
+        {
+            currentShip.TakeDamage(x);
+            currentShip.CheckStatus();
+        }
+    }
+
+    public static void CheckRange(Vehicle currentShip, OnePart part)
+    {
+        if (part == null)
         {
             return;
         }
 
-        if (currentHabitat is not HighDensityArea)
+        if (currentShip is null || part.Habitat is null)
+        {
+            return;
+        }
+
+        if (currentShip.Engines is null)
+        {
+            return;
+        }
+
+        if (part.Habitat is not HighDensityArea)
         {
             // currentShip.ShipStatus = ShipStatus.Fail;
             return;
@@ -72,48 +51,68 @@ public class OnePathService
             if (x is JumpingEngine)
             {
                 var y = (JumpingEngine)x;
-                if (currentLength <= y.Range)
+                if (part.Length <= y.Range)
                 {
-                    // return ShipStatus.Working;
                     return;
                 }
             }
         }
 
-        // return ShipStatus.ShipLost;
         currentShip.ShipStatus = ShipStatus.ShipLost;
     }
 
-    public static void CheckObstacles(IList<Obstacle> currentObstacles, Vehicle currentShip)
+    public static void CheckHabitat(Vehicle currentShip, OnePart part)
     {
-        if (currentShip == null || currentObstacles == null)
+        if (part is null)
         {
             return;
         }
 
-        foreach (Obstacle x in currentObstacles)
+        if (currentShip is null || part.Habitat is null)
         {
-            currentShip.TakeDamage(x);
-            currentShip.CheckArmorStatus();
+            return;
+        }
+
+        if (currentShip.Engines is null || part.Habitat.EngineTypeAllowed.Count == 0)
+        {
+            currentShip.ShipStatus = ShipStatus.Fail;
+            return;
+        }
+
+        bool allowed = false;
+        foreach (Engine x in currentShip.Engines)
+        {
+            if (part.Habitat.EngineTypeAllowed.Contains(x.Category))
+            {
+                double newCalculatedTime = x.CalculateTime(part.Length);
+                if (currentShip.Time > newCalculatedTime)
+                {
+                    currentShip.Time += newCalculatedTime;
+                }
+
+                allowed = true;
+            }
+        }
+
+        if (!allowed)
+        {
+            currentShip.ShipStatus = ShipStatus.ShipDestroyed;
         }
     }
 
-    public static bool CheckStatus(Vehicle ship)
+    public static Vehicle? BetterShip(IEnumerable<Vehicle> ships, OnePart part)
     {
-        if (ship?.ShipStatus == ShipStatus.Working)
+        if (part is null)
         {
-            return true;
+            return null;
         }
 
-        return false;
-    }
-
-    public Vehicle? BetterShip(double distance, IEnumerable<Vehicle> ships)
-    {
+        double distance = part.Length;
         Vehicle? optimalVehicle = null;
         double max_price = 0;
         double price;
-        if (ships == null || Habitat == null)
+
+        if (ships is null || part.Habitat is null)
         {
             return null;
         }
@@ -121,14 +120,15 @@ public class OnePathService
         foreach (Vehicle x in ships)
         {
             price = 0;
-            if (x.Engines == null || Habitat.EngineTypeAllowed == null)
+            double fuel = 0;
+            if (x.Engines == null || part.Habitat.EngineTypeAllowed.Count == 0)
             {
                 continue;
             }
 
             foreach (Engine y in x.Engines)
             {
-                if (Habitat.EngineTypeAllowed.Contains(y.Category))
+                if (part.Habitat.EngineTypeAllowed.Contains(y.Category))
                 {
                     if (y is JumpingEngine)
                     {
@@ -142,8 +142,12 @@ public class OnePathService
                     {
                         price += y.CalculatePrice(distance);
                     }
+
+                    fuel += y.CalculateConsumption(distance);
                 }
 
+                x.Price += price;
+                x.ConsumptedFuel += fuel;
                 if (max_price == 0)
                 {
                     max_price = price;
@@ -160,72 +164,45 @@ public class OnePathService
         return optimalVehicle;
     }
 
-    public void SeeResult(IEnumerable<Vehicle> allVehicles)
+    public static void SeeResult(OnePart part)
     {
-        if (allVehicles == null || Habitat == null)
+        if (part is null)
         {
             return;
         }
 
-        foreach (Vehicle ship in allVehicles)
+        if (part.Vehicles is null || part.Habitat is null)
         {
-            CheckHabitat(ship);
-            if (!CheckStatus(ship))
+            return;
+        }
+
+        foreach (Vehicle ship in part.Vehicles)
+        {
+            CheckHabitat(ship, part);
+            if (!ship.IsShipWorking())
             {
-                Results.Add(ship.ShipStatus);
+                part.Results.Add(ship.ShipStatus);
                 continue;
             }
 
-            CheckObstacles(Obstacles, ship);
-            if (!CheckStatus(ship))
+            CheckObstacles(part.Obstacles, ship);
+            if (!ship.IsShipWorking())
             {
-                Results.Add(ship.ShipStatus);
+                part.Results.Add(ship.ShipStatus);
                 continue;
             }
 
-            CheckRange(ship, Habitat, Length);
-            if (!CheckStatus(ship))
+            CheckRange(ship, part);
+            if (!ship.IsShipWorking())
             {
-                Results.Add(ship.ShipStatus);
+                part.Results.Add(ship.ShipStatus);
                 continue;
             }
 
-            Results.Add(ShipStatus.Success);
-            SuccessVehicles.Add(ship);
+            part.Results.Add(ShipStatus.Success);
+            part.SuccessVehicles.Add(ship);
         }
 
-        BestShip = BetterShip(Length, SuccessVehicles);
-    }
-
-    public void CheckHabitat(Vehicle currentShip)
-    {
-        if (currentShip == null || Habitat == null)
-        {
-            return;
-        }
-
-        if (currentShip.Engines == null || Habitat.EngineTypeAllowed == null)
-        {
-            currentShip.ShipStatus = ShipStatus.Fail;
-            return;
-        }
-
-        bool allowed = false;
-        foreach (Engine x in currentShip.Engines)
-        {
-            if (Habitat.EngineTypeAllowed.Contains(x.Category))
-            {
-                allowed = true;
-            }
-        }
-
-        if (!allowed)
-        {
-            // return ShipStatus.ShipDestroyed;
-            currentShip.ShipStatus = ShipStatus.ShipDestroyed;
-            return;
-        }
-
-        // return ShipStatus.Working;
+        part.BestShip = BetterShip(part.SuccessVehicles, part);
     }
 }

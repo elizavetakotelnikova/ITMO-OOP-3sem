@@ -9,12 +9,8 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 public class Stell : Vehicle
 {
     public Stell()
+        : base(new FirstClassDeflector(false), new FirstFrame(), Sizes.Small, false)
     {
-        ShipStatus = ShipStatus.Working;
         Engines = new List<Engine>() { new EngineClassC(), new JumpingEngineOmega() };
-        Frame = new FirstFrame();
-        SizeCharacteristics = Sizes.Small;
-        Deflector = new FirstClassDeflector();
-        HasAntiNeutronEmitter = false;
     }
 }

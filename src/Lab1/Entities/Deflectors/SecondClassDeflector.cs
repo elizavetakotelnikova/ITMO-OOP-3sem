@@ -4,16 +4,23 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Deflectors;
 
 public class SecondClassDeflector : Deflector
 {
-    public SecondClassDeflector()
+    public SecondClassDeflector(bool flag)
+    : base(100)
     {
-        HealthPoints = 100;
-        Status = 1;
-        SettedPhotonDeflector = null;
+        IfPhotonDeflectorSetted = flag;
+        if (flag)
+        {
+            SettedPhotonDeflector = new PhotonDeflector();
+        }
+        else
+        {
+            SettedPhotonDeflector = null;
+        }
     }
 
     public override void TakeDamage(Obstacle obstacle)
     {
-        if (obstacle == null || obstacle is Antimatter)
+        if (obstacle is null || obstacle is Antimatter)
         {
             return;
         }
