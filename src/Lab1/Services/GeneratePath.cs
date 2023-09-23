@@ -42,21 +42,11 @@ public class GeneratePath
     }
 
     public IList<Vehicle>? SuccesfulVehicles { get; }
-
-    /* public IList<Vehicle>? Times { get; set; }
-    public IList<Vehicle>? Prices { get; set; }
-    public IList<double>? FuelsList { get; set; }*/
-
     public void SeeResults()
     {
-        if (_habitats?.Count != _distances?.Count || _habitats?.Count != _obstacles?.Count)
+        if (_habitats.Count != _distances.Count || _habitats.Count != _obstacles.Count)
         {
             throw new ArgumentException("Invalid arguments");
-        }
-
-        if (_habitats is null || _distances is null || _ships is null || _obstacles is null)
-        {
-            return;
         }
 
         for (int i = 0; i < _habitats.Count; i++)
@@ -83,7 +73,7 @@ public class GeneratePath
         return _shipStatusList;
     }
 
-    public void FindSuccesfulVehicles()
+    public void FindSuccessfulVehicles()
     {
         foreach (Vehicle x in _allParts[0].Vehicles)
         {

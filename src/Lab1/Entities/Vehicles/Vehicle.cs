@@ -30,7 +30,6 @@ public abstract class Vehicle : ICanTakeDamage
     public Sizes SizeCharacteristics { get; set; }
     public double Time { get; set; }
     public double Price { get; set; }
-
     public double ConsumptedFuel { get; set; }
     public void TakeDamage(Obstacle obstacle)
     {

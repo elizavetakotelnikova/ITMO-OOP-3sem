@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Itmo.ObjectOrientedProgramming.Lab1.Entities.Engines;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Habitats;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
@@ -17,6 +18,7 @@ public class OnePart
         Results = new List<ShipStatus>();
         SuccessVehicles = new List<Vehicle>();
         BestShip = null;
+        BestEngine = null;
         if (userObstacles == null)
         {
             throw new ArgumentNullException(nameof(userObstacles));
@@ -36,6 +38,7 @@ public class OnePart
     public double Length { get; }
     public Habitat? Habitat { get; }
     public Vehicle? BestShip { get; set; }
+    public Engine? BestEngine { get; set; }
     public IList<Vehicle> Vehicles { get; }
     public IList<Obstacle> Obstacles { get; }
     public IList<ShipStatus> Results { get; }

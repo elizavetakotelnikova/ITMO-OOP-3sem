@@ -1,3 +1,4 @@
+using Itmo.ObjectOrientedProgramming.Lab1.Entities.Habitats;
 using Itmo.ObjectOrientedProgramming.Lab1.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Engines;
@@ -19,6 +20,21 @@ public abstract class Engine
     public double CalculateTime(double distance)
     {
         return distance / Speed;
+    }
+
+    public virtual bool IsSuitable(Habitat area, double distance)
+    {
+        if (area is null || distance < 0)
+        {
+            return false;
+        }
+
+        if (area.EngineTypeAllowed.Contains(Category))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public abstract double CalculateConsumption(double distance);

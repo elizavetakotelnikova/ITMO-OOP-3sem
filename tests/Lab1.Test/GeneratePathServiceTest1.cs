@@ -38,7 +38,6 @@ public class GeneratePathServiceTest1
             return;
         }
 
-        // _checking.SeeResult(_ships);
         _commonPath.SeeResults();
 
         // Vehicle? bestShip = _checking.BestShip;
