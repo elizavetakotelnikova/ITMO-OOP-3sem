@@ -180,7 +180,7 @@ public class PathServiceTests
         var obstacles = new List<IList<Obstacle>>() { firstObstacles, secondObstacles };
         var ships = new List<Vehicle>() { firstShip };
         var habitats = new List<Habitat>() { new UsualSpace(), new UsualSpace() };
-        var distances = new List<double>() { 50000, 10000 }; // short distance
+        var distances = new List<double>() { 50000, 10000 }; // two distances
         var commonPath = new GeneratePath(habitats, obstacles, ships,  distances);
         commonPath.SeeResults();
         commonPath.FindSuccessfulVehicles();

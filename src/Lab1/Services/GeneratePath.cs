@@ -4,7 +4,6 @@ using Itmo.ObjectOrientedProgramming.Lab1.Entities.Habitats;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 using Itmo.ObjectOrientedProgramming.Lab1.Models;
-
 namespace Itmo.ObjectOrientedProgramming.Lab1.Services;
 public class GeneratePath
 {

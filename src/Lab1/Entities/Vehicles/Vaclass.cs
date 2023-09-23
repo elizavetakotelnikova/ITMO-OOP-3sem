@@ -10,6 +10,6 @@ public class Vaclass : Vehicle
     public Vaclass()
         : base(new FirstClassDeflector(false), new SecondFrame(), Sizes.Middle, false)
     {
-        Engines = new List<Engine>() { new EngineClassC(), new EngineClassE(), new JumpingEngineGamma() };
+        Engines = new List<Engine>() { new EngineClassE(), new JumpingEngineGamma() };
     }
 }

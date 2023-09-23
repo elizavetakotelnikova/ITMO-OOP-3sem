@@ -2,7 +2,6 @@ using System;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Engines;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 using Itmo.ObjectOrientedProgramming.Lab1.Models;
-
 namespace Itmo.ObjectOrientedProgramming.Lab1.Services;
 
 public static class CalculationService // static because it has only calculation methods, which could be tested through the BestShip characteristics

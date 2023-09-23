@@ -5,17 +5,13 @@ using Itmo.ObjectOrientedProgramming.Lab1.Entities.Habitats;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 using Itmo.ObjectOrientedProgramming.Lab1.Models;
-
 namespace Itmo.ObjectOrientedProgramming.Lab1.Services;
 
 public static class OnePathService // static because it contains only methods which could be tested through the non-static OnePart class
 {
     public static void SeeResult(OnePart part)
     {
-        if (part is null)
-        {
-            return;
-        }
+        if (part is null) return;
 
         if (part.Vehicles is null || part.Habitat is null)
         {
@@ -95,10 +91,7 @@ public static class OnePathService // static because it contains only methods wh
             throw new ArgumentException("Null-values for non-nullable objects");
         }
 
-        if (currentObstacles is null)
-        {
-            return;
-        }
+        if (currentObstacles is null) return;
 
         foreach (Obstacle x in currentObstacles)
         {
@@ -114,10 +107,7 @@ public static class OnePathService // static because it contains only methods wh
             throw new ArgumentException("Null-values for non-nullable objects");
         }
 
-        if (part.Habitat is not HighDensityArea)
-        {
-            return;
-        }
+        if (part.Habitat is not HighDensityArea) return;
 
         foreach (Engine drive in currentShip.Engines)
         {
