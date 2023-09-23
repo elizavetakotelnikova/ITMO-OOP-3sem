@@ -30,7 +30,7 @@ public class OnePathServiceTest1
     [Test]
     public void OnePathServiceStrollShipandAvgurInHighDensityAreaShipDestroyedShipLOstreturned() // underscore is prohibited by the IDE
     {
-        var result = new List<ShipStatus>() { ShipStatus.ShipDestroyed, ShipStatus.ShipLost };
+        var result = new List<ShipStatus>() { ShipStatus.Destroyed, ShipStatus.Lost };
         if (_ships == null || _checking == null)
         {
             return;

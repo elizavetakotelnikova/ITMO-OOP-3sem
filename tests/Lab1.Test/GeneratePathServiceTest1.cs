@@ -42,6 +42,6 @@ public class GeneratePathServiceTest1
 
         // Vehicle? bestShip = _checking.BestShip;
         IList<ShipStatus> answer = _commonPath.ReturnShipStatusList();
-        Assert.True(answer[1] == ShipStatus.ShipDestroyed);
+        Assert.True(answer[1] == ShipStatus.Destroyed);
     }
 }

@@ -1,6 +1,5 @@
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
 using Itmo.ObjectOrientedProgramming.Lab1.Models;
-
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Frames;
 
 public class SecondFrame : Frame
@@ -12,10 +11,7 @@ public class SecondFrame : Frame
 
     public override void TakeDamage(Obstacle obstacle)
     {
-        if (obstacle is null)
-        {
-            return;
-        }
+        if (obstacle is null) return;
 
         if (obstacle.Size == Sizes.Small)
         {

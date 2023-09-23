@@ -5,11 +5,11 @@ using Itmo.ObjectOrientedProgramming.Lab1.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Services;
 
-public static class CalculationService
+public static class CalculationService // static because it has only calculation methods, which could be tested through the BestShip characteristics
 {
-    public static BestPriceCharacteristics CalculateVehiclePrice(OnePart part, Vehicle ship)
+    public static BestPriceCharacteristics CalculateVehiclePrice(OnePart part, Vehicle ship, bool flag)
     {
-        if (part is null || part.Habitat is null || ship is null)
+        if (part?.Habitat is null || ship is null)
         {
             throw new ArgumentException("Null-values for non-nullable types");
         }
@@ -19,10 +19,7 @@ public static class CalculationService
         var parameters = new BestPriceCharacteristics();
         foreach (Engine y in ship.Engines)
         {
-            if (y.IsSuitable(part.Habitat, part.Length))
-            {
-                price = y.CalculatePrice(part.Length);
-            }
+            if (y.IsSuitable(part.Habitat, part.Length)) price = y.CalculatePrice(part.Length);
 
             if (minPrice == 0)
             {
@@ -38,11 +35,26 @@ public static class CalculationService
 
         parameters.Price = price;
         parameters.BestVehicle = ship;
-        ship.Price += minPrice;
+        if (flag) ship.Price += minPrice;
         return parameters;
     }
 
-    public static void CalculateConsumptedFuel(OnePart part, Vehicle ship, Engine engine)
+    public static void CalculatePriceFuelAndTime(Vehicle ship, OnePart part)
+    {
+        if (part is null || ship is null)
+        {
+            throw new ArgumentException("Null-values for non-nullable objects");
+        }
+
+        BestPriceCharacteristics currentParams = CalculationService.CalculateVehiclePrice(part, ship, false);
+        if (currentParams.Price != 0 && currentParams.BestEngine is not null)
+        {
+            CalculateConsumedTime(part, ship, currentParams.BestEngine);
+            CalculateConsumedFuel(part, ship, currentParams.BestEngine);
+        }
+    }
+
+    private static void CalculateConsumedFuel(OnePart part, Vehicle ship, Engine engine)
     {
         if (engine is null || part is null || ship is null)
         {
@@ -50,10 +62,10 @@ public static class CalculationService
         }
 
         double fuel = engine.CalculateConsumption(part.Length);
-        ship.ConsumptedFuel += fuel;
+        ship.ConsumedFuel += fuel;
     }
 
-    public static void CalculateConsumptedTime(OnePart part, Vehicle ship, Engine engine)
+    private static void CalculateConsumedTime(OnePart part, Vehicle ship, Engine engine)
     {
         if (engine is null || part is null || ship is null)
         {

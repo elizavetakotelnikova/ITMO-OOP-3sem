@@ -7,7 +7,7 @@ using Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Models;
 
-public class OnePart
+public class OnePart // class which contains the info about one part of the entire path
 {
     public OnePart(double userLength, Habitat userHabitat, IList<Vehicle> userVehicles, IEnumerable<Obstacle> userObstacles)
     {

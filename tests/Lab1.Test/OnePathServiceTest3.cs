@@ -33,7 +33,7 @@ public class OnePathServiceTest3
     [Test]
     public void OnePathServiceAntiNeutronEmiiterDestroyedSuccessSucessreturned() // underscore is prohibited by the IDE
     {
-        var result = new List<ShipStatus>() { ShipStatus.ShipDestroyed, ShipStatus.Success, ShipStatus.Success };
+        var result = new List<ShipStatus>() { ShipStatus.Destroyed, ShipStatus.Success, ShipStatus.Success };
         if (_ships == null || _checking == null)
         {
             return;

@@ -4,6 +4,6 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities;
 
 public interface ICanTakeDamage
 {
-    public void TakeDamage(Obstacle obstacle);
-    public void CheckStatus();
+    void TakeDamage(Obstacle obstacle);
+    void CheckStatus();
 }

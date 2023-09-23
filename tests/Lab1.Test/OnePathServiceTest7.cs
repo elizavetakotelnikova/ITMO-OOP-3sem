@@ -39,6 +39,6 @@ public class OnePathServiceTest7
 
         // Vehicle? bestShip = _checking.BestShip;
         IList<ShipStatus> answer = _checking.Results;
-        Assert.True(answer[1] == ShipStatus.ShipDestroyed);
+        Assert.True(answer[1] == ShipStatus.Destroyed);
     }
 }

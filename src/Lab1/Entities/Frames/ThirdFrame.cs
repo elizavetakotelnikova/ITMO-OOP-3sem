@@ -1,5 +1,6 @@
-namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Frames;
+using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
 
+namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Frames;
 public class ThirdFrame : Frame
 {
     public ThirdFrame()
@@ -7,12 +8,9 @@ public class ThirdFrame : Frame
     {
     }
 
-    public override void TakeDamage(Obstacles.Obstacle obstacle)
+    public override void TakeDamage(Obstacle obstacle)
     {
-        if (obstacle is null)
-        {
-            return;
-        }
+        if (obstacle is null) return;
 
         HealthPoints = obstacle.Damage * 0.5;
         CheckStatus();

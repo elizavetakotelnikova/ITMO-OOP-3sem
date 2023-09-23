@@ -5,7 +5,7 @@ public enum ShipStatus
     Success,
     Working,
     CrewKilled,
-    ShipLost,
-    ShipDestroyed,
-    Fail,
+    Lost,
+    Destroyed,
+    Fail, // added a case, with conditions not mentioned in the lab
 }

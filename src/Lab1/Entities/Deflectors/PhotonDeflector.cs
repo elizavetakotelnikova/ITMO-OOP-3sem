@@ -1,5 +1,4 @@
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
-
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Deflectors;
 
 public class PhotonDeflector : Deflector
@@ -13,10 +12,7 @@ public class PhotonDeflector : Deflector
 
     public override void TakeDamage(Obstacle obstacle)
     {
-        if (obstacle is null)
-        {
-            return;
-        }
+        if (obstacle is null) return;
 
         if (obstacle is not Antimatter)
         {

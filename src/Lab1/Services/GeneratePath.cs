@@ -2,29 +2,26 @@ using System;
 using System.Collections.Generic;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Habitats;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
-using Itmo.ObjectOrientedProgramming.Lab1.Entities.Pathes;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 using Itmo.ObjectOrientedProgramming.Lab1.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Services;
 public class GeneratePath
 {
-    private IList<OnePart> _allParts = new List<OnePart>();
-    private IList<ShipStatus> _shipStatusList;
-    private IList<Habitat> _habitats;
-    private IList<Vehicle> _ships;
-    private IList<IList<Obstacle>> _obstacles;
-    private IList<double> _distances;
+    private readonly IList<ShipStatus> _shipStatusList;
+    private readonly IList<Habitat> _habitats;
+    private readonly IList<Vehicle> _ships;
+    private readonly IList<IList<Obstacle>> _obstacles;
+    private readonly IList<double> _distances;
 
     public GeneratePath()
     {
         _shipStatusList = new List<ShipStatus>();
-        SuccesfulVehicles = new List<Vehicle>();
         _habitats = new List<Habitat>();
         _obstacles = new List<IList<Obstacle>>();
         _ships = new List<Vehicle>();
         _distances = new List<double>();
-        _allParts = new List<OnePart>();
+        SuccessfulVehicles = new List<Vehicle>();
     }
 
     public GeneratePath(
@@ -38,10 +35,10 @@ public class GeneratePath
         _obstacles = userObstacles;
         _ships = userShips;
         _distances = userDistances;
-        _allParts = new List<OnePart>();
+        SuccessfulVehicles = new List<Vehicle>();
     }
 
-    public IList<Vehicle>? SuccesfulVehicles { get; }
+    public IList<Vehicle>? SuccessfulVehicles { get; }
     public void SeeResults()
     {
         if (_habitats.Count != _distances.Count || _habitats.Count != _obstacles.Count)
@@ -56,7 +53,7 @@ public class GeneratePath
         }
     }
 
-    public IList<ShipStatus> ReturnShipStatusList()
+    public IEnumerable<ShipStatus> ReturnShipStatusList()
     {
         foreach (Vehicle element in _ships)
         {
@@ -75,36 +72,24 @@ public class GeneratePath
 
     public void FindSuccessfulVehicles()
     {
-        foreach (Vehicle x in _allParts[0].Vehicles)
+        foreach (Vehicle x in _ships)
         {
-            bool flag = true;
-            foreach (OnePart y in _allParts)
-            {
-                if (!y.SuccessVehicles.Contains(x))
-                {
-                    flag = false;
-                    break;
-                }
-            }
+            if (!x.IsShipWorking()) continue;
 
-            if (flag)
-            {
-                SuccesfulVehicles?.Add(x);
-            }
+            x.ShipStatus = ShipStatus.Success;
+            SuccessfulVehicles?.Add(x);
         }
     }
 
     public Vehicle? FindOptimalVehicle()
     {
-        if (SuccesfulVehicles is null)
-        {
-            return null;
-        }
+        if (SuccessfulVehicles is null) return null;
 
         Vehicle? optimalVehicle = null;
-        foreach (Vehicle x in SuccesfulVehicles)
+        foreach (Vehicle x in SuccessfulVehicles)
         {
             double maxPrice = x.Price;
+            optimalVehicle = x;
             if (x.Price < maxPrice)
             {
                 optimalVehicle = x;

@@ -1,15 +1,13 @@
-using System.Runtime.Versioning;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Deflectors;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Habitats;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Pathes;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 using Itmo.ObjectOrientedProgramming.Lab1.Models;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace TestProject1;
 
-public class UnitTest1
+public class PathServiceTests
 {
     [Fact]
     public void Test1()

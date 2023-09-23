@@ -1,5 +1,4 @@
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
-
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Frames;
 
 public abstract class Frame : ICanTakeDamage
@@ -10,8 +9,8 @@ public abstract class Frame : ICanTakeDamage
         IsWorking = true;
     }
 
-    public double HealthPoints { get; set; }
-    public bool IsWorking { get; protected set; }
+    public bool IsWorking { get; private set; }
+    protected double HealthPoints { get; set; }
     public abstract void TakeDamage(Obstacle obstacle);
 
     public void CheckStatus()

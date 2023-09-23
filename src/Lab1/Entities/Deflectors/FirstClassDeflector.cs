@@ -1,5 +1,4 @@
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
-
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Deflectors;
 
 public class FirstClassDeflector : Deflector
@@ -20,10 +19,7 @@ public class FirstClassDeflector : Deflector
 
     public override void TakeDamage(Obstacle obstacle)
     {
-        if (obstacle is null || obstacle is Antimatter)
-        {
-            return;
-        }
+        if (obstacle is null || obstacle is Antimatter) return;
 
         if (obstacle is SmallAsteroid)
         {
