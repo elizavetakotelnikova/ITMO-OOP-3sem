@@ -4,8 +4,9 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Frames;
 
 public class SecondFrame : Frame
 {
+    private const int SecondFrameHealthPoints = 36;
     public SecondFrame()
-        : base(36)
+        : base(SecondFrameHealthPoints)
     {
     }
 
@@ -22,6 +23,6 @@ public class SecondFrame : Frame
             HealthPoints -= obstacle.Damage * 0.4;
         }
 
-        CheckStatus();
+        UpdateStatus();
     }
 }

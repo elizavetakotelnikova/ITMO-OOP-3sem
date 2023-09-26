@@ -6,7 +6,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Services;
 
 public static class CalculationService // static because it has only calculation methods, which could be tested through the BestShip characteristics
 {
-    public static BestPriceCharacteristics CalculateVehiclePrice(OnePart part, Vehicle ship, bool flag)
+    public static BestPriceCharacteristics CalculateVehiclePrice(Part part, Vehicle ship, bool flag)
     {
         if (part?.Habitat is null || ship is null)
         {
@@ -38,7 +38,7 @@ public static class CalculationService // static because it has only calculation
         return parameters;
     }
 
-    public static void CalculatePriceFuelAndTime(Vehicle ship, OnePart part)
+    public static void CalculatePriceFuelAndTime(Vehicle ship, Part part)
     {
         if (part is null || ship is null)
         {
@@ -53,7 +53,7 @@ public static class CalculationService // static because it has only calculation
         }
     }
 
-    private static void CalculateConsumedFuel(OnePart part, Vehicle ship, Engine engine)
+    private static void CalculateConsumedFuel(Part part, Vehicle ship, Engine engine)
     {
         if (engine is null || part is null || ship is null)
         {
@@ -64,7 +64,7 @@ public static class CalculationService // static because it has only calculation
         ship.ConsumedFuel += fuel;
     }
 
-    private static void CalculateConsumedTime(OnePart part, Vehicle ship, Engine engine)
+    private static void CalculateConsumedTime(Part part, Vehicle ship, Engine engine)
     {
         if (engine is null || part is null || ship is null)
         {

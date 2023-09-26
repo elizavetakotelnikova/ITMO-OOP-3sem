@@ -3,8 +3,9 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Engines;
 
 public class EngineClassC : Engine
 {
+    private const int EngineClassCSpeed = 10000;
     public EngineClassC()
-        : base(EngineTypes.ImpulseDriveStandard, 10000)
+        : base(EngineTypes.ImpulseDriveStandard, EngineClassCSpeed)
     {
     }
 

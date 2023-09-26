@@ -3,8 +3,9 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Deflectors;
 
 public class PhotonDeflector : Deflector
 {
+    private const int PhotonDeflectorHealth = 300;
     public PhotonDeflector()
-        : base(300)
+        : base(PhotonDeflectorHealth)
     {
         IfPhotonDeflectorSetted = false;
         SettedPhotonDeflector = null;
@@ -16,11 +17,11 @@ public class PhotonDeflector : Deflector
 
         if (obstacle is not Antimatter)
         {
-            Status = 0;
+            IsActive = true;
             return;
         }
 
         HealthPoints -= obstacle.Damage;
-        CheckStatus();
+        UpdateStatus();
     }
 }

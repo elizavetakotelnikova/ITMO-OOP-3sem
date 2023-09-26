@@ -6,11 +6,11 @@ using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
 using Itmo.ObjectOrientedProgramming.Lab1.Models;
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 
-public abstract class Vehicle : ICanTakeDamage
+public abstract class Vehicle : IDamageable
 {
-    protected Vehicle(Deflector? deflector, Frame? frame, Sizes shipSize, bool flag)
+    protected Vehicle(Deflector? deflector, Frame? frame, Sizes shipSize, bool hasAntiNeutronEmitter)
     {
-        HasAntiNeutronEmitter = flag;
+        HasAntiNeutronEmitter = hasAntiNeutronEmitter;
         Deflector = deflector;
         Frame = frame;
         SizeCharacteristics = shipSize;
@@ -40,16 +40,16 @@ public abstract class Vehicle : ICanTakeDamage
         if (obstacle is Antimatter)
         {
             if (Deflector is null || Deflector.SettedPhotonDeflector is null
-                                  || Deflector.Status == 0 || Deflector.SettedPhotonDeflector.Status == 0)
+                                  || !Deflector.IsActive || !Deflector.SettedPhotonDeflector.IsActive)
             {
                 ShipStatus = ShipStatus.CrewKilled;
                 return;
             }
 
-            if (Deflector.SettedPhotonDeflector.Status == 1)
+            if (Deflector.SettedPhotonDeflector.IsActive)
             {
                 Deflector.SettedPhotonDeflector.TakeDamage(obstacle);
-                Deflector.SettedPhotonDeflector.CheckStatus();
+                Deflector.SettedPhotonDeflector.UpdateStatus();
                 return;
             }
         }
@@ -63,10 +63,10 @@ public abstract class Vehicle : ICanTakeDamage
             }
         }
 
-        if (Deflector != null && Deflector.Status == 1)
+        if (Deflector != null && Deflector.IsActive)
         {
             Deflector.TakeDamage(obstacle);
-            Deflector.CheckStatus();
+            Deflector.UpdateStatus();
         }
         else
         {
@@ -74,9 +74,9 @@ public abstract class Vehicle : ICanTakeDamage
         }
     }
 
-    public void CheckStatus()
+    public void UpdateStatus()
     {
-        if (Frame?.IsWorking == false) ShipStatus = ShipStatus.Destroyed;
+        if (Frame?.IsActive == false) ShipStatus = ShipStatus.Destroyed;
     }
 
     public bool IsShipWorking()

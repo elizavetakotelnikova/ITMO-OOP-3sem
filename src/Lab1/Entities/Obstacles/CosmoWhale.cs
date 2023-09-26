@@ -3,8 +3,10 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
 
 public class CosmoWhale : Obstacle
 {
+    private const int CosmoWhaleDamage = 400;
+
     public CosmoWhale()
-            : base(400, ObstaclesTypes.CosmoWhale, Sizes.Huge)
+            : base(CosmoWhaleDamage, ObstaclesTypes.CosmoWhale, Sizes.Huge)
         {
         }
 }

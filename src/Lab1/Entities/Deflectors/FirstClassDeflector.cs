@@ -1,13 +1,15 @@
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
+
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Deflectors;
 
 public class FirstClassDeflector : Deflector
 {
-    public FirstClassDeflector(bool flag)
-        : base(20)
+    private const int FirstClassDeflectorHealth = 20;
+    public FirstClassDeflector(bool hasPhotonDeflector)
+        : base(FirstClassDeflectorHealth)
     {
-        IfPhotonDeflectorSetted = flag;
-        if (flag)
+        IfPhotonDeflectorSetted = hasPhotonDeflector;
+        if (hasPhotonDeflector)
         {
             SettedPhotonDeflector = new PhotonDeflector();
         }
@@ -30,6 +32,6 @@ public class FirstClassDeflector : Deflector
             HealthPoints -= obstacle.Damage * 0.5;
         }
 
-        CheckStatus();
+        UpdateStatus();
     }
 }

@@ -3,8 +3,10 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
 
 public class SmallAsteroid : Obstacle
 {
+    private const int SmallAsteroidDamage = 10;
+
     public SmallAsteroid()
-        : base(10, ObstaclesTypes.Asteroid, Sizes.Small)
+        : base(SmallAsteroidDamage, ObstaclesTypes.Asteroid, Sizes.Small)
     {
     }
 }

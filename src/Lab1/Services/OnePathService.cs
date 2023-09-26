@@ -9,7 +9,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Services;
 
 public static class OnePathService // static because it contains only methods which could be tested through the non-static OnePart class
 {
-    public static void SeeResult(OnePart part)
+    public static void SeeResult(Part part)
     {
         if (part is null) return;
 
@@ -56,7 +56,7 @@ public static class OnePathService // static because it contains only methods wh
         (part.BestShip, part.BestEngine) = (bestParams.BestVehicle, bestParams.BestEngine);
     }
 
-    private static void CheckHabitat(Vehicle currentShip, OnePart part)
+    private static void CheckHabitat(Vehicle currentShip, Part part)
     {
         if (part is null || currentShip is null || part.Habitat is null)
         {
@@ -96,11 +96,11 @@ public static class OnePathService // static because it contains only methods wh
         foreach (Obstacle x in currentObstacles)
         {
             currentShip.TakeDamage(x);
-            currentShip.CheckStatus();
+            currentShip.UpdateStatus();
         }
     }
 
-    private static void CheckRange(Vehicle currentShip, OnePart part)
+    private static void CheckRange(Vehicle currentShip, Part part)
     {
         if (part is null || currentShip is null || part.Habitat is null)
         {
@@ -123,7 +123,7 @@ public static class OnePathService // static because it contains only methods wh
         currentShip.ShipStatus = ShipStatus.Lost;
     }
 
-    private static BestPriceCharacteristics FindBetterShip(IEnumerable<Vehicle> ships, OnePart part)
+    private static BestPriceCharacteristics FindBetterShip(IEnumerable<Vehicle> ships, Part part)
     {
         if (part is null || ships is null)
         {

@@ -19,7 +19,7 @@ public class PathServiceTests
         var habitat = new HighDensityArea();
         double distance = 100000; // middle distance
         var obstacles = new List<Obstacle>();
-        var path = new OnePart(distance, habitat, ships, obstacles);
+        var path = new Part(distance, habitat, ships, obstacles);
         var result = new List<ShipStatus>() { ShipStatus.Destroyed, ShipStatus.Lost };
         OnePathService.SeeResult(path);
         IList<ShipStatus> answer = path.Results;
@@ -44,7 +44,7 @@ public class PathServiceTests
         var ships = new List<Vehicle>() { firstShip, secondShip };
         var habitat = new HighDensityArea();
         double distance = 50000; // short distance
-        var path = new OnePart(distance, habitat, ships, obstacles);
+        var path = new Part(distance, habitat, ships, obstacles);
         var result = new List<ShipStatus>() { ShipStatus.CrewKilled, ShipStatus.Success };
         OnePathService.SeeResult(path);
         IList<ShipStatus> answer = path.Results;
@@ -62,7 +62,7 @@ public class PathServiceTests
         var ships = new List<Vehicle>() { firstShip, secondShip, thirdShip };
         var habitat = new Nebula();
         double distance = 49000; // short distance
-        var path = new OnePart(distance, habitat, ships, obstacles);
+        var path = new Part(distance, habitat, ships, obstacles);
         var result = new List<ShipStatus>() { ShipStatus.Destroyed, ShipStatus.Success, ShipStatus.Success };
         OnePathService.SeeResult(path);
         IList<ShipStatus> answer = path.Results;
@@ -82,7 +82,7 @@ public class PathServiceTests
         var ships = new List<Vehicle>() { firstShip, secondShip };
         var habitat = new UsualSpace();
         double distance = 49000; // short distance
-        var path = new OnePart(distance, habitat, ships, obstacles);
+        var path = new Part(distance, habitat, ships, obstacles);
         OnePathService.SeeResult(path);
         Vehicle? bestShip = path.BestShip;
         Assert.True(bestShip == ships[0]);
@@ -97,7 +97,7 @@ public class PathServiceTests
         var ships = new List<Vehicle>() { firstShip, secondShip };
         var habitat = new HighDensityArea();
         double distance = 80000; // middle distance
-        var path = new OnePart(distance, habitat, ships, obstacles);
+        var path = new Part(distance, habitat, ships, obstacles);
         OnePathService.SeeResult(path);
         Vehicle? bestShip = path.BestShip;
         Assert.True(bestShip == ships[1]);
@@ -112,7 +112,7 @@ public class PathServiceTests
         var ships = new List<Vehicle>() { firstShip, secondShip };
         var habitat = new Nebula();
         double distance = 49000; // short distance
-        var path = new OnePart(distance, habitat, ships, obstacles);
+        var path = new Part(distance, habitat, ships, obstacles);
         OnePathService.SeeResult(path);
         Vehicle? bestShip = path.BestShip;
 
@@ -128,7 +128,7 @@ public class PathServiceTests
         var ships = new List<Vehicle>() { firstShip, secondShip };
         var habitat = new UsualSpace();
         double distance = 49000; // short distance
-        var path = new OnePart(distance, habitat, ships, obstacles);
+        var path = new Part(distance, habitat, ships, obstacles);
         OnePathService.SeeResult(path);
         IEnumerable<ShipStatus> answer = path.Results;
         var result = new List<ShipStatus>() { ShipStatus.Destroyed, ShipStatus.Destroyed };

@@ -3,11 +3,12 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Deflectors;
 
 public class SecondClassDeflector : Deflector
 {
-    public SecondClassDeflector(bool flag)
-    : base(100)
+    private const int SecondClassDeflectorHealth = 100;
+    public SecondClassDeflector(bool hasPhotonDeflector)
+    : base(SecondClassDeflectorHealth)
     {
-        IfPhotonDeflectorSetted = flag;
-        if (flag)
+        IfPhotonDeflectorSetted = hasPhotonDeflector;
+        if (hasPhotonDeflector)
         {
             SettedPhotonDeflector = new PhotonDeflector();
         }
@@ -28,6 +29,6 @@ public class SecondClassDeflector : Deflector
         }
 
         HealthPoints -= obstacle.Damage;
-        CheckStatus();
+        UpdateStatus();
     }
 }

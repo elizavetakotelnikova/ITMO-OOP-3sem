@@ -2,10 +2,11 @@ using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
 using Itmo.ObjectOrientedProgramming.Lab1.Models;
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Frames;
 
-public class FirstFrame : Frame, ICanTakeDamage
+public class FirstFrame : Frame, IDamageable
 {
+    private const int FirstFrameHealthPoints = 15;
     public FirstFrame()
-        : base(15)
+        : base(FirstFrameHealthPoints)
     {
     }
 
@@ -22,6 +23,6 @@ public class FirstFrame : Frame, ICanTakeDamage
             HealthPoints -= obstacle.Damage;
         }
 
-        CheckStatus();
+        UpdateStatus();
     }
 }

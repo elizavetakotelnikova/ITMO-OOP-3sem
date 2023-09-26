@@ -2,8 +2,10 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Engines;
 
 public class JumpingEngineGamma : JumpingEngine
 {
+    private const int GammaEngineRange = 100000;
+    private const int GammaEngineSpeed = 100000;
     public JumpingEngineGamma()
-        : base(100000, 100000)
+        : base(GammaEngineRange, GammaEngineSpeed)
     {
     }
 

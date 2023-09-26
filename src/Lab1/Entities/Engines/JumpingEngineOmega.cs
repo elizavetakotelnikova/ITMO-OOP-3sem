@@ -1,8 +1,10 @@
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Engines;
 public class JumpingEngineOmega : JumpingEngine
 {
+    private const int OmegaEngineRange = 500000;
+    private const int OmegaEngineSpeed = 500000;
     public JumpingEngineOmega()
-        : base(500000, 500000)
+        : base(OmegaEngineRange, OmegaEngineSpeed)
     {
     }
 

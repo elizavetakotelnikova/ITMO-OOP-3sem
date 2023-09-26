@@ -1,23 +1,20 @@
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Frames;
 
-public abstract class Frame : ICanTakeDamage
+public abstract class Frame : IDamageable
 {
-    protected Frame(double hp)
+    protected Frame(double healthPoints)
     {
-        HealthPoints = hp;
-        IsWorking = true;
+        HealthPoints = healthPoints;
+        IsActive = true;
     }
 
-    public bool IsWorking { get; private set; }
+    public bool IsActive { get; private set; }
     protected double HealthPoints { get; set; }
     public abstract void TakeDamage(Obstacle obstacle);
 
-    public void CheckStatus()
+    public void UpdateStatus()
     {
-        if (HealthPoints < 0)
-        {
-            IsWorking = false;
-        }
+        if (HealthPoints < 0) IsActive = false;
     }
 }

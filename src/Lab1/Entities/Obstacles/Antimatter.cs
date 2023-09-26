@@ -3,8 +3,10 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Obstacles;
 
 public class Antimatter : Obstacle
 {
+    private const int AntimatterDamage = 100;
+
     public Antimatter()
-        : base(100, ObstaclesTypes.Antimatter, Sizes.Big)
+        : base(AntimatterDamage, ObstaclesTypes.Antimatter, Sizes.Big)
     {
     }
 }

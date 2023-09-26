@@ -7,9 +7,9 @@ using Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Models;
 
-public class OnePart // class which contains the info about one part of the entire path
+public class Part // class which contains the info about one part of the entire path
 {
-    public OnePart(double userLength, Habitat userHabitat, IList<Vehicle> userVehicles, IEnumerable<Obstacle> userObstacles)
+    public Part(double userLength, Habitat userHabitat, IList<Vehicle> userVehicles, IEnumerable<Obstacle> userObstacles)
     {
         Length = userLength;
         Habitat = userHabitat;
@@ -27,7 +27,7 @@ public class OnePart // class which contains the info about one part of the enti
         {
             foreach (Obstacle element in userObstacles)
             {
-                if (Habitat != null && Habitat.ObstacleTypeAllowed.Contains(element.Category))
+                if (Habitat is not null && Habitat.ObstacleTypeAllowed.Contains(element.Category))
                 {
                     Obstacles.Add(element);
                 }
