@@ -8,14 +8,7 @@ public class SecondClassDeflector : Deflector
     : base(SecondClassDeflectorHealth)
     {
         IfPhotonDeflectorSetted = hasPhotonDeflector;
-        if (hasPhotonDeflector)
-        {
-            SettedPhotonDeflector = new PhotonDeflector();
-        }
-        else
-        {
-            SettedPhotonDeflector = null;
-        }
+        SettedPhotonDeflector = hasPhotonDeflector ? new PhotonDeflector() : null;
     }
 
     public override void TakeDamage(Obstacle obstacle)

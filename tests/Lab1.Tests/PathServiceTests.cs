@@ -13,7 +13,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Tests;
 public class PathServiceTests
 {
     [Fact]
-    public void OnePathServiceShouldReturnDestroyedLostWhenStrollShipAvgurPassed()
+    public void OnePartServiceShouldReturnDestroyedLostWhenStrollShipAvgurPassed()
     {
         var ships = new List<Vehicle>() { new StrollShip(), new Avgur() };
         var habitat = new HighDensityArea();
@@ -21,7 +21,7 @@ public class PathServiceTests
         var obstacles = new List<Obstacle>();
         var path = new Part(distance, habitat, ships, obstacles);
         var result = new List<ShipStatus>() { ShipStatus.Destroyed, ShipStatus.Lost };
-        OnePathService.SeeResult(path);
+        OnePartService.SeeResult(path);
         IList<ShipStatus> answer = path.Results;
 
         Assert.True(result.SequenceEqual(answer));
@@ -29,7 +29,7 @@ public class PathServiceTests
 
     [Fact]
     public void
-        OnePathServiceShouldReturnCrewKilledSuccessWhenVaclassandVaclassWithDeflectorsInHighDensityAreaPassed() // underscore is prohibited by the IDE
+        OnePartServiceShouldReturnCrewKilledSuccessWhenVaclassandVaclassWithDeflectorsInHighDensityAreaPassed() // underscore is prohibited by the IDE
     {
         Vehicle firstShip = new Vaclass();
         Vehicle secondShip = new Vaclass();
@@ -46,14 +46,14 @@ public class PathServiceTests
         double distance = 50000; // short distance
         var path = new Part(distance, habitat, ships, obstacles);
         var result = new List<ShipStatus>() { ShipStatus.CrewKilled, ShipStatus.Success };
-        OnePathService.SeeResult(path);
+        OnePartService.SeeResult(path);
         IList<ShipStatus> answer = path.Results;
 
         Assert.True(result.SequenceEqual(answer));
     }
 
     [Fact]
-    public void OnePathServiceShouldReturnDestroyedSuccessSuccessWhenAvgurVaclassMeredianPassed()
+    public void OnePartServiceShouldReturnDestroyedSuccessSuccessWhenAvgurVaclassMeredianPassed()
     {
         Vehicle firstShip = new Vaclass();
         Vehicle secondShip = new Avgur();
@@ -64,7 +64,7 @@ public class PathServiceTests
         double distance = 49000; // short distance
         var path = new Part(distance, habitat, ships, obstacles);
         var result = new List<ShipStatus>() { ShipStatus.Destroyed, ShipStatus.Success, ShipStatus.Success };
-        OnePathService.SeeResult(path);
+        OnePartService.SeeResult(path);
         IList<ShipStatus> answer = path.Results;
 
         Assert.True(result.SequenceEqual(answer));
@@ -74,7 +74,7 @@ public class PathServiceTests
     }
 
     [Fact]
-    public void OnePathServiceShouldReturnStrollShipWhenStrollShipVaclassPassed()
+    public void OnePartServiceShouldReturnStrollShipWhenStrollShipVaclassPassed()
     {
         var firstShip = new StrollShip();
         var secondShip = new Vaclass();
@@ -83,13 +83,13 @@ public class PathServiceTests
         var habitat = new UsualSpace();
         double distance = 49000; // short distance
         var path = new Part(distance, habitat, ships, obstacles);
-        OnePathService.SeeResult(path);
+        OnePartService.SeeResult(path);
         Vehicle? bestShip = path.BestShip;
         Assert.True(bestShip == ships[0]);
     }
 
     [Fact]
-    public void OnePathServiceShouldReturnStellWhenAvgurStellPassed()
+    public void OnePartServiceShouldReturnStellWhenAvgurStellPassed()
     {
         var firstShip = new Avgur();
         var secondShip = new Stell();
@@ -98,13 +98,13 @@ public class PathServiceTests
         var habitat = new HighDensityArea();
         double distance = 80000; // middle distance
         var path = new Part(distance, habitat, ships, obstacles);
-        OnePathService.SeeResult(path);
+        OnePartService.SeeResult(path);
         Vehicle? bestShip = path.BestShip;
         Assert.True(bestShip == ships[1]);
     }
 
     [Fact]
-    public void OnePathServiceShouldReturnVaclassWhenStrollShipVaclassPassed()
+    public void OnePartServiceShouldReturnVaclassWhenStrollShipVaclassPassed()
     {
         var firstShip = new StrollShip();
         var secondShip = new Vaclass();
@@ -113,14 +113,14 @@ public class PathServiceTests
         var habitat = new Nebula();
         double distance = 49000; // short distance
         var path = new Part(distance, habitat, ships, obstacles);
-        OnePathService.SeeResult(path);
+        OnePartService.SeeResult(path);
         Vehicle? bestShip = path.BestShip;
 
         Assert.True(bestShip == ships[1]);
     }
 
     [Fact]
-    public void PathServiceShouldReturnDestroyedDestroyedWhenStrollShipVaclassMeteoritsPassed()
+    public void OnePartServiceShouldReturnDestroyedDestroyedWhenStrollShipVaclassMeteoritsPassed()
     {
         var firstShip = new StrollShip();
         var secondShip = new Vaclass();
@@ -129,7 +129,7 @@ public class PathServiceTests
         var habitat = new UsualSpace();
         double distance = 49000; // short distance
         var path = new Part(distance, habitat, ships, obstacles);
-        OnePathService.SeeResult(path);
+        OnePartService.SeeResult(path);
         IEnumerable<ShipStatus> answer = path.Results;
         var result = new List<ShipStatus>() { ShipStatus.Destroyed, ShipStatus.Destroyed };
         Assert.True(result.SequenceEqual(answer));

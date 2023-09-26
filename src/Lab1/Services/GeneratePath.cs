@@ -48,7 +48,7 @@ public class GeneratePath
         for (int i = 0; i < _habitats.Count; i++)
         {
             var newPathPart = new Part(_distances[i], _habitats[i], _ships, _obstacles[i]);
-            OnePathService.SeeResult(newPathPart);
+            OnePartService.SeeResult(newPathPart);
         }
     }
 

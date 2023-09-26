@@ -24,13 +24,11 @@ public class Part // class which contains the info about one part of the entire 
             throw new ArgumentNullException(nameof(userObstacles));
         }
 
+        foreach (Obstacle element in userObstacles)
         {
-            foreach (Obstacle element in userObstacles)
+            if (Habitat is not null && Habitat.ObstacleTypeAllowed.Contains(element.Category))
             {
-                if (Habitat is not null && Habitat.ObstacleTypeAllowed.Contains(element.Category))
-                {
-                    Obstacles.Add(element);
-                }
+                Obstacles.Add(element);
             }
         }
     }

@@ -7,7 +7,7 @@ using Itmo.ObjectOrientedProgramming.Lab1.Entities.Vehicles;
 using Itmo.ObjectOrientedProgramming.Lab1.Models;
 namespace Itmo.ObjectOrientedProgramming.Lab1.Services;
 
-public static class OnePathService // static because it contains only methods which could be tested through the non-static OnePart class
+public static class OnePartService // static because it contains only methods which could be tested through the non-static OnePart class
 {
     public static void SeeResult(Part part)
     {
