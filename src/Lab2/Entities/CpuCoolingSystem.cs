@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace Itmo.ObjectOrientedProgramming.Lab2.Models;
+namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
-public class CpuCoolingSystem
+public class CpuCoolingSystem : IReposirotyAdded
 {
     public CpuCoolingSystem(ObjectSize? size, IList<string> allowedSockets, int tdp)
     {
@@ -15,4 +15,8 @@ public class CpuCoolingSystem
     public IList<string> AllowedSockets { get; set; } // подумать + надо ли налабл
     public int Tdp { get; set; }
 
+    public void AddToRepository(Repository repository)
+    {
+        repository?.CpuCoolingSystems.Add(this);
+    }
 }

@@ -4,8 +4,7 @@
         <RootNamespace>Itmo.ObjectOrientedProgramming.Lab2</RootNamespace>
     </PropertyGroup>
 
-    <ItemGroup>
-      <Folder Include="Services\" />
-    </ItemGroup>
+
+
 
 </Project>

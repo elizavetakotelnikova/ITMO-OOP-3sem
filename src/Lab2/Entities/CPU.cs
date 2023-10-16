@@ -1,6 +1,6 @@
-namespace Itmo.ObjectOrientedProgramming.Lab2.Models;
+namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
-public class Cpu
+public class Cpu : IReposirotyAdded
 {
     public Cpu(
         int clockRate,
@@ -24,4 +24,9 @@ public class Cpu
     public bool HasIGpu { get; set; }
     public int Tdp { get; set; }
     public int ConsumedPower { get; set; }
+
+    public void AddToRepository(Repository repository)
+    {
+        repository?.Cpus.Add(this);
+    }
 }

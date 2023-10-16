@@ -1,6 +1,6 @@
-namespace Itmo.ObjectOrientedProgramming.Lab2.Models;
+namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
-public class Ssd
+public class Ssd : IReposirotyAdded
 {
     public Ssd(VariantConnectingSsd connecting, int capacity, int maxSpeed, int consumptedPower)
     {
@@ -14,4 +14,9 @@ public class Ssd
     public int Capacity { get; set; }
     public int MaxSpeed { get; set; }
     public int ConsumptedPower { get; set; }
+    
+    public void AddToRepository(Repository repository)
+    {
+        repository?.Ssds.Add(this);
+    }
 }

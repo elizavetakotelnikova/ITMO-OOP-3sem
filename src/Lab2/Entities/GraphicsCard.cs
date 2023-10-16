@@ -1,6 +1,6 @@
-namespace Itmo.ObjectOrientedProgramming.Lab2.Models;
+namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
-public class GraphicsCard
+public class GraphicsCard : IReposirotyAdded
 {
     public GraphicsCard(int highth, int width, string pciEVersion, int chipFrequency, int consumptedPower)
     {
@@ -16,4 +16,9 @@ public class GraphicsCard
     public string PciEVersion { get; set; }
     public int ChipFrequency { get; set; }
     public int ConsumptedPower { get; set; }
+
+    public void AddToRepository(Repository repository)
+    {
+        repository?.GraphicsCards.Add(this);
+    }
 }

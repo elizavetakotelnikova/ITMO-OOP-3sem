@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 
-namespace Itmo.ObjectOrientedProgramming.Lab2.Models;
 
-public class WiFiAdapter
+namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
+
+public class WiFiAdapter : IReposirotyAdded
 {
     public WiFiAdapter(string version, bool hasBluetooth, string pciEVersion, int consumptedPower)
     {
@@ -16,4 +16,9 @@ public class WiFiAdapter
     public bool HasBluetooth { get; set; }
     public string PciEVersion { get; set; }
     public int ConsumptedPower { get; set; }
+    
+    public void AddToRepository(Repository repository)
+    {
+        repository?.WiFiAdapters.Add(this);
+    }
 }
