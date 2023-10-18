@@ -1,11 +1,15 @@
-using Itmo.ObjectOrientedProgramming.Lab2.Models;
 
-namespace Itmo.ObjectOrientedProgramming.Lab2.Services;
+
+using Itmo.ObjectOrientedProgramming.Lab2.Entities;
+using Itmo.ObjectOrientedProgramming.Lab2.Models;
+using Itmo.ObjectOrientedProgramming.Lab2.Services.RepositoryServices;
+
+namespace Itmo.ObjectOrientedProgramming.Lab2.Services.ComputerBuilding;
 
 public class ComputerMaker
 {
     public Computer MakeComputer(
-        Configurator configurator,
+        IComputerBuilder configurator,
         Motherboard motherboard,
         Cpu cpu,
         CpuCoolingSystem cpuCoolingSystem,
@@ -13,7 +17,7 @@ public class ComputerMaker
         GraphicsCard graphicsCard,
         Ssd ssd,
         Hdd hhd,
-        ComputerCase computerCase,
+        ComputerCaseRepositoryService computerCaseRepositoryService,
         PowerCase powerCase,
         WiFiAdapter wiFiAdapter)
     {
@@ -24,7 +28,7 @@ public class ComputerMaker
         configurator.BuildGraphicsCard(graphicsCard);
         configurator.BuildSsd(ssd);
         configurator.BuildHdd(hhd);
-        configurator.BuildComputerCase(computerCase);
+        configurator.BuildComputerCase(computerCaseRepositoryService);
         configurator.BuildPowerCase(powerCase);
         configurator.BuildWifiAdapter(wiFiAdapter);
         return configurator.Product;

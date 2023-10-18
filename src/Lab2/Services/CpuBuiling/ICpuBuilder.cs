@@ -1,4 +1,8 @@
-namespace Itmo.ObjectOrientedProgramming.Lab2.Services.Cpu;
+using Itmo.ObjectOrientedProgramming.Lab2.Entities;
+using Itmo.ObjectOrientedProgramming.Lab2.Models;
+using Itmo.ObjectOrientedProgramming.Lab2.Services.Motherboard;
+
+namespace Itmo.ObjectOrientedProgramming.Lab2.Services.CpuBuilding;
 
 public interface ICpuBuilder
 {

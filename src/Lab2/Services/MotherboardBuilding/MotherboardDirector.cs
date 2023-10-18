@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Net;
 using Itmo.ObjectOrientedProgramming.Lab2.Models;
 
-namespace Itmo.ObjectOrientedProgramming.Lab2.Services.Motherboard;
+namespace Itmo.ObjectOrientedProgramming.Lab2.Services.MotherboardBuilding;
 
 
 public class MotherboardDirector

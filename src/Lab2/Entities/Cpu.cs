@@ -3,13 +3,15 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 public class Cpu : IReposirotyAdded
 {
     public Cpu(
+        int id,
         int clockRate,
         int coresQuantity,
-        int socket,
+        string socket,
         bool hasIGpu,
         int tdp,
         int consumedPower)
     {
+        Id = id;
         ClockRate = clockRate;
         CoresQuantity = coresQuantity;
         Socket = socket;
@@ -18,9 +20,10 @@ public class Cpu : IReposirotyAdded
         ConsumedPower = consumedPower;
     }
 
+    public int Id { get; set; }
     public int ClockRate { get; set; }
     public int CoresQuantity { get; set; }
-    public int Socket { get; set; }
+    public string Socket { get; set; }
     public bool HasIGpu { get; set; }
     public int Tdp { get; set; }
     public int ConsumedPower { get; set; }

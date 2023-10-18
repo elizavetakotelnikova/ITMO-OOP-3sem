@@ -1,7 +1,7 @@
 using System;
 using Itmo.ObjectOrientedProgramming.Lab2.Models;
 
-namespace Itmo.ObjectOrientedProgramming.Lab2.Services.Motherboard;
+namespace Itmo.ObjectOrientedProgramming.Lab2.Services.MotherboardBuilidng;
 
 public class MotherboardBuilder : IMotherboardBuilder
 {

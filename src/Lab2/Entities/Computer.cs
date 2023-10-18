@@ -5,12 +5,38 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
 public class Computer
 {
-   public Computer(Motherboard? motherboard, Cpu? cpu, CpuCoolingSystem? cpuCoolingSystem, Memory? memory, GraphicsCard? graphicsCard, Ssd? ssd, Hdd? hdd, ComputerCase? computerCase, PowerCase? powerCase, WiFiAdapter? wiFiAdapter)
+   private readonly Motherboard? _motherboard;
+   private readonly Cpu? _cpu;
+   // bios
+   private readonly CpuCoolingSystem? _cpuCoolingSystem;
+
+   private readonly Memory? _memory;
+   private readonly XmpProfile? _xmpProfile;
+   private readonly GraphicsCard? _graphicsCard;
+   private readonly Ssd? _ssd;
+   private readonly Hdd? _hdd;
+   private readonly ComputerCase? _computerCase;
+   private readonly PowerCase? _powerCase;
+   private readonly WiFiAdapter? _wiFiAdapter;
+
+   public Computer(
+      Motherboard? motherboard,
+      Cpu? cpu,
+      CpuCoolingSystem? cpuCoolingSystem,
+      Memory? memory,
+      XmpProfile? xmpProfile,
+      GraphicsCard? graphicsCard,
+      Ssd? ssd,
+      Hdd? hdd,
+      ComputerCase? computerCase,
+      PowerCase? powerCase,
+      WiFiAdapter? wiFiAdapter)
    {
       _motherboard = motherboard;
       _cpu = cpu;
       _cpuCoolingSystem = cpuCoolingSystem;
       _memory = memory;
+      _xmpProfile = xmpProfile;
       _graphicsCard = graphicsCard;
       _ssd = ssd;
       _hdd = hdd;
@@ -18,20 +44,6 @@ public class Computer
       _powerCase = powerCase;
       _wiFiAdapter = wiFiAdapter;
    }
-
-   private Motherboard? _motherboard;
-   private Cpu? _cpu;
-   // bios
-   private CpuCoolingSystem? _cpuCoolingSystem;
-
-   private Memory? _memory;
-   // public XmpProfile XmpProfile { get; set; }
-   private GraphicsCard? _graphicsCard;
-   private Ssd? _ssd;
-   private Hdd? _hdd;
-   private ComputerCase? _computerCase;
-   private PowerCase? _powerCase;
-   private WiFiAdapter? _wiFiAdapter;
 
    public IComputerBuilder Direct(IComputerBuilder builder)
    {
