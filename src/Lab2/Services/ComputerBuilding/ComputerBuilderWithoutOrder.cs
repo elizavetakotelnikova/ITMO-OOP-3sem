@@ -190,7 +190,7 @@ public class ComputerBuilderWithoutOrder : IComputerBuilder
             throw new ArgumentException("the object can not be created");
         }
 
-        ValidateComputer.ValidateAllComponents(
+        /*ValidateComputer.ValidateAllComponents(
             _motherboard,
             _cpu,
             _cpuCoolingSystem,
@@ -202,7 +202,20 @@ public class ComputerBuilderWithoutOrder : IComputerBuilder
             _computerCase,
             _powerCase,
             _wiFiAdapter,
-            this);
+            this);*/
+        var pc = new ComputerVersion2(
+            _motherboard,
+            _cpu,
+            _cpuCoolingSystem,
+            _memory,
+            _xmpProfile,
+            _graphicsCard,
+            _ssd,
+            _hdd,
+            _computerCase,
+            _powerCase,
+            _wiFiAdapter);
+        ValidateEntireComputer.ValidateAllComponents(pc, this);
         if (BuildingReport.Status == BuildingStatus.Failed)
         {
             throw new ArgumentException("The object can not be created");
