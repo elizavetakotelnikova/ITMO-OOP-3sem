@@ -48,16 +48,18 @@ public class Computer
    public IComputerBuilder Direct(IComputerBuilder builder)
    {
       if (builder is null) throw new ArgumentException("builder must not be null");
-      builder.SetMotherboard(_motherboard);
-      builder.SetСpu(_cpu);
-      builder.SetMemory(_memory);
-      builder.SetSsd(_ssd);
-      builder.SetHdd(_hdd);
-      builder.SetGraphicsCard(_graphicsCard);
-      builder.SetCoolingSystem(_cpuCoolingSystem);
-      builder.SetComputerCase(_computerCase);
-      builder.SetPowerCase(_powerCase);
-      builder.SetWifiAdapter(_wiFiAdapter);
+      builder
+         .WithMotherboard(_motherboard)
+         .WithСpu(_cpu)
+         .WithCoolingSystem(_cpuCoolingSystem)
+         .WithMemory(_memory)
+         .WithXmpProfile(_xmpProfile)
+         .WithGraphicsCard(_graphicsCard)
+         .WithSsd(_ssd)
+         .WithHdd(_hdd)
+         .WithComputerCase(_computerCase)
+         .WithPowerCase(_powerCase)
+         .WithWifiAdapter(_wiFiAdapter);
 
       return builder;
    }

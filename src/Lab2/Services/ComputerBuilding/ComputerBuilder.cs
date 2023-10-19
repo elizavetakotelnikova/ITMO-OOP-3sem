@@ -12,7 +12,6 @@ public class ComputerBuilder : IComputerBuilder
     private Cpu? _cpu;
     // bios
     private CpuCoolingSystem? _cpuCoolingSystem;
-
     private Memory? _memory;
     private XmpProfile? _xmpProfile;
     private GraphicsCard? _graphicsCard;
@@ -26,23 +25,38 @@ public class ComputerBuilder : IComputerBuilder
     {
         BuildingReport = report;
     }*/
-
+    public ComputerBuilder(ComputerVersion2 computer)
+    {
+        if (computer is null) return;
+        this
+            .WithMotherboard(computer.Motherboard)
+            .WithСpu(computer.Cpu)
+            .WithCoolingSystem(computer.CpuCoolingSystem)
+            .WithMemory(computer.Memory)
+            .WithXmpProfile(computer.XmpProfile)
+            .WithGraphicsCard(computer.GraphicsCard)
+            .WithSsd(computer.Ssd)
+            .WithHdd(computer.Hdd)
+            .WithComputerCase(computer.ComputerCase)
+            .WithPowerCase(computer.PowerCase)
+            .WithWifiAdapter(computer.WiFiAdapter);
+    }
     public Report BuildingReport { get; set; } = new Report();
-
     public IComputerBuilder BuiltExisting(IComputerBuilder builder)
     {
         if (builder is null) throw new ArgumentException("builder is not set");
-        builder.WithMotherboard(_motherboard);
-        builder.WithСpu(_cpu);
-        builder.WithCoolingSystem(_cpuCoolingSystem);
-        builder.WithMemory(_memory);
-        builder.WithXmpProfile(_xmpProfile);
-        builder.WithGraphicsCard(_graphicsCard);
-        builder.WithSsd(_ssd);
-        builder.WithHdd(_hdd);
-        builder.WithComputerCase(_computerCase);
-        builder.WithPowerCase(_powerCase);
-        builder.WithWifiAdapter(_wiFiAdapter);
+        builder
+            .WithMotherboard(_motherboard)
+            .WithСpu(_cpu)
+            .WithCoolingSystem(_cpuCoolingSystem)
+            .WithMemory(_memory)
+            .WithXmpProfile(_xmpProfile)
+            .WithGraphicsCard(_graphicsCard)
+            .WithSsd(_ssd)
+            .WithHdd(_hdd)
+            .WithComputerCase(_computerCase)
+            .WithPowerCase(_powerCase)
+            .WithWifiAdapter(_wiFiAdapter);
         return this;
     }
 
@@ -154,6 +168,18 @@ public class ComputerBuilder : IComputerBuilder
 
     public IComputerBuilder WithGraphicsCard(GraphicsCard? graphicsCard)
     {
+        if (_cpu is null)
+        {
+            BuildingReport.Status = BuildingStatus.Failed;
+            BuildingReport.Notes = "Cpu is not set";
+            throw new ArgumentException("Cpu is not set");
+        }
+        if (!_cpu.HasIGpu && _graphicsCard is null)
+        {
+            BuildingReport.Status = BuildingStatus.Failed;
+            BuildingReport.Notes = "Must have a graphics card";
+            throw new ArgumentException("Must have a graphicsCard");
+        }
         _graphicsCard = graphicsCard;
         return this;
     }
@@ -199,6 +225,12 @@ public class ComputerBuilder : IComputerBuilder
 
     public IComputerBuilder WithWifiAdapter(WiFiAdapter? wifiAdapter)
     {
+        if (_wiFiAdapter is not null && wifiAdapter is not null)
+        {
+            BuildingReport.Status = BuildingStatus.Failed;
+            BuildingReport.Notes = "Wifi adapter can not be set";
+        }
+
         _wiFiAdapter = wifiAdapter;
         return this;
     }
@@ -214,17 +246,10 @@ public class ComputerBuilder : IComputerBuilder
             throw new ArgumentException("the object can not be created");
         }
 
-        if (!_cpu.HasIGpu && _graphicsCard is null)
-        {
-            BuildingReport.Status = BuildingStatus.Failed;
-            BuildingReport.Notes = "Must have a graphics card";
-            throw new ArgumentException("Must have a graphicsCard");
-        }
-
         if (_ssd is null && _hdd is null)
         {
             BuildingReport.Status = BuildingStatus.Failed;
-            BuildingReport.Notes = "Must hae a ssd or hdd";
+            BuildingReport.Notes = "Must have a ssd or hdd";
             throw new ArgumentException("Must have at sdd or hdd");
         }
 

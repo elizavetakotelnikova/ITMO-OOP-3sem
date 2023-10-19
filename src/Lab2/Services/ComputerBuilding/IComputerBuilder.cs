@@ -3,6 +3,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Models;
 
 public interface IComputerBuilder
 {
+    public Report BuildingReport { get; }
     public IComputerBuilder WithMotherboard(Motherboard? motherboard);
     public IComputerBuilder WithСpu(Cpu? cpu);
     public IComputerBuilder WithCoolingSystem(CpuCoolingSystem? cpuCoolingSystem);
