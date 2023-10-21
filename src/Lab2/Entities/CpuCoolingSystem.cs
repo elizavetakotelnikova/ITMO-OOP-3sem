@@ -12,9 +12,9 @@ public class CpuCoolingSystem : IReposirotyAdded
         Tdp = tdp;
     }
 
-    public ObjectSize? Size { get; set; }
-    public IList<string> AllowedSockets { get; set; } // подумать + надо ли налабл
-    public int Tdp { get; set; }
+    public ObjectSize? Size { get; }
+    public IList<string> AllowedSockets { get;  } // подумать + надо ли налабл
+    public int Tdp { get; }
 
     public void AddToRepository(Repository repository)
     {

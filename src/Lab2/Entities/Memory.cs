@@ -4,7 +4,13 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
 public class Memory : IReposirotyAdded
 {
-    public Memory(int freeMemory, IList<(double Freq, double Power)> frequencyPower, IList<string> supportedXmp, FormFactor formFactor, string ddrStandard, int powerConsumption)
+    public Memory(
+        int freeMemory,
+        IList<(double Freq, double Power)> frequencyPower,
+        IList<string> supportedXmp,
+        FormFactor formFactor,
+        string ddrStandard,
+        int powerConsumption)
     {
         FreeMemory = freeMemory;
         FrequencyPower = frequencyPower;
@@ -15,7 +21,14 @@ public class Memory : IReposirotyAdded
         PowerConsumption = powerConsumption;
     } // констурктор с листами еще посмотреть
 
-    public Memory(int freeMemory, IList<(double Freq, double Power)> frequencyPower, IList<string> supportedXmp, FormFactor formFactor, string ddrStandard, int powerConsumption, XmpProfile? xmpProfile)
+    public Memory(
+        int freeMemory,
+        IList<(double Freq, double Power)> frequencyPower,
+        IList<string> supportedXmp,
+        FormFactor formFactor,
+        string ddrStandard,
+        int powerConsumption,
+        XmpProfile? xmpProfile)
     {
         FreeMemory = freeMemory;
         FrequencyPower = frequencyPower;
@@ -40,5 +53,4 @@ public class Memory : IReposirotyAdded
     {
         repository?.Rams.Add(this);
     }
-
 }

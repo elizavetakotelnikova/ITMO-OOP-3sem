@@ -1,4 +1,4 @@
-
+using Itmo.ObjectOrientedProgramming.Lab2.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
@@ -16,7 +16,7 @@ public class WiFiAdapter : IReposirotyAdded
     public bool HasBluetooth { get; set; }
     public string PciEVersion { get; set; }
     public int PowerConsumption { get; set; }
-    
+
     public void AddToRepository(Repository repository)
     {
         repository?.WiFiAdapters.Add(this);

@@ -38,12 +38,12 @@ public class Repository
     public void InitializeMotherboards()
     {
         var builder = new MotherboardBuilder();
-        var microATX = new FormFactor("Micro-ATX"); //244 244
+        var microATX = new FormFactor("Micro-ATX");
         var miniATX = new FormFactor("Mini-ATX");
         var amiBios = new Bios(
             "AMI",
             "Intel-1.0",
-            new List<string>() { "Intel core i3-10105"  });
+            new List<string>() { "Intel core i3-10105", "Intel core i5-12400" });
         var intelG41 = new Chipset("Intel G41", new List<double>() { 1600 }, true);
         Motherboard firstType = builder.WithFormFactor(microATX).WithSocket("LGA 775").WithPcieLines(1).WithSataPorts(4)
             .WithAllowedDdr("DDR3").WithRamQuantity(2).WithChipset(intelG41).WithBios(amiBios).Build();
@@ -89,8 +89,10 @@ public class Repository
         var sockets = new List<string>() { "AM3", "AM3+", "AM4", "AM5", "FM1", "FM2", "FM2+", "LGA 1150", "LGA 1151", "LGA 1155", "LGA 1200", "LGA 1700", "LGA 2011", "LGA 2011-3", "LGA 2066" };
         CpuCoolingSystem firstType = builder.WithSize(new ObjectSize(138, 129, 160)).WithTdp(260).WithAllowedSockets(sockets).Build();
         CpuCoolingSystem secondType = builder.WithSize(new ObjectSize(138, 129, 160)).WithTdp(200).WithAllowedSockets(sockets).Build();
+        CpuCoolingSystem thirdType = builder.WithSize(new ObjectSize(138, 129, 160)).WithTdp(100).WithAllowedSockets(sockets).Build();
         CpuCoolingSystems.Add(firstType);
         CpuCoolingSystems.Add(secondType);
+        CpuCoolingSystems.Add(thirdType);
     }
 
     public void InitializeRam()

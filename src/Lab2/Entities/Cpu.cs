@@ -32,7 +32,7 @@ public class Cpu : IReposirotyAdded
     public bool HasIGpu { get; }
     public int Tdp { get; }
     public int ConsumedPower { get; }
-    public string RamSupport { get; } = new List<string>();
+    public int RamSupport { get; }
 
     public void AddToRepository(Repository repository)
     {

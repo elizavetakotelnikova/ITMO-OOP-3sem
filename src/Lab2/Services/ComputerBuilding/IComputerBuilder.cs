@@ -15,4 +15,6 @@ public interface IComputerBuilder
     public IComputerBuilder WithComputerCase(ComputerCase? computerCase);
     public IComputerBuilder WithPowerCase(PowerCase? powerCase);
     public IComputerBuilder WithWifiAdapter(WiFiAdapter? wifiAdapter);
+
+    public Computer Build();
 }

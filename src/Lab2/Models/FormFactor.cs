@@ -16,7 +16,7 @@ public record FormFactor
         Length = length;
     }
 
-    public string? Name { get; set; }
+    public string Name { get; set; }
     public double Width { get; set; }
     public double Length { get; set; }
 }

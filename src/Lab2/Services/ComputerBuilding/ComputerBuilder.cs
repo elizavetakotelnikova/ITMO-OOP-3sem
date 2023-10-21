@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Itmo.ObjectOrientedProgramming.Lab2.Entities;
 using Itmo.ObjectOrientedProgramming.Lab2.Models;
 
@@ -24,6 +22,11 @@ public class ComputerBuilder : IComputerBuilder
     {
         BuildingReport = report;
     }*/
+
+    public ComputerBuilder()
+    {
+    }
+
     public ComputerBuilder(Computer computer)
     {
         if (computer is null) return;
@@ -40,8 +43,10 @@ public class ComputerBuilder : IComputerBuilder
             .WithPowerCase(computer.PowerCase)
             .WithWifiAdapter(computer.WiFiAdapter);
     }
+
     public Report BuildingReport { get; set; } = new Report();
-    public IComputerBuilder BuiltExisting(IComputerBuilder builder)
+
+    /*public IComputerBuilder BuildFromExisting(IComputerBuilder builder)
     {
         if (builder is null) throw new ArgumentException("builder is not set");
         builder
@@ -57,29 +62,26 @@ public class ComputerBuilder : IComputerBuilder
             .WithPowerCase(_powerCase)
             .WithWifiAdapter(_wiFiAdapter);
         return this;
-    }
+    }*/
 
     public IComputerBuilder WithMotherboard(Motherboard? motherboard) // ограничение с процессором и оперативкой
     {
+        if (_motherboard is null)
+        {
+            BuildingReport.Status = BuildingStatus.Failed;
+            BuildingReport.Notes = "Not all mandatory components are provided";
+        }
+
         _motherboard = motherboard;
         return this;
     }
 
     public IComputerBuilder WithСpu(Cpu? cpu)
     {
-        if (_motherboard is null || cpu is null || cpu.Socket != _motherboard.CpuSocket)
+        if (_cpu is null)
         {
             BuildingReport.Status = BuildingStatus.Failed;
-            BuildingReport.Notes = "Cpu is not suitable for this motherboard type";
-            return this;
-        }
-
-        if (_motherboard.Bios is null ||
-            !_motherboard.Bios.CpuAllowedTypes.Contains(cpu)) // посмотреть что с айдишечкой
-        {
-            BuildingReport.Status = BuildingStatus.Failed;
-            BuildingReport.Notes = "Bios and cpu are not suitable";
-            return this;
+            BuildingReport.Notes = "Not all mandatory components are provided";
         }
 
         _cpu = cpu;
@@ -95,63 +97,19 @@ public class ComputerBuilder : IComputerBuilder
             return this;
         }
 
-        if (_cpu.Tdp > cpuCoolingSystem.Tdp)
-        {
-            BuildingReport.Guarantee = "Because of not enough tdp of CoolingSystem the guarantee could not be provided";
-        }
-
         _cpuCoolingSystem = cpuCoolingSystem;
         return this;
     }
 
     public IComputerBuilder WithMemory(Memory? memory)
     {
-        if (_memory is null)
-        {
-            BuildingReport.Status = BuildingStatus.Failed;
-            BuildingReport.Notes = "RAM is not set";
-            return this;
-        }
-
-        if (_motherboard is null || _motherboard.Chipset is null)
-        {
-            BuildingReport.Status = BuildingStatus.Failed;
-            BuildingReport.Notes = "Motherboard is not set";
-            return this;
-        }
-
-        bool canBeSet = false;
-        foreach ((double Freq, int Power) pair in _memory.FrequencyPower)
-        {
-            IEnumerable<double> allowedFrequencies = _motherboard.Chipset.Frequencies.Where(freq => freq < pair.Freq);
-            if (allowedFrequencies.Any())
-            {
-                canBeSet = true;
-            }
-        }
-
-        if (!canBeSet)
-        {
-            BuildingReport.Status = BuildingStatus.Failed;
-            BuildingReport.Notes = "RAM is not suitable because of frequencies lack";
-            return this;
-        }
-
-        if (_memory.XmpProfile is not null && _xmpProfile is not null)
-        {
-            if (!_memory.SupportedXmp.Contains(_xmpProfile.Name))
-            {
-                BuildingReport.Notes = "Xmp is not working because it is not supported by the RAM";
-            }
-        }
-
         _memory = memory;
         return this;
     }
 
     public IComputerBuilder WithXmpProfile(XmpProfile? xmpProfile)
     {
-        if (_memory is not null && _xmpProfile is not null)
+        if (_memory is not null && _xmpProfile is not null && _xmpProfile.Name is not null)
         {
             if (!_memory.SupportedXmp.Contains(_xmpProfile.Name))
             {
@@ -167,18 +125,6 @@ public class ComputerBuilder : IComputerBuilder
 
     public IComputerBuilder WithGraphicsCard(GraphicsCard? graphicsCard)
     {
-        if (_cpu is null)
-        {
-            BuildingReport.Status = BuildingStatus.Failed;
-            BuildingReport.Notes = "Cpu is not set";
-            throw new ArgumentException("Cpu is not set");
-        }
-        if (!_cpu.HasIGpu && _graphicsCard is null)
-        {
-            BuildingReport.Status = BuildingStatus.Failed;
-            BuildingReport.Notes = "Must have a graphics card";
-            throw new ArgumentException("Must have a graphicsCard");
-        }
         _graphicsCard = graphicsCard;
         return this;
     }
@@ -203,21 +149,6 @@ public class ComputerBuilder : IComputerBuilder
 
     public IComputerBuilder WithPowerCase(PowerCase? powerCase)
     {
-        if (_powerCase is null || _cpu is null || _memory is null || (_ssd is null && _hdd is null))
-        {
-            BuildingReport.Status = BuildingStatus.Failed;
-            BuildingReport.Notes = "Mandatory components are not set";
-            throw new ArgumentException("Mandatory components not set");
-        }
-
-        if (_powerCase.MaxLoad <
-            (_cpu.ConsumedPower + _memory.PowerConsumption + _ssd?.ConsumptedPower + _hdd?.ConsumptedPower) * 1.3)
-        {
-            BuildingReport.Status = BuildingStatus.Failed;
-            BuildingReport.Notes = "Not enough powerful PowerCase";
-            throw new ArgumentException("Not enough powerful PowerCase");
-        }
-
         _powerCase = powerCase;
         return this;
     }
@@ -236,20 +167,32 @@ public class ComputerBuilder : IComputerBuilder
 
     public Computer Build()
     {
+        BuildingReport.Status = BuildingStatus.Success;
         if (_motherboard is null || _cpu is null || _cpuCoolingSystem is null || _memory is null ||
             _computerCase is null ||
             _powerCase is null)
         {
             BuildingReport.Status = BuildingStatus.Failed;
             BuildingReport.Notes = "Not all mandatory components are provided";
-            throw new ArgumentException("the object can not be created");
+            throw new ArgumentException("Not all mandatory objects are set");
         }
 
-        if (_ssd is null && _hdd is null)
+        ValidateComputer.ValidateAllComponents(
+            _motherboard,
+            _cpu,
+            _cpuCoolingSystem,
+            _memory,
+            _xmpProfile,
+            _graphicsCard,
+            _ssd,
+            _hdd,
+            _computerCase,
+            _powerCase,
+            _wiFiAdapter,
+            this);
+        if (BuildingReport.Status == BuildingStatus.Failed)
         {
-            BuildingReport.Status = BuildingStatus.Failed;
-            BuildingReport.Notes = "Must have a ssd or hdd";
-            throw new ArgumentException("Must have at sdd or hdd");
+            throw new ArgumentException("The object can not be created");
         }
 
         return new Computer(

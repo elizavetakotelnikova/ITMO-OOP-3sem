@@ -42,7 +42,6 @@ public class WifiAdapterBuilder
             throw new ArgumentException("Adapter cannot be created");
         }
 
-        var meow = new CpuRepositoryService(Repository);
         return new WiFiAdapter(
             _version,
             _hasBluetooth,

@@ -29,10 +29,11 @@ public static class ValidateComputer
         ValidateXmpProfile(xmpProfile, memory, builder);
         ValidateGraphicsCard(graphicsCard, cpu, builder);
         ValidateDrivenDisks(ssd, hdd, builder);
-        ValidateComputerCase(computerCase, builder);
+        ValidateComputerCase(computerCase, motherboard, graphicsCard, builder);
         ValidatePowerCase(powerCase, cpu, memory, ssd, hdd, builder);
         ValidateWifiAdpater(builder);
     }
+
     public static void ValidateMotherboard(Motherboard? motherboard, Cpu? cpu,  IComputerBuilder builder)
     {
         if (builder is null) return;
@@ -51,12 +52,19 @@ public static class ValidateComputer
         }
 
         if (motherboard.Bios is null ||
-            !motherboard.Bios.CpuAllowedTypes.Contains(cpu)) // посмотреть что с айдишечкой
+            !motherboard.Bios.CpuAllowedTypes.Contains(cpu.Name))
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
             builder.BuildingReport.Notes = "Bios and cpu are not suitable";
+            return;
         }
 
+        if (builder.BuildingReport.Status == BuildingStatus.Failed)
+        {
+            throw new ArgumentException("The object can not be created because of motherboard");
+        }
+
+        // посмотреть что с айдишечкой
         return;
     }
 
@@ -74,17 +82,25 @@ public static class ValidateComputer
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
             builder.BuildingReport.Notes = "Cpu is not suitable for this motherboard type";
+
+            // throw new ArgumentException("check sockets");
             return;
         }
 
         if (motherboard.Bios is null ||
-            !motherboard.Bios.CpuAllowedTypes.Contains(cpu)) // посмотреть что с айдишечкой
+            !motherboard.Bios.CpuAllowedTypes.Contains(cpu.Name))
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
             builder.BuildingReport.Notes = "Bios and cpu are not suitable";
             return;
         }
 
+        if (builder.BuildingReport.Status == BuildingStatus.Failed)
+        {
+            throw new ArgumentException("The object can not be created because of cpu");
+        }
+
+        // посмотреть что с айдишечкой
         return;
     }
 
@@ -105,7 +121,10 @@ public static class ValidateComputer
             builder.BuildingReport.Guarantee = "Because of not enough tdp of CoolingSystem the guarantee could not be provided";
         }
 
-        return;
+        if (builder.BuildingReport.Status == BuildingStatus.Failed)
+        {
+            throw new ArgumentException("The object can not be created because of cooling system");
+        }
     }
 
     public static void ValidateMemory(Motherboard? motherboard, Memory? memory, XmpProfile? xmpProfile, IComputerBuilder? builder)
@@ -143,32 +162,40 @@ public static class ValidateComputer
             return;
         }
 
-        if (memory.XmpProfile is not null && xmpProfile is not null)
+        if (memory.XmpProfile is not null && xmpProfile is not null && xmpProfile.Name is not null)
         {
             if (!memory.SupportedXmp.Contains(xmpProfile.Name))
             {
                 builder.BuildingReport.Notes = "Xmp is not working because it is not supported by the RAM";
             }
+        }
+
+        if (builder.BuildingReport.Status == BuildingStatus.Failed)
+        {
+            throw new ArgumentException("The object can not be created because of RAM");
         }
     }
 
     public static void ValidateXmpProfile(XmpProfile? xmpProfile, Memory? memory, IComputerBuilder builder)
     {
         if (builder is null) return;
-        if (memory is not null && xmpProfile is not null)
+        if (memory is not null && xmpProfile is not null && xmpProfile.Name is not null)
         {
             if (!memory.SupportedXmp.Contains(xmpProfile.Name))
             {
                 builder.BuildingReport.Notes = "Xmp is not working because it is not supported by the RAM";
-                xmpProfile = null;
             }
         }
 
-        return;
+        if (builder.BuildingReport.Status == BuildingStatus.Failed)
+        {
+            throw new ArgumentException("The object can not be created because of XmpProfile");
+        }
     }
 
     public static void ValidateGraphicsCard(GraphicsCard? graphicsCard, Cpu? cpu, IComputerBuilder builder)
     {
+        if (builder is null) return;
         if (cpu is null)
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
@@ -185,14 +212,35 @@ public static class ValidateComputer
                 return;
             }
         }
+
+        if (builder.BuildingReport.Status == BuildingStatus.Failed)
+        {
+            throw new ArgumentException("The object can not be created because of graphics card");
+        }
     }
 
-    public static void ValidateDrivenDisks(Ssd? ssd, Hdd? hdd, IComputerBuilder builder,)
+    public static void ValidateComputerCase(ComputerCase? computerCase, Motherboard? motherboard, GraphicsCard? graphicsCard, IComputerBuilder builder)
     {
-        if (ssd is null && hdd is null)
+        if (builder is null) return;
+        if (computerCase is null || graphicsCard is null || graphicsCard.Height > computerCase.Size.Height ||
+            graphicsCard.Width > computerCase.Size.Width)
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
-            builder.BuildingReport.Notes = "Should have ssd or hdd";
+            builder.BuildingReport.Notes = "Graphics card is too big";
+            throw new ArgumentException("Graphics card is too big");
+        }
+
+        if (motherboard is null || motherboard.FormFactor is null ||
+            !computerCase.AllowedFormFactors.Contains(motherboard.FormFactor.Name))
+        {
+            builder.BuildingReport.Status = BuildingStatus.Failed;
+            builder.BuildingReport.Notes = "Motherboard should have another form factor";
+            throw new ArgumentException("Motherboard should have another form factor");
+        }
+
+        if (builder.BuildingReport.Status == BuildingStatus.Failed)
+        {
+            throw new ArgumentException("The object can not be created because of computer case");
         }
     }
 
@@ -207,11 +255,16 @@ public static class ValidateComputer
         }
 
         if (powerCase.MaxLoad <
-            (cpu.ConsumedPower + memory.ConsumptedPower + ssd?.ConsumptedPower + hdd?.ConsumptedPower) * 1.3)
+            (cpu.ConsumedPower + memory.PowerConsumption + ssd?.PowerConsumption + hdd?.PowerConsumption) * 1.3)
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
             builder.BuildingReport.Notes = "Not enough powerful PowerCase";
             throw new ArgumentException("Not enough powerful PowerCase");
+        }
+
+        if (builder.BuildingReport.Status == BuildingStatus.Failed)
+        {
+            throw new ArgumentException("The object can not be created because of power case");
         }
     }
 
@@ -222,6 +275,11 @@ public static class ValidateComputer
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
             builder.BuildingReport.Notes = "Should have ssd or hdd";
+        }
+
+        if (builder.BuildingReport.Status == BuildingStatus.Failed)
+        {
+            throw new ArgumentException("The object can not be created because of driven disks");
         }
     }
 

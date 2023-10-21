@@ -13,10 +13,10 @@ public class ComputerCase : IReposirotyAdded
         Size = size;
     }
 
-    public int MaxGCLength { get; set; }
-    public int MaxGCWidth { get; set; }
-    public IList<string> AllowedFormFactors { get; set; }
-    public ObjectSize Size { get; set; }
+    public int MaxGCLength { get; }
+    public int MaxGCWidth { get; }
+    public IList<string> AllowedFormFactors { get; }
+    public ObjectSize Size { get; }
     public void AddToRepository(Repository repository)
     {
         repository?.ComputerCases.Add(this);
