@@ -9,7 +9,7 @@ public class SsdBuilder
     private VariantConnectingSsd? _connecting;
     private int _capacity;
     private int _maxSpeed;
-    private int _powerConsumption;
+    private double _powerConsumption;
 
     public SsdBuilder WithConnecting(VariantConnectingSsd connectingSsd)
     {
@@ -29,7 +29,7 @@ public class SsdBuilder
         return this;
     }
 
-    public SsdBuilder WithPower(int powerConsumption)
+    public SsdBuilder WithPower(double powerConsumption)
     {
         _powerConsumption = powerConsumption;
         return this;

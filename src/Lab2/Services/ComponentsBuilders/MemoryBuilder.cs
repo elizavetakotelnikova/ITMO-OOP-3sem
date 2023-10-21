@@ -8,8 +8,8 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Services.ComponentsBuilders;
 public class MemoryBuilder
 {
     private int _freeMemory;
-    private IList<(double Freq, int Power)> _frequencyPower = new List<(double Freq, int Power)>();
-    private IList<XmpProfile> _supportedXmp = new List<XmpProfile>();
+    private IList<(double Freq, double Power)> _frequencyPower = new List<(double Freq, double Power)>();
+    private IList<string> _supportedXmp = new List<string>();
     private XmpProfile? _xmpProfile;
     private FormFactor? _formFactor;
     private string? _ddrStandard;
@@ -21,15 +21,21 @@ public class MemoryBuilder
             return this;
         }
 
-    public MemoryBuilder WithFrequencyPower(IList<(double Freq, int Power)> list)
+    public MemoryBuilder WithFrequencyPower(IList<(double Freq, double Power)> list)
         {
             _frequencyPower = list;
             return this;
         }
 
-    public MemoryBuilder WithSupportedXmp(XmpProfile xmpProfile)
+    public MemoryBuilder WithXmp(XmpProfile xmpProfile)
     {
         _xmpProfile = xmpProfile;
+        return this;
+    }
+
+    public MemoryBuilder WithSupportedXmp(IList<string> supportedXmp)
+    {
+        _supportedXmp = supportedXmp;
         return this;
     }
 
@@ -78,6 +84,7 @@ public class MemoryBuilder
 
             _freeMemory = memory.FreeMemory;
             _frequencyPower = memory.FrequencyPower;
+            _xmpProfile = memory.XmpProfile;
             _supportedXmp = memory.SupportedXmp;
             _formFactor = memory.FormFactor;
             _ddrStandard = memory.DdrStandard;

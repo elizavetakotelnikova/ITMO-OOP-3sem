@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
@@ -9,8 +8,8 @@ public class XmpProfileBuilder
 {
     private string? _name;
 
-    private IList<string> _timing = new List<string>();
-    private int _power;
+    private string? _timing;
+    private double _power;
     private int _frequency;
 
     public XmpProfileBuilder WithName(string? name)
@@ -19,7 +18,7 @@ public class XmpProfileBuilder
         return this;
     }
 
-    public XmpProfileBuilder WithPower(int power)
+    public XmpProfileBuilder WithPower(double power)
     {
         _power = power;
         return this;
@@ -31,7 +30,7 @@ public class XmpProfileBuilder
         return this;
     }
 
-    public XmpProfileBuilder WithTiming(IList<string> timing)
+    public XmpProfileBuilder WithTiming(string timing)
     {
         _timing = timing;
         return this;

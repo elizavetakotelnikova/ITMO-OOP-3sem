@@ -9,7 +9,7 @@ public class BiosBuilder
 {
     private string? _type;
     private string? _version;
-    private IList<Cpu> _allowedCpu = new List<Cpu>();
+    private IList<string> _allowedCpu = new List<string>();
 
     public BiosBuilder WithType(string type)
     {
@@ -23,7 +23,7 @@ public class BiosBuilder
         return this;
     }
 
-    public BiosBuilder WithAllowedCpu(IList<Cpu> allowedCpus)
+    public BiosBuilder WithAllowedCpu(IList<string> allowedCpus)
     {
         _allowedCpu = allowedCpus;
         return this;

@@ -18,15 +18,15 @@ public class CoolingSystemBuilder
         return this;
     }
 
-    public CoolingSystemBuilder WithClockRate(IList<string> allowedSockets)
-    {
-        _allowedSockets = allowedSockets;
-        return this;
-    }
-
     public CoolingSystemBuilder WithTdp(int tdp)
     {
         _tdp = tdp;
+        return this;
+    }
+
+    public CoolingSystemBuilder WithAllowedSockets(IList<string> sockets)
+    {
+        _allowedSockets = sockets;
         return this;
     }
 

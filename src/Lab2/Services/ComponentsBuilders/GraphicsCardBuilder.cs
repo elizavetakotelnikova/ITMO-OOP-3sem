@@ -7,9 +7,10 @@ public class GraphicsCardBuilder
 {
     private int _height;
     private int _width;
+    private int _availableMemory;
     private string? _pciEVersion;
     private int _chipFrequency;
-    private int _powerConsumption;
+    private double _powerConsumption;
 
     public GraphicsCardBuilder WithHeight(int height)
     {
@@ -23,15 +24,27 @@ public class GraphicsCardBuilder
         return this;
     }
 
-    public GraphicsCardBuilder WithPciEVersion(string pcieVersion)
-        {
-            _pciEVersion = pcieVersion;
-            return this;
-        }
+    public GraphicsCardBuilder WithAvailableMemory(int availableMemory)
+    {
+        _availableMemory = availableMemory;
+        return this;
+    }
 
-    public GraphicsCardBuilder WithPowerConsumption(int powerConsumption)
+    public GraphicsCardBuilder WithPciEVersion(string pcieVersion)
+    {
+        _pciEVersion = pcieVersion;
+        return this;
+    }
+
+    public GraphicsCardBuilder WithPowerConsumption(double powerConsumption)
     {
         _powerConsumption = powerConsumption;
+        return this;
+    }
+
+    public GraphicsCardBuilder WithChipFrequency(int chipFrequency)
+    {
+        _chipFrequency = chipFrequency;
         return this;
     }
 
@@ -48,7 +61,8 @@ public class GraphicsCardBuilder
             _width,
             _pciEVersion,
             _chipFrequency,
-            _powerConsumption);
+            _powerConsumption,
+            _availableMemory);
     }
 
     public GraphicsCardBuilder BuiltFromExisting(GraphicsCard graphicsCard)
@@ -64,6 +78,7 @@ public class GraphicsCardBuilder
         _pciEVersion = graphicsCard.PciEVersion;
         _chipFrequency = graphicsCard.ChipFrequency;
         _powerConsumption = graphicsCard.PowerConsumption;
+        _availableMemory = graphicsCard.AvailableMemory;
         return this;
     }
 }

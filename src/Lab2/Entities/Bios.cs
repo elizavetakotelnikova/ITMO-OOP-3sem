@@ -5,7 +5,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
 public class Bios : IReposirotyAdded
 {
-    public Bios(string? type, string? version, IList<Cpu> cpuAllowedTypes)
+    public Bios(string? type, string? version, IList<string> cpuAllowedTypes)
     {
         Type = type;
         Version = version;
@@ -14,7 +14,7 @@ public class Bios : IReposirotyAdded
 
     public string? Type { get; set; }
     public string? Version { get; set; }
-    public IList<Cpu> CpuAllowedTypes { get; } = new List<Cpu>();
+    public IList<string> CpuAllowedTypes { get; } = new List<string>();
 
     public void AddToRepository(Repository repository)
     {

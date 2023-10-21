@@ -1,5 +1,6 @@
 using System;
 using Itmo.ObjectOrientedProgramming.Lab2.Entities;
+using Itmo.ObjectOrientedProgramming.Lab2.Services.RepositoryServices;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Services.ComponentsBuilders;
 
@@ -41,6 +42,7 @@ public class WifiAdapterBuilder
             throw new ArgumentException("Adapter cannot be created");
         }
 
+        var meow = new CpuRepositoryService(Repository);
         return new WiFiAdapter(
             _version,
             _hasBluetooth,

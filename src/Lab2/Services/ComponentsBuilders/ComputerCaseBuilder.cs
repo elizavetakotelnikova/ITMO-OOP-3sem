@@ -11,7 +11,7 @@ public class ComputerCaseBuilder
     private ObjectSize? _size;
     private int _maxGcLength;
     private int _maxGcWidth;
-    private IList<FormFactor> _allowedFormFactors = new List<FormFactor>();
+    private IList<string> _allowedFormFactors = new List<string>();
 
     public ComputerCaseBuilder WithSize(ObjectSize size)
     {
@@ -19,7 +19,7 @@ public class ComputerCaseBuilder
         return this;
     }
 
-    public ComputerCaseBuilder WithFormFactor(IList<FormFactor> allowedFormFactors)
+    public ComputerCaseBuilder WithFormFactor(IList<string> allowedFormFactors)
     {
         _allowedFormFactors = allowedFormFactors;
         return this;

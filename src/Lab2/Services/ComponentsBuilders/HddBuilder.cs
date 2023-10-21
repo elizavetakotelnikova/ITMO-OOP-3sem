@@ -7,7 +7,7 @@ public class HddBuilder
 {
     private int _capacity;
     private int _maxSpeed;
-    private int _powerConsumption;
+    private double _powerConsumption;
 
     public HddBuilder WithCapacity(int capacity)
     {
@@ -21,7 +21,7 @@ public class HddBuilder
         return this;
     }
 
-    public HddBuilder WithPower(int powerConsumption)
+    public HddBuilder WithPower(double powerConsumption)
     {
         _powerConsumption = powerConsumption;
         return this;

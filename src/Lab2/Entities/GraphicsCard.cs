@@ -1,21 +1,25 @@
+using Itmo.ObjectOrientedProgramming.Lab2.Models;
+
 namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
 public class GraphicsCard : IReposirotyAdded
 {
-    public GraphicsCard(int height, int width, string pciEVersion, int chipFrequency, int consumptedPower)
+    public GraphicsCard(int height, int width, string pciEVersion, int chipFrequency, double powerConsumption, int availableMemory)
     {
         Height = height;
         Width = width;
         PciEVersion = pciEVersion;
         ChipFrequency = chipFrequency;
-        PowerConsumption = consumptedPower;
+        PowerConsumption = powerConsumption;
+        AvailableMemory = availableMemory;
     }
 
-    public int Height { get; set; }
-    public int Width { get; set; }
-    public string PciEVersion { get; set; }
-    public int ChipFrequency { get; set; }
-    public int PowerConsumption { get; set; }
+    public int Height { get; }
+    public int Width { get; }
+    public string PciEVersion { get; }
+    public int ChipFrequency { get; }
+    public double PowerConsumption { get; }
+    public int AvailableMemory { get; }
 
     public void AddToRepository(Repository repository)
     {

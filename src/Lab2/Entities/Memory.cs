@@ -4,7 +4,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
 public class Memory : IReposirotyAdded
 {
-    public Memory(int freeMemory, IList<(double Freq, int Power)> frequencyPower, IList<XmpProfile> supportedXmp, FormFactor formFactor, string ddrStandard, int powerConsumption)
+    public Memory(int freeMemory, IList<(double Freq, double Power)> frequencyPower, IList<string> supportedXmp, FormFactor formFactor, string ddrStandard, int powerConsumption)
     {
         FreeMemory = freeMemory;
         FrequencyPower = frequencyPower;
@@ -15,7 +15,7 @@ public class Memory : IReposirotyAdded
         PowerConsumption = powerConsumption;
     } // констурктор с листами еще посмотреть
 
-    public Memory(int freeMemory, IList<(double Freq, int Power)> frequencyPower, IList<XmpProfile> supportedXmp, FormFactor formFactor, string ddrStandard, int powerConsumption, XmpProfile? xmpProfile)
+    public Memory(int freeMemory, IList<(double Freq, double Power)> frequencyPower, IList<string> supportedXmp, FormFactor formFactor, string ddrStandard, int powerConsumption, XmpProfile? xmpProfile)
     {
         FreeMemory = freeMemory;
         FrequencyPower = frequencyPower;
@@ -27,14 +27,14 @@ public class Memory : IReposirotyAdded
         XmpProfile = xmpProfile;
     }
 
-    public int FreeMemory { get; set; }
-    public IList<(double Freq, int Power)> FrequencyPower { get; set; } = new List<(double Freq, int Power)>();
-    public IList<XmpProfile> SupportedXmp { get; set; } = new List<XmpProfile>();
+    public int FreeMemory { get; }
+    public IList<(double Freq, double Power)> FrequencyPower { get; } = new List<(double Freq, double Power)>();
+    public IList<string> SupportedXmp { get; } = new List<string>();
 
-    public XmpProfile? XmpProfile { get; set; }
-    public FormFactor FormFactor { get; set; }
-    public string DdrStandard { get; set; }
-    public int PowerConsumption { get; set; }
+    public XmpProfile? XmpProfile { get; }
+    public FormFactor FormFactor { get; }
+    public string DdrStandard { get; }
+    public int PowerConsumption { get; }
 
     public void AddToRepository(Repository repository)
     {

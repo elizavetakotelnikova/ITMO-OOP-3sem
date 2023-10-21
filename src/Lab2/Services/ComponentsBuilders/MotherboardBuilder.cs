@@ -7,12 +7,12 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Services.ComponentsBuilders;
 public class MotherboardBuilder
 {
     private string? _cpuSocket;
-    private string? _pciLinesQuantity;
+    private int _pciLinesQuantity;
     private Chipset? _chipset;
     private int _sataPortsQuantity;
     private string? _ddrStandard;
     private int _ramQuantity;
-    private string? _formFactor;
+    private FormFactor? _formFactor;
     private Bios? _bios;
 
     public MotherboardBuilder WithSocket(string socket)
@@ -21,7 +21,7 @@ public class MotherboardBuilder
         return this;
     }
 
-    public MotherboardBuilder WithPcieLines(string? lines)
+    public MotherboardBuilder WithPcieLines(int lines)
     {
         _pciLinesQuantity = lines;
         return this;
@@ -46,7 +46,7 @@ public class MotherboardBuilder
         return this;
     }
 
-    public MotherboardBuilder WithFormFactor(string formFactor)
+    public MotherboardBuilder WithFormFactor(FormFactor formFactor)
     {
         _formFactor = formFactor;
         return this;
@@ -66,7 +66,7 @@ public class MotherboardBuilder
 
     public Motherboard Build()
     {
-        if (_cpuSocket is null || _ddrStandard is null || _formFactor is null || _bios is null || _chipset is null || _pciLinesQuantity is null)
+        if (_cpuSocket is null || _ddrStandard is null || _formFactor is null || _bios is null || _chipset is null || _pciLinesQuantity == 0)
             throw new ArgumentException("Mandatory element are not set");
         return new Motherboard(
             _cpuSocket,

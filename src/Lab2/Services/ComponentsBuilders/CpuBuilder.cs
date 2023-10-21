@@ -5,17 +5,18 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Services.ComponentsBuilders;
 
 public class CpuBuilder
 {
-    private int _id;
+    private string? _name;
     private int _clockRate;
     private int _coresQuantity;
     private string? _socket;
     private bool _hasIGpu;
     private int _tdp;
     private int _consumedPower;
+    private int _ramSupport;
 
-    public CpuBuilder WithId(int id)
+    public CpuBuilder WithName(string name)
     {
-        _id = id;
+        _name = name;
         return this;
     }
 
@@ -55,30 +56,38 @@ public class CpuBuilder
         return this;
     }
 
+    public CpuBuilder WithIRamSupport(int ramSupport)
+    {
+        _ramSupport = ramSupport;
+        return this;
+    }
+
     public Cpu Build()
     {
-        if (_clockRate == 0 || _coresQuantity == 0 || _socket is null || _tdp == 0 || _consumedPower == 0)
+        if (_ramSupport == 0 || _name is null || _clockRate == 0 || _coresQuantity == 0 || _socket is null || _tdp == 0 || _consumedPower == 0)
             throw new ArgumentException("Mandatory elements are not set");
         return new Cpu(
-            _id,
+            _name,
             _clockRate,
             _coresQuantity,
             _socket,
             _hasIGpu,
             _tdp,
-            _consumedPower);
+            _consumedPower,
+            _ramSupport);
     }
 
     public CpuBuilder BuiltFromExisting(Cpu cpu)
     {
         if (cpu is null) return this;
-        _id = cpu.Id;
+        _name = cpu.Name;
         _clockRate = cpu.ClockRate;
         _coresQuantity = cpu.CoresQuantity;
         _socket = cpu.Socket;
         _hasIGpu = cpu.HasIGpu;
         _tdp = cpu.Tdp;
         _consumedPower = cpu.ConsumedPower;
+        _ramSupport = cpu.RamSupport;
         return this;
     }
 }
