@@ -5,7 +5,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
 public class XmpProfile : IReposirotyAdded
 {
-    public XmpProfile(string name, IList<string> timing, int power, int frequency)
+    public XmpProfile(string? name, IList<string> timing, int power, int frequency)
     {
         Name = name;
         Timing = timing;
@@ -13,9 +13,9 @@ public class XmpProfile : IReposirotyAdded
         Frequency = frequency;
     } // конструктор листа посмотреть
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
-    public IList<string> Timing { get; set; }
+    public IList<string> Timing { get; } = new List<string>();
     public int Power { get; set; } // или напряжение?
     public int Frequency { get; set; }
 

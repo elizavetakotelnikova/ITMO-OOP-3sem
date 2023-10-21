@@ -20,13 +20,13 @@ public class Cpu : IReposirotyAdded
         ConsumedPower = consumedPower;
     }
 
-    public int Id { get; set; }
-    public int ClockRate { get; set; }
-    public int CoresQuantity { get; set; }
-    public string Socket { get; set; }
-    public bool HasIGpu { get; set; }
-    public int Tdp { get; set; }
-    public int ConsumedPower { get; set; }
+    public int Id { get; }
+    public int ClockRate { get; }
+    public int CoresQuantity { get; }
+    public string Socket { get; }
+    public bool HasIGpu { get; }
+    public int Tdp { get; }
+    public int ConsumedPower { get; }
 
     public void AddToRepository(Repository repository)
     {

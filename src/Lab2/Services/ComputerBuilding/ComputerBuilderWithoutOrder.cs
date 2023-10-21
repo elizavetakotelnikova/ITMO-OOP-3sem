@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Itmo.ObjectOrientedProgramming.Lab2.Entities;
 using Itmo.ObjectOrientedProgramming.Lab2.Models;
 
@@ -10,9 +8,7 @@ public class ComputerBuilderWithoutOrder : IComputerBuilder
 {
     private Motherboard? _motherboard;
     private Cpu? _cpu;
-    // bios
     private CpuCoolingSystem? _cpuCoolingSystem;
-
     private Memory? _memory;
     private XmpProfile? _xmpProfile;
     private GraphicsCard? _graphicsCard;
@@ -27,7 +23,7 @@ public class ComputerBuilderWithoutOrder : IComputerBuilder
         BuildingReport = report;
     }*/
 
-    public ComputerBuilderWithoutOrder(ComputerVersion2 computer)
+    public ComputerBuilderWithoutOrder(Computer computer)
     {
         if (computer is null) return;
         this
@@ -125,7 +121,7 @@ public class ComputerBuilderWithoutOrder : IComputerBuilder
     {
         if (_memory is not null && _xmpProfile is not null)
         {
-            if (!_memory.SupportedXmp.Contains(_xmpProfile.Name))
+            if (!_memory.SupportedXmp.Contains(_xmpProfile))
             {
                 BuildingReport.Notes = "Xmp is not working because it is not supported by the RAM";
                 _xmpProfile = null;
@@ -190,7 +186,7 @@ public class ComputerBuilderWithoutOrder : IComputerBuilder
             throw new ArgumentException("the object can not be created");
         }
 
-        /*ValidateComputer.ValidateAllComponents(
+        ValidateComputer.ValidateAllComponents(
             _motherboard,
             _cpu,
             _cpuCoolingSystem,
@@ -202,20 +198,7 @@ public class ComputerBuilderWithoutOrder : IComputerBuilder
             _computerCase,
             _powerCase,
             _wiFiAdapter,
-            this);*/
-        var pc = new ComputerVersion2(
-            _motherboard,
-            _cpu,
-            _cpuCoolingSystem,
-            _memory,
-            _xmpProfile,
-            _graphicsCard,
-            _ssd,
-            _hdd,
-            _computerCase,
-            _powerCase,
-            _wiFiAdapter);
-        ValidateEntireComputer.ValidateAllComponents(pc, this);
+            this);
         if (BuildingReport.Status == BuildingStatus.Failed)
         {
             throw new ArgumentException("The object can not be created");

@@ -2,16 +2,16 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
 public class Hdd : IReposirotyAdded
 {
-    public Hdd(int capacity, int rotatingSpeed, int consumptedPower)
+    public Hdd(int capacity, int rotatingSpeed, int powerConsumption)
     {
         Capacity = capacity;
         RotatingSpeed = rotatingSpeed;
-        ConsumptedPower = consumptedPower;
+        PowerConsumption = powerConsumption;
     }
 
-    public int Capacity { get; set; }
-    public int RotatingSpeed { get; set; }
-    public int ConsumptedPower { get; set; }
+    public int Capacity { get; }
+    public int RotatingSpeed { get; }
+    public int PowerConsumption { get; }
 
     public void AddToRepository(Repository repository)
     {

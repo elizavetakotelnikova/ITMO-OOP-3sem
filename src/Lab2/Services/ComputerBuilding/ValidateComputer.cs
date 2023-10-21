@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using Itmo.ObjectOrientedProgramming.Lab2.Entities;
 using Itmo.ObjectOrientedProgramming.Lab2.Models;
@@ -9,17 +8,18 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Services;
 
 public static class ValidateComputer
 {
-    public static void ValidateAllComponents(Motherboard? motherboard,
+    public static void ValidateAllComponents(
+        Motherboard? motherboard,
         Cpu? cpu,
-    CpuCoolingSystem? cpuCoolingSystem,
-    Memory? memory,
+        CpuCoolingSystem? cpuCoolingSystem,
+        Memory? memory,
         XmpProfile? xmpProfile,
-    GraphicsCard? graphicsCard,
-    Ssd? ssd,
-    Hdd? hdd,
-    ComputerCase? computerCase,
-    PowerCase? powerCase,
-    WiFiAdapter? wiFiAdapter,
+        GraphicsCard? graphicsCard,
+        Ssd? ssd,
+        Hdd? hdd,
+        ComputerCase? computerCase,
+        PowerCase? powerCase,
+        WiFiAdapter? wiFiAdapter,
         IComputerBuilder builder)
     {
         ValidateMotherboard(motherboard, cpu, builder);
@@ -33,21 +33,21 @@ public static class ValidateComputer
         ValidatePowerCase(powerCase, cpu, memory, ssd, hdd, builder);
         ValidateWifiAdpater(builder);
     }
-    public static bool ValidateMotherboard(Motherboard? motherboard, Cpu? cpu,  IComputerBuilder builder)
+    public static void ValidateMotherboard(Motherboard? motherboard, Cpu? cpu,  IComputerBuilder builder)
     {
-        if (builder is null) return false;
+        if (builder is null) return;
         if (motherboard is null || cpu is null)
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
             builder.BuildingReport.Notes = "Not all mandatory components are provided";
-            return false;
+            return;
         }
 
         if (cpu.Socket != motherboard.CpuSocket)
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
             builder.BuildingReport.Notes = "Cpu is not suitable for this motherboard type";
-            return false;
+            return;
         }
 
         if (motherboard.Bios is null ||
@@ -57,24 +57,24 @@ public static class ValidateComputer
             builder.BuildingReport.Notes = "Bios and cpu are not suitable";
         }
 
-        return true;
+        return;
     }
 
-    public static bool ValidateCpu(Motherboard? motherboard, Cpu? cpu, IComputerBuilder builder)
+    public static void ValidateCpu(Motherboard? motherboard, Cpu? cpu, IComputerBuilder builder)
     {
-        if (builder is null) return false;
+        if (builder is null) return;
         if (motherboard is null || cpu is null)
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
             builder.BuildingReport.Notes = "Not all mandatory components are provided";
-            return false;
+            return;
         }
 
         if (cpu.Socket != motherboard.CpuSocket)
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
             builder.BuildingReport.Notes = "Cpu is not suitable for this motherboard type";
-            return false;
+            return;
         }
 
         if (motherboard.Bios is null ||
@@ -82,20 +82,22 @@ public static class ValidateComputer
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
             builder.BuildingReport.Notes = "Bios and cpu are not suitable";
-            return false;
+            return;
         }
 
-        return true;
+        return;
     }
 
-    public static bool ValidateCoolingSystem(CpuCoolingSystem? cpuCoolingSystem, Cpu? cpu, IComputerBuilder builder)
+    public static void ValidateCoolingSystem(CpuCoolingSystem? cpuCoolingSystem, Cpu? cpu, IComputerBuilder builder)
     {
-        if (builder is null) return false;
+        if (builder is null) return;
         if (cpu is null || cpuCoolingSystem is null)
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
             builder.BuildingReport.Notes = "Not all mandatory components are provided";
-            throw new ArgumentException("the object can not be created");
+
+            // throw new ArgumentException("the object can not be created");
+            return;
         }
 
         if (cpu.Tdp > cpuCoolingSystem.Tdp)
@@ -103,7 +105,7 @@ public static class ValidateComputer
             builder.BuildingReport.Guarantee = "Because of not enough tdp of CoolingSystem the guarantee could not be provided";
         }
 
-        return true;
+        return;
     }
 
     public static void ValidateMemory(Motherboard? motherboard, Memory? memory, XmpProfile? xmpProfile, IComputerBuilder? builder)
@@ -150,7 +152,7 @@ public static class ValidateComputer
         }
     }
 
-    public static bool ValidateXmpProfile(XmpProfile? xmpProfile, Memory? memory, IComputerBuilder builder)
+    public static void ValidateXmpProfile(XmpProfile? xmpProfile, Memory? memory, IComputerBuilder builder)
     {
         if (builder is null) return;
         if (memory is not null && xmpProfile is not null)
@@ -162,10 +164,10 @@ public static class ValidateComputer
             }
         }
 
-        return true;
+        return;
     }
 
-    public static void ValidateGraphicsCard(GraphicsCard? graphicsCard, Cpu? cpu, IComputerBuilder builder, )
+    public static void ValidateGraphicsCard(GraphicsCard? graphicsCard, Cpu? cpu, IComputerBuilder builder)
     {
         if (cpu is null)
         {
@@ -194,9 +196,9 @@ public static class ValidateComputer
         }
     }
 
-    public static void ValidatePowerCase(PowerCase? powerCase, Cpu? cpu, Memory? memory, Ssd? ssd, Hdd? hdd,
-        IComputerBuilder builder)
+    public static void ValidatePowerCase(PowerCase? powerCase, Cpu? cpu, Memory? memory, Ssd? ssd, Hdd? hdd, IComputerBuilder builder)
     {
+        if (builder is null) return;
         if (powerCase is null || cpu is null || memory is null || (ssd is null && hdd is null))
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
@@ -215,6 +217,7 @@ public static class ValidateComputer
 
     public static void ValidateDrivenDisks(Ssd? ssd, Hdd? hdd, IComputerBuilder builder)
     {
+        if (builder is null) return;
         if (ssd is null && hdd is null)
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;

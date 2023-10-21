@@ -1,9 +1,10 @@
 using System;
+using Itmo.ObjectOrientedProgramming.Lab2.Entities;
 using Itmo.ObjectOrientedProgramming.Lab2.Models;
 
-namespace Itmo.ObjectOrientedProgramming.Lab2.Services.MotherboardBuilidng;
+namespace Itmo.ObjectOrientedProgramming.Lab2.Services.ComponentsBuilders;
 
-public class MotherboardBuilder : IMotherboardBuilder
+public class MotherboardBuilder
 {
     private string? _cpuSocket;
     private string? _pciLinesQuantity;
@@ -13,58 +14,61 @@ public class MotherboardBuilder : IMotherboardBuilder
     private int _ramQuantity;
     private string? _formFactor;
     private Bios? _bios;
-    public Entities.Motherboard Product { get; set; } = new Entities.Motherboard();
-    public IMotherboardBuilder SetSocket(string socket)
+
+    public MotherboardBuilder WithSocket(string socket)
     {
         _cpuSocket = socket;
         return this;
     }
-    public IMotherboardBuilder SetPcieLines(int lines)
+
+    public MotherboardBuilder WithPcieLines(string? lines)
     {
         _pciLinesQuantity = lines;
         return this;
     }
-    public IMotherboardBuilder SetSataPorts(int sataPorts)
+
+    public MotherboardBuilder WithSataPorts(int sataPorts)
     {
         _sataPortsQuantity = sataPorts;
         return this;
     }
-    public IMotherboardBuilder SetAllowedDdr(string? ddr)
+
+    public MotherboardBuilder WithAllowedDdr(string? ddr)
     {
         if (ddr is null) throw new ArgumentException("ddr must be setted");
         _ddrStandard = ddr;
         return this;
     }
 
-    public IMotherboardBuilder SetRamQuantity(int ramQuantity)
+    public MotherboardBuilder WithRamQuantity(int ramQuantity)
     {
         _ramQuantity = ramQuantity;
         return this;
     }
 
-    public IMotherboardBuilder SetFormFactor(string formFactor)
+    public MotherboardBuilder WithFormFactor(string formFactor)
     {
         _formFactor = formFactor;
         return this;
     }
 
-    public IMotherboardBuilder SetBios(Bios bios)
+    public MotherboardBuilder WithBios(Bios bios)
     {
         _bios = bios;
         return this;
     }
 
-    public IMotherboardBuilder SetChipset(Chipset chipset)
+    public MotherboardBuilder WithChipset(Chipset chipset)
     {
         _chipset = chipset;
         return this;
     }
 
-    public Entities.Motherboard Build()
+    public Motherboard Build()
     {
         if (_cpuSocket is null || _ddrStandard is null || _formFactor is null || _bios is null || _chipset is null || _pciLinesQuantity is null)
-            throw new ArgumentException();
-        return new Entities.Motherboard(
+            throw new ArgumentException("Mandatory element are not set");
+        return new Motherboard(
             _cpuSocket,
             _pciLinesQuantity,
             _sataPortsQuantity,
@@ -75,8 +79,17 @@ public class MotherboardBuilder : IMotherboardBuilder
             _chipset);
     }
 
-    public void SetExisting(Entities.Motherboard motherboard)
+    public MotherboardBuilder BuiltFromExisting(Motherboard motherboard)
     {
-        Product = motherboard;
+        if (motherboard is null) return this;
+        _cpuSocket = motherboard.CpuSocket;
+        _pciLinesQuantity = motherboard.PciLinesQuantity;
+        _sataPortsQuantity = motherboard.SataPortsQuantity;
+        _ddrStandard = motherboard.DdrStandard;
+        _ramQuantity = motherboard.RamQuantity;
+        _formFactor = motherboard.FormFactor;
+        _bios = motherboard.Bios;
+        _chipset = motherboard.Chipset;
+        return this;
     }
 }

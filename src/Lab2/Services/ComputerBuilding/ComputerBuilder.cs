@@ -10,7 +10,6 @@ public class ComputerBuilder : IComputerBuilder
 {
     private Motherboard? _motherboard;
     private Cpu? _cpu;
-    // bios
     private CpuCoolingSystem? _cpuCoolingSystem;
     private Memory? _memory;
     private XmpProfile? _xmpProfile;
@@ -25,7 +24,7 @@ public class ComputerBuilder : IComputerBuilder
     {
         BuildingReport = report;
     }*/
-    public ComputerBuilder(ComputerVersion2 computer)
+    public ComputerBuilder(Computer computer)
     {
         if (computer is null) return;
         this
@@ -212,7 +211,7 @@ public class ComputerBuilder : IComputerBuilder
         }
 
         if (_powerCase.MaxLoad <
-            (_cpu.ConsumedPower + _memory.ConsumptedPower + _ssd?.ConsumptedPower + _hdd?.ConsumptedPower) * 1.3)
+            (_cpu.ConsumedPower + _memory.PowerConsumption + _ssd?.ConsumptedPower + _hdd?.ConsumptedPower) * 1.3)
         {
             BuildingReport.Status = BuildingStatus.Failed;
             BuildingReport.Notes = "Not enough powerful PowerCase";

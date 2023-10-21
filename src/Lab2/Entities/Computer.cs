@@ -5,62 +5,59 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
 public class Computer
 {
-   private readonly Motherboard? _motherboard;
-   private readonly Cpu? _cpu;
-   // bios
-   private readonly CpuCoolingSystem? _cpuCoolingSystem;
+    public Computer(
+        Motherboard? motherboard,
+        Cpu? cpu,
+        CpuCoolingSystem? cpuCoolingSystem,
+        Memory? memory,
+        XmpProfile? xmpProfile,
+        GraphicsCard? graphicsCard,
+        Ssd? ssd,
+        Hdd? hdd,
+        ComputerCase? computerCase,
+        PowerCase? powerCase,
+        WiFiAdapter? wiFiAdapter)
+    {
+        Motherboard = motherboard;
+        Cpu = cpu;
+        CpuCoolingSystem = cpuCoolingSystem;
+        Memory = memory;
+        XmpProfile = xmpProfile;
+        GraphicsCard = graphicsCard;
+        Ssd = ssd;
+        Hdd = hdd;
+        ComputerCase = computerCase;
+        PowerCase = powerCase;
+        WiFiAdapter = wiFiAdapter;
+    }
 
-   private readonly Memory? _memory;
-   private readonly XmpProfile? _xmpProfile;
-   private readonly GraphicsCard? _graphicsCard;
-   private readonly Ssd? _ssd;
-   private readonly Hdd? _hdd;
-   private readonly ComputerCase? _computerCase;
-   private readonly PowerCase? _powerCase;
-   private readonly WiFiAdapter? _wiFiAdapter;
+    public Motherboard? Motherboard { get; }
+    public Cpu? Cpu { get; }
+    public CpuCoolingSystem? CpuCoolingSystem { get; }
+    public Memory? Memory { get; }
+    public XmpProfile? XmpProfile { get; }
+    public GraphicsCard? GraphicsCard { get; }
+    public Ssd? Ssd { get; }
+    public Hdd? Hdd { get; }
+    public ComputerCase? ComputerCase { get; }
+    public PowerCase? PowerCase { get; }
+    public WiFiAdapter? WiFiAdapter { get; }
 
-   public Computer(
-      Motherboard? motherboard,
-      Cpu? cpu,
-      CpuCoolingSystem? cpuCoolingSystem,
-      Memory? memory,
-      XmpProfile? xmpProfile,
-      GraphicsCard? graphicsCard,
-      Ssd? ssd,
-      Hdd? hdd,
-      ComputerCase? computerCase,
-      PowerCase? powerCase,
-      WiFiAdapter? wiFiAdapter)
-   {
-      _motherboard = motherboard;
-      _cpu = cpu;
-      _cpuCoolingSystem = cpuCoolingSystem;
-      _memory = memory;
-      _xmpProfile = xmpProfile;
-      _graphicsCard = graphicsCard;
-      _ssd = ssd;
-      _hdd = hdd;
-      _computerCase = computerCase;
-      _powerCase = powerCase;
-      _wiFiAdapter = wiFiAdapter;
-   }
-
-   public IComputerBuilder Direct(IComputerBuilder builder)
-   {
-      if (builder is null) throw new ArgumentException("builder must not be null");
-      builder
-         .WithMotherboard(_motherboard)
-         .WithСpu(_cpu)
-         .WithCoolingSystem(_cpuCoolingSystem)
-         .WithMemory(_memory)
-         .WithXmpProfile(_xmpProfile)
-         .WithGraphicsCard(_graphicsCard)
-         .WithSsd(_ssd)
-         .WithHdd(_hdd)
-         .WithComputerCase(_computerCase)
-         .WithPowerCase(_powerCase)
-         .WithWifiAdapter(_wiFiAdapter);
-
-      return builder;
-   }
+    public IComputerBuilder Direct(IComputerBuilder builder)
+    {
+        if (builder is null) throw new ArgumentException("builder must not be null");
+        builder
+            .WithMotherboard(Motherboard)
+            .WithСpu(Cpu)
+            .WithCoolingSystem(CpuCoolingSystem)
+            .WithMemory(Memory)
+            .WithXmpProfile(XmpProfile)
+            .WithGraphicsCard(GraphicsCard)
+            .WithSsd(Ssd)
+            .WithHdd(Hdd)
+            .WithComputerCase(ComputerCase)
+            .WithPowerCase(PowerCase)
+            .WithWifiAdapter(WiFiAdapter);
+        return builder;
+    }
 }
