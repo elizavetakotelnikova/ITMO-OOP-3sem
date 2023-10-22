@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using Itmo.ObjectOrientedProgramming.Lab2.Models;
 namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
-public class Memory : IReposirotyAdded
+public class Memory
 {
     public Memory(
         int freeMemory,
@@ -19,7 +18,7 @@ public class Memory : IReposirotyAdded
         FormFactor = formFactor;
         DdrStandard = ddrStandard;
         PowerConsumption = powerConsumption;
-    } // констурктор с листами еще посмотреть
+    }
 
     public Memory(
         int freeMemory,
@@ -48,9 +47,4 @@ public class Memory : IReposirotyAdded
     public FormFactor FormFactor { get; }
     public string DdrStandard { get; }
     public int PowerConsumption { get; }
-
-    public void AddToRepository(Repository repository)
-    {
-        repository?.Rams.Add(this);
-    }
 }

@@ -35,7 +35,7 @@ public class Repository
         InitializeXmpProfiles();
     }
 
-    public void InitializeMotherboards()
+    private void InitializeMotherboards()
     {
         var builder = new MotherboardBuilder();
         var microATX = new FormFactor("Micro-ATX");
@@ -58,7 +58,7 @@ public class Repository
         Motherboards.Add(thirdType);
     }
 
-    public void InitializeСpu()
+    private void InitializeСpu()
     {
         var builder = new CpuBuilder();
         Cpu firstType = builder.WithName("Intel core i5-12400").WithSocket("LGA 1700").WithCoresQuantity(6)
@@ -72,7 +72,7 @@ public class Repository
         Cpus.Add(thirdType);
     }
 
-    public void InitializeBioses()
+    private void InitializeBioses()
     {
         var builder = new BiosBuilder();
         Bios amiBios = builder.WithType("AMI").WithVersion("Intel-1.0")
@@ -83,33 +83,31 @@ public class Repository
         Bioses.Add(secondAmiBios);
     }
 
-    public void InitializeCoolingSystems()
+    private void InitializeCoolingSystems()
     {
         var builder = new CoolingSystemBuilder();
         var sockets = new List<string>() { "AM3", "AM3+", "AM4", "AM5", "FM1", "FM2", "FM2+", "LGA 1150", "LGA 1151", "LGA 1155", "LGA 1200", "LGA 1700", "LGA 2011", "LGA 2011-3", "LGA 2066" };
-        CpuCoolingSystem firstType = builder.WithSize(new ObjectSize(138, 129, 160)).WithTdp(260).WithAllowedSockets(sockets).Build();
-        CpuCoolingSystem secondType = builder.WithSize(new ObjectSize(138, 129, 160)).WithTdp(200).WithAllowedSockets(sockets).Build();
-        CpuCoolingSystem thirdType = builder.WithSize(new ObjectSize(138, 129, 160)).WithTdp(100).WithAllowedSockets(sockets).Build();
-        CpuCoolingSystems.Add(firstType);
-        CpuCoolingSystems.Add(secondType);
-        CpuCoolingSystems.Add(thirdType);
+        builder.WithSize(new ObjectSize(138, 129, 160)).WithTdp(260).WithAllowedSockets(sockets).
+            BuildAndPushToRepository(this.CpuCoolingSystems);
+        builder.WithSize(new ObjectSize(138, 129, 160)).WithTdp(200).WithAllowedSockets(sockets).
+            BuildAndPushToRepository(this.CpuCoolingSystems);
+        builder.WithSize(new ObjectSize(138, 129, 160)).WithTdp(100).WithAllowedSockets(sockets).
+            BuildAndPushToRepository(this.CpuCoolingSystems);
     }
 
-    public void InitializeRam()
+    private void InitializeRam()
     {
         var builder = new MemoryBuilder();
         var microATX = new FormFactor("Micro-ATX");
-        Memory firstType = builder.WithFormFactor(microATX).WithDdrStandard("DDR5").WithFreeMemory(32)
+        builder.WithFormFactor(microATX).WithDdrStandard("DDR5").WithFreeMemory(32)
             .WithFrequencyPower(new List<(double Freq, double Power)>() { (3200, 1.35) }).WithPowerConsumption(3)
-            .Build();
-        Memory secondType = builder.WithFormFactor(microATX).WithDdrStandard("DDR3").WithFreeMemory(16)
+            .BuildAndPushToRepository(this.Rams);
+        builder.WithFormFactor(microATX).WithDdrStandard("DDR3").WithFreeMemory(16)
             .WithFrequencyPower(new List<(double Freq, double Power)>() { (3200, 1.35), (2666, 1.3) }).WithPowerConsumption(3)
-            .Build();
-        Rams.Add(firstType);
-        Rams.Add(secondType);
+            .BuildAndPushToRepository(this.Rams);
     }
 
-    public void InitializeXmpProfiles()
+    private void InitializeXmpProfiles()
     {
         XmpProfile firstType = new XmpProfileBuilder().WithName("DDR4-3200").WithFrequency(3200).WithPower(1.35).WithTiming("16-20-20").Build();
         XmpProfile secondType = new XmpProfileBuilder().WithName("DDR3-3200").WithFrequency(2666).WithPower(1.3).WithTiming("16-20-20").Build();
@@ -117,7 +115,7 @@ public class Repository
         XmpProfile.Add(secondType);
     }
 
-    public void InitializeGraphicsCard()
+    private void InitializeGraphicsCard()
     {
         GraphicsCard firstType = new GraphicsCardBuilder().WithHeight(53).WithWidth(118).WithAvailableMemory(8)
             .WithPowerConsumption(225).WithPciEVersion("PCI-E x16").WithChipFrequency(1410).Build();
@@ -127,7 +125,7 @@ public class Repository
         GraphicsCards.Add(secondType);
     }
 
-    public void InitializeHdd()
+    private void InitializeHdd()
     {
         Hdd firstType = new HddBuilder().WithCapacity(2000).WithSpeed(7200).WithPower(3.7).Build();
         Hdd secondType = new HddBuilder().WithCapacity(4000).WithSpeed(5400).WithPower(4.7).Build();
@@ -135,7 +133,7 @@ public class Repository
         Hdds.Add(secondType);
     }
 
-    public void InitializeSsd()
+    private void InitializeSsd()
     {
         Ssd firstType = new SsdBuilder().WithCapacity(480).WithConnecting(VariantConnectingSsd.Sata).WithPower(1.53)
             .WithSpeed(500).Build();
@@ -145,7 +143,7 @@ public class Repository
         Ssds.Add(secondType);
     }
 
-    public void InitializeComputerCase()
+    private void InitializeComputerCase()
     {
         ComputerCase firstType = new ComputerCaseBuilder().WithSize(new ObjectSize(465, 240, 496))
             .WithFormFactor(new List<string>() { "E-ATX", "Micro-ATX", "Mini-ITX", "SSI-CEB", "Standard-ATX" })
@@ -157,15 +155,17 @@ public class Repository
         ComputerCases.Add(secondType);
     }
 
-    public void InitializePowerCase()
+    private void InitializePowerCase()
     {
         var firstType = new PowerCase(600);
         var secondType = new PowerCase(550);
+        var thirdType = new PowerCase(65);
         PowerCases.Add(firstType);
         PowerCases.Add(secondType);
+        PowerCases.Add(thirdType);
     }
 
-    public void InitializeWifiAdapters()
+    private void InitializeWifiAdapters()
     {
         WiFiAdapter firstType = new WifiAdapterBuilder().WithVersion("4").WithPowerConsumption(2).WithPcieVersion("4.0").Build();
         WiFiAdapter secondType = new WifiAdapterBuilder().WithVersion("5").WithPowerConsumption(2).WithPcieVersion("4.0").WithBluetooth(true).Build();

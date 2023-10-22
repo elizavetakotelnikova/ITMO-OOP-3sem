@@ -1,9 +1,6 @@
-using System.Collections.Generic;
-using Itmo.ObjectOrientedProgramming.Lab2.Models;
-
 namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
-public class Cpu : IReposirotyAdded
+public class Cpu
 {
     public Cpu(
         string name,
@@ -12,7 +9,7 @@ public class Cpu : IReposirotyAdded
         string socket,
         bool hasIGpu,
         int tdp,
-        int consumedPower,
+        int powerConsumption,
         int ramSupport)
     {
         Name = name;
@@ -21,7 +18,7 @@ public class Cpu : IReposirotyAdded
         Socket = socket;
         HasIGpu = hasIGpu;
         Tdp = tdp;
-        ConsumedPower = consumedPower;
+        PowerConsumption = powerConsumption;
         RamSupport = ramSupport;
     }
 
@@ -31,11 +28,6 @@ public class Cpu : IReposirotyAdded
     public string Socket { get; }
     public bool HasIGpu { get; }
     public int Tdp { get; }
-    public int ConsumedPower { get; }
+    public int PowerConsumption { get; }
     public int RamSupport { get; }
-
-    public void AddToRepository(Repository repository)
-    {
-        repository?.Cpus.Add(this);
-    }
 }

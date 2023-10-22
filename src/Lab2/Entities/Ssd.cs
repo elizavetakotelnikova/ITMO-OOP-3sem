@@ -2,7 +2,7 @@ using Itmo.ObjectOrientedProgramming.Lab2.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
-public class Ssd : IReposirotyAdded
+public class Ssd
 {
     public Ssd(VariantConnectingSsd? connecting, int capacity, int maxSpeed, double powerConsumption)
     {
@@ -12,13 +12,8 @@ public class Ssd : IReposirotyAdded
         PowerConsumption = powerConsumption;
     }
 
-    public VariantConnectingSsd? Connecting { get; set; }
-    public int Capacity { get; set; }
-    public int MaxSpeed { get; set; }
-    public double PowerConsumption { get; set; }
-
-    public void AddToRepository(Repository repository)
-    {
-        repository?.Ssds.Add(this);
-    }
+    public VariantConnectingSsd? Connecting { get; }
+    public int Capacity { get; }
+    public int MaxSpeed { get; }
+    public double PowerConsumption { get; }
 }

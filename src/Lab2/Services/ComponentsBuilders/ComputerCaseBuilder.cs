@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Itmo.ObjectOrientedProgramming.Lab2.Entities;
 using Itmo.ObjectOrientedProgramming.Lab2.Models;
@@ -35,18 +35,27 @@ public class ComputerCaseBuilder
     public ComputerCase Build()
     {
         if (_size is null || !_allowedFormFactors.Any() || _maxGcLength == 0 || _maxGcWidth == 0)
-            throw new ArgumentException("Mandatory parameters are not set");
+            throw new InvalidDataException("Mandatory parameters are not set");
         return new ComputerCase(_maxGcLength, _maxGcWidth, _allowedFormFactors, _size);
     }
 
     public ComputerCaseBuilder BuiltFromExisting(ComputerCase computerCase)
     {
         if (computerCase is null)
-            throw new ArgumentException("Cpu is not provided");
+            throw new InvalidDataException("Computer case is not provided");
         _size = computerCase.Size;
         _allowedFormFactors = computerCase.AllowedFormFactors;
         _maxGcLength = computerCase.MaxGCLength;
         _maxGcWidth = computerCase.MaxGCWidth;
         return this;
+    }
+
+    public ComputerCase BuildAndPushToRepository(IList<ComputerCase> computerCases)
+    {
+        if (_size is null || !_allowedFormFactors.Any() || _maxGcLength == 0 || _maxGcWidth == 0)
+            throw new InvalidDataException("Mandatory parameters are not set");
+        var newObject = new ComputerCase(_maxGcLength, _maxGcWidth, _allowedFormFactors, _size);
+        computerCases?.Add(newObject);
+        return newObject;
     }
 }

@@ -12,6 +12,19 @@ public class XmpProfileBuilder
     private double _power;
     private int _frequency;
 
+    public XmpProfileBuilder()
+    {
+    }
+
+    public XmpProfileBuilder(XmpProfile xmpProfile)
+    {
+        if (xmpProfile is null) throw new ArgumentNullException(nameof(xmpProfile));
+        _name = xmpProfile.Name;
+        _frequency = xmpProfile.Frequency;
+        _power = xmpProfile.Power;
+        _timing = xmpProfile.Timing;
+    }
+
     public XmpProfileBuilder WithName(string? name)
     {
         _name = name;
@@ -44,19 +57,5 @@ public class XmpProfileBuilder
         }
 
         return new XmpProfile(_name, _timing, _power, _frequency);
-    }
-
-    public XmpProfileBuilder BuiltFromExisting(XmpProfile xmpProfile)
-    {
-        if (xmpProfile is null || _timing is null || _power == 0 || !_timing.Any())
-        {
-            throw new ArgumentException("Bios cannot be created");
-        }
-
-        _name = xmpProfile.Name;
-        _frequency = xmpProfile.Frequency;
-        _power = xmpProfile.Power;
-        _timing = xmpProfile.Timing;
-        return this;
     }
 }

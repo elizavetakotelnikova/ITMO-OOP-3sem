@@ -2,7 +2,7 @@ using Itmo.ObjectOrientedProgramming.Lab2.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
-public class Motherboard : IReposirotyAdded
+public class Motherboard
 {
     public Motherboard()
     {
@@ -36,17 +36,13 @@ public class Motherboard : IReposirotyAdded
         Chipset = chipset;
     }
 
-    public string? CpuSocket { get; set; }
-    public int PciLinesQuantity { get; set; }
+    public string? CpuSocket { get; }
+    public int PciLinesQuantity { get; }
 
-    public Chipset? Chipset { get; set; }
-    public int SataPortsQuantity { get; set; }
-    public string? DdrStandard { get; set; }
-    public int RamQuantity { get; set; }
-    public FormFactor? FormFactor { get; set; }
-    public Bios? Bios { get; set; } // тип, версия
-    public void AddToRepository(Repository repository)
-    {
-        repository?.Motherboards.Add(this);
-    }
+    public Chipset? Chipset { get; }
+    public int SataPortsQuantity { get; }
+    public string? DdrStandard { get; }
+    public int RamQuantity { get; }
+    public FormFactor? FormFactor { get; }
+    public Bios? Bios { get; }
 }

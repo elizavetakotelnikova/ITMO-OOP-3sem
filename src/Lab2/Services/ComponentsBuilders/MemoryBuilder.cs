@@ -15,6 +15,22 @@ public class MemoryBuilder
     private string? _ddrStandard;
     private int _powerConsumption;
 
+    public MemoryBuilder()
+    {
+    }
+
+    public MemoryBuilder(Memory memory)
+    {
+        if (memory is null) throw new ArgumentNullException(nameof(memory));
+        _freeMemory = memory.FreeMemory;
+        _frequencyPower = memory.FrequencyPower;
+        _xmpProfile = memory.XmpProfile;
+        _supportedXmp = memory.SupportedXmp;
+        _formFactor = memory.FormFactor;
+        _ddrStandard = memory.DdrStandard;
+        _powerConsumption = memory.PowerConsumption;
+    }
+
     public MemoryBuilder WithFreeMemory(int freeMemory)
         {
             _freeMemory = freeMemory;
@@ -74,21 +90,22 @@ public class MemoryBuilder
             _powerConsumption);
     }
 
-    public MemoryBuilder BuiltFromExisting(Memory memory)
+    public Memory BuildAndPushToRepository(IList<Memory> memoryList)
+    {
+        if (_freeMemory == 0 || _formFactor is null || _ddrStandard is null || !_frequencyPower.Any() ||
+            _powerConsumption == 0)
         {
-            if (memory is null || _freeMemory == 0 || _formFactor is null || _ddrStandard is null || !_frequencyPower.Any() ||
-                _powerConsumption == 0)
-            {
-                throw new ArgumentException("RAM cannot be created");
-            }
-
-            _freeMemory = memory.FreeMemory;
-            _frequencyPower = memory.FrequencyPower;
-            _xmpProfile = memory.XmpProfile;
-            _supportedXmp = memory.SupportedXmp;
-            _formFactor = memory.FormFactor;
-            _ddrStandard = memory.DdrStandard;
-            _powerConsumption = memory.PowerConsumption;
-            return this;
+            throw new ArgumentException("RAM cannot be created");
         }
+
+        var newobject = new Memory(
+            _freeMemory,
+            _frequencyPower,
+            _supportedXmp,
+            _formFactor,
+            _ddrStandard,
+            _powerConsumption);
+        memoryList?.Add(newobject);
+        return newobject;
+    }
 }

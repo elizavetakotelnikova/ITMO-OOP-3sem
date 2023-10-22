@@ -11,6 +11,19 @@ public class SsdBuilder
     private int _maxSpeed;
     private double _powerConsumption;
 
+    public SsdBuilder()
+    {
+    }
+
+    public SsdBuilder(Ssd ssd)
+    {
+        if (ssd is null) throw new ArgumentNullException(nameof(ssd));
+        _connecting = ssd.Connecting;
+        _capacity = ssd.Capacity;
+        _maxSpeed = ssd.MaxSpeed;
+        _powerConsumption = ssd.PowerConsumption;
+    }
+
     public SsdBuilder WithConnecting(VariantConnectingSsd connectingSsd)
     {
         _connecting = connectingSsd;
@@ -47,19 +60,5 @@ public class SsdBuilder
             _capacity,
             _maxSpeed,
             _powerConsumption);
-    }
-
-    public SsdBuilder BuiltFromExisting(Ssd ssd)
-    {
-        if (ssd is null || _connecting is null || _capacity == 0 || _maxSpeed == 0 || _powerConsumption == 0)
-        {
-            throw new ArgumentException("Ssd cannot be created");
-        }
-
-        _connecting = ssd.Connecting;
-        _capacity = ssd.Capacity;
-        _maxSpeed = ssd.MaxSpeed;
-        _powerConsumption = ssd.PowerConsumption;
-        return this;
     }
 }

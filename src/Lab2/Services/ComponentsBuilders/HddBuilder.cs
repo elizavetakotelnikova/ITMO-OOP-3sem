@@ -9,6 +9,18 @@ public class HddBuilder
     private int _maxSpeed;
     private double _powerConsumption;
 
+    public HddBuilder()
+    {
+    }
+
+    public HddBuilder(Hdd hdd)
+    {
+        if (hdd is null) throw new ArgumentNullException(nameof(hdd));
+        _capacity = hdd.Capacity;
+        _maxSpeed = hdd.RotatingSpeed;
+        _powerConsumption = hdd.PowerConsumption;
+    }
+
     public HddBuilder WithCapacity(int capacity)
     {
         _capacity = capacity;
@@ -38,18 +50,5 @@ public class HddBuilder
             _capacity,
             _maxSpeed,
             _powerConsumption);
-    }
-
-    public HddBuilder BuiltFromExisting(Hdd hdd)
-    {
-        if (hdd is null || _capacity == 0 || _maxSpeed == 0 || _powerConsumption == 0)
-        {
-            throw new ArgumentException("Hdd cannot be created");
-        }
-
-        _capacity = hdd.Capacity;
-        _maxSpeed = hdd.RotatingSpeed;
-        _powerConsumption = hdd.PowerConsumption;
-        return this;
     }
 }

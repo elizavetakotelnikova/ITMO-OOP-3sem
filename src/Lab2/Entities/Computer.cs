@@ -1,6 +1,3 @@
-using System;
-using Itmo.ObjectOrientedProgramming.Lab2.Models;
-
 namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
 public class Computer
@@ -42,22 +39,4 @@ public class Computer
     public ComputerCase? ComputerCase { get; }
     public PowerCase? PowerCase { get; }
     public WiFiAdapter? WiFiAdapter { get; }
-
-    public IComputerBuilder Direct(IComputerBuilder builder)
-    {
-        if (builder is null) throw new ArgumentException("builder must not be null");
-        builder
-            .WithMotherboard(Motherboard)
-            .WithСpu(Cpu)
-            .WithCoolingSystem(CpuCoolingSystem)
-            .WithMemory(Memory)
-            .WithXmpProfile(XmpProfile)
-            .WithGraphicsCard(GraphicsCard)
-            .WithSsd(Ssd)
-            .WithHdd(Hdd)
-            .WithComputerCase(ComputerCase)
-            .WithPowerCase(PowerCase)
-            .WithWifiAdapter(WiFiAdapter);
-        return builder;
-    }
 }

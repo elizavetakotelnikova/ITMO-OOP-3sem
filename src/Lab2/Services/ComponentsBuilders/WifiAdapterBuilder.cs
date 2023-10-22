@@ -1,7 +1,5 @@
 using System;
 using Itmo.ObjectOrientedProgramming.Lab2.Entities;
-using Itmo.ObjectOrientedProgramming.Lab2.Services.RepositoryServices;
-
 namespace Itmo.ObjectOrientedProgramming.Lab2.Services.ComponentsBuilders;
 
 public class WifiAdapterBuilder
@@ -10,6 +8,19 @@ public class WifiAdapterBuilder
     private bool _hasBluetooth;
     private string? _pcieVersion;
     private int _powerConsumption;
+
+    public WifiAdapterBuilder()
+    {
+    }
+
+    public WifiAdapterBuilder(WiFiAdapter wifiAdapter)
+    {
+        if (wifiAdapter is null) throw new ArgumentNullException(nameof(wifiAdapter));
+        _version = wifiAdapter.Version;
+        _pcieVersion = wifiAdapter.PciEVersion;
+        _hasBluetooth = wifiAdapter.HasBluetooth;
+        _powerConsumption = wifiAdapter.PowerConsumption;
+    }
 
     public WifiAdapterBuilder WithVersion(string version)
     {
@@ -48,18 +59,4 @@ public class WifiAdapterBuilder
             _pcieVersion,
             _powerConsumption);
     }
-
-    public WifiAdapterBuilder BuiltFromExisting(WiFiAdapter wifiAdapter)
-        {
-            if (wifiAdapter is null || _version is null || _pcieVersion is null || _powerConsumption == 0)
-            {
-                throw new ArgumentException("Adapter cannot be created");
-            }
-
-            _version = wifiAdapter.Version;
-            _pcieVersion = wifiAdapter.PciEVersion;
-            _hasBluetooth = wifiAdapter.HasBluetooth;
-            _powerConsumption = wifiAdapter.PowerConsumption;
-            return this;
-        }
 }

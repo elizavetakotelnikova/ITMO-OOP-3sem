@@ -1,10 +1,10 @@
-using System;
+using System.IO;
 using Itmo.ObjectOrientedProgramming.Lab2.Entities;
 using Itmo.ObjectOrientedProgramming.Lab2.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Services.ComputerBuilding;
 
-public class ComputerBuilder : IComputerBuilder
+public class ComputerBuilder : IComputerBuilder // in telegram was said that we shouldn't build a computer in mandatory strong order
 {
     private Motherboard? _motherboard;
     private Cpu? _cpu;
@@ -18,20 +18,15 @@ public class ComputerBuilder : IComputerBuilder
     private PowerCase? _powerCase;
     private WiFiAdapter? _wiFiAdapter;
 
-    /*public ComputerBuilder(Report report)
-    {
-        BuildingReport = report;
-    }*/
-
     public ComputerBuilder()
     {
+        BuildingReport.Status = BuildingStatus.Success;
     }
 
     public ComputerBuilder(Computer computer)
     {
         if (computer is null) return;
-        this
-            .WithMotherboard(computer.Motherboard)
+        this.WithMotherboard(computer.Motherboard)
             .WithСpu(computer.Cpu)
             .WithCoolingSystem(computer.CpuCoolingSystem)
             .WithMemory(computer.Memory)
@@ -46,9 +41,9 @@ public class ComputerBuilder : IComputerBuilder
 
     public Report BuildingReport { get; set; } = new Report();
 
-    /*public IComputerBuilder BuildFromExisting(IComputerBuilder builder)
+    public IComputerBuilder BuildFromExisting(IComputerBuilder builder)
     {
-        if (builder is null) throw new ArgumentException("builder is not set");
+        if (builder is null) throw new InvalidDataException("builder is not set");
         builder
             .WithMotherboard(_motherboard)
             .WithСpu(_cpu)
@@ -62,41 +57,22 @@ public class ComputerBuilder : IComputerBuilder
             .WithPowerCase(_powerCase)
             .WithWifiAdapter(_wiFiAdapter);
         return this;
-    }*/
+    }
 
     public IComputerBuilder WithMotherboard(Motherboard? motherboard) // ограничение с процессором и оперативкой
     {
-        if (_motherboard is null)
-        {
-            BuildingReport.Status = BuildingStatus.Failed;
-            BuildingReport.Notes = "Not all mandatory components are provided";
-        }
-
         _motherboard = motherboard;
         return this;
     }
 
     public IComputerBuilder WithСpu(Cpu? cpu)
     {
-        if (_cpu is null)
-        {
-            BuildingReport.Status = BuildingStatus.Failed;
-            BuildingReport.Notes = "Not all mandatory components are provided";
-        }
-
         _cpu = cpu;
         return this;
     }
 
     public IComputerBuilder WithCoolingSystem(CpuCoolingSystem? cpuCoolingSystem)
     {
-        if (cpuCoolingSystem is null || _cpu is null)
-        {
-            BuildingReport.Status = BuildingStatus.Failed;
-            BuildingReport.Notes = "cpuCoolingSystem is not set";
-            return this;
-        }
-
         _cpuCoolingSystem = cpuCoolingSystem;
         return this;
     }
@@ -119,7 +95,7 @@ public class ComputerBuilder : IComputerBuilder
             }
         }
 
-        _xmpProfile = xmpProfile; // посмотреть по логике с профайлом
+        _xmpProfile = xmpProfile;
         return this;
     }
 
@@ -167,32 +143,39 @@ public class ComputerBuilder : IComputerBuilder
 
     public Computer Build()
     {
-        BuildingReport.Status = BuildingStatus.Success;
+        if (BuildingReport.Status == BuildingStatus.Failed)
+        {
+            throw new InvalidDataException("Object can not be created");
+        }
+
         if (_motherboard is null || _cpu is null || _cpuCoolingSystem is null || _memory is null ||
             _computerCase is null ||
             _powerCase is null)
         {
             BuildingReport.Status = BuildingStatus.Failed;
             BuildingReport.Notes = "Not all mandatory components are provided";
-            throw new ArgumentException("Not all mandatory objects are set");
+            throw new InvalidDataException("Not all mandatory objects are set");
         }
 
-        ValidateComputer.ValidateAllComponents(
-            _motherboard,
-            _cpu,
-            _cpuCoolingSystem,
-            _memory,
-            _xmpProfile,
-            _graphicsCard,
-            _ssd,
-            _hdd,
-            _computerCase,
-            _powerCase,
-            _wiFiAdapter,
-            this);
-        if (BuildingReport.Status == BuildingStatus.Failed)
+        try
         {
-            throw new ArgumentException("The object can not be created");
+            ValidateComputer.ValidateAllComponents(
+                _motherboard,
+                _cpu,
+                _cpuCoolingSystem,
+                _memory,
+                _xmpProfile,
+                _graphicsCard,
+                _ssd,
+                _hdd,
+                _computerCase,
+                _powerCase,
+                _wiFiAdapter,
+                this);
+        }
+        catch (InvalidDataException)
+        {
+            throw new InvalidDataException("Object can not be created");
         }
 
         return new Computer(

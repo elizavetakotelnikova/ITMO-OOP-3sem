@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
@@ -10,6 +11,21 @@ public class BiosBuilder
     private string? _type;
     private string? _version;
     private IList<string> _allowedCpu = new List<string>();
+    public BiosBuilder()
+    {
+    }
+
+    public BiosBuilder(Bios bios)
+    {
+        if (bios?.Type is null || bios.Version is null || !bios.CpuAllowedTypes.Any())
+        {
+            throw new ArgumentNullException(nameof(bios));
+        }
+
+        _type = bios.Type;
+        _version = bios.Version;
+        _allowedCpu = bios.CpuAllowedTypes;
+    }
 
     public BiosBuilder WithType(string type)
     {
@@ -39,16 +55,15 @@ public class BiosBuilder
         return new Bios(_type, _version, _allowedCpu);
     }
 
-    public BiosBuilder BuiltFromExisting(Bios bios)
+    public Bios BuildAndPushToRepository(IList<Bios> biosList)
     {
-        if (bios is null || bios.Type is null || bios.Version is null || !bios.CpuAllowedTypes.Any())
+        if (_type is null || _version is null || !_allowedCpu.Any())
         {
-            throw new ArgumentException("Bios cannot be created");
+            throw new InvalidDataException("Bios cannot be created");
         }
 
-        _type = bios.Type;
-        _version = bios.Version;
-        _allowedCpu = bios.CpuAllowedTypes;
-        return this;
+        var newObject = new Bios(_type, _version, _allowedCpu);
+        biosList?.Add(newObject);
+        return newObject;
     }
 }

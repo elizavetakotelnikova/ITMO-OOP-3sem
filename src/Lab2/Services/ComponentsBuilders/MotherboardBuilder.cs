@@ -15,6 +15,23 @@ public class MotherboardBuilder
     private FormFactor? _formFactor;
     private Bios? _bios;
 
+    public MotherboardBuilder()
+    {
+    }
+
+    public MotherboardBuilder(Motherboard motherboard)
+    {
+        if (motherboard is null) throw new ArgumentNullException(nameof(motherboard));
+        _cpuSocket = motherboard.CpuSocket;
+        _pciLinesQuantity = motherboard.PciLinesQuantity;
+        _sataPortsQuantity = motherboard.SataPortsQuantity;
+        _ddrStandard = motherboard.DdrStandard;
+        _ramQuantity = motherboard.RamQuantity;
+        _formFactor = motherboard.FormFactor;
+        _bios = motherboard.Bios;
+        _chipset = motherboard.Chipset;
+    }
+
     public MotherboardBuilder WithSocket(string socket)
     {
         _cpuSocket = socket;
@@ -77,19 +94,5 @@ public class MotherboardBuilder
             _formFactor,
             _bios,
             _chipset);
-    }
-
-    public MotherboardBuilder BuiltFromExisting(Motherboard motherboard)
-    {
-        if (motherboard is null) return this;
-        _cpuSocket = motherboard.CpuSocket;
-        _pciLinesQuantity = motherboard.PciLinesQuantity;
-        _sataPortsQuantity = motherboard.SataPortsQuantity;
-        _ddrStandard = motherboard.DdrStandard;
-        _ramQuantity = motherboard.RamQuantity;
-        _formFactor = motherboard.FormFactor;
-        _bios = motherboard.Bios;
-        _chipset = motherboard.Chipset;
-        return this;
     }
 }

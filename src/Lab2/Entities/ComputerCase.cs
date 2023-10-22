@@ -3,7 +3,7 @@ using Itmo.ObjectOrientedProgramming.Lab2.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
-public class ComputerCase : IReposirotyAdded
+public class ComputerCase
 {
     public ComputerCase(int maxGcLength, int maxGcWidth, IList<string> allowedFormFactors, ObjectSize size)
     {
@@ -17,8 +17,4 @@ public class ComputerCase : IReposirotyAdded
     public int MaxGCWidth { get; }
     public IList<string> AllowedFormFactors { get; }
     public ObjectSize Size { get; }
-    public void AddToRepository(Repository repository)
-    {
-        repository?.ComputerCases.Add(this);
-    }
 }

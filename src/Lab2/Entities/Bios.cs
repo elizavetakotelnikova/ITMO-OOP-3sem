@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using Itmo.ObjectOrientedProgramming.Lab2.Models;
-
 namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
-public class Bios : IReposirotyAdded
+public class Bios
 {
     public Bios(string? type, string? version, IList<string> cpuAllowedTypes)
     {
@@ -12,12 +10,7 @@ public class Bios : IReposirotyAdded
         CpuAllowedTypes = cpuAllowedTypes;
     }
 
-    public string? Type { get; set; }
-    public string? Version { get; set; }
+    public string? Type { get; }
+    public string? Version { get; }
     public IList<string> CpuAllowedTypes { get; } = new List<string>();
-
-    public void AddToRepository(Repository repository)
-    {
-        repository?.Bioses.Add(this);
-    }
 }
