@@ -14,6 +14,4 @@ public record Chipset
     public string? Name { get; set; }
     public IList<double> Frequencies { get; } = new List<double>();
     public bool SupportsXmpProfile { get; set; }
-
-    // public IList<string> AllowedXmp { get; set; } = new List<string>();
 }

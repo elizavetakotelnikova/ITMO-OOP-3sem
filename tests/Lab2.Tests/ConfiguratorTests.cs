@@ -145,7 +145,7 @@ public class ConfiguratorTests
         string notes = "Bios and cpu are not suitable";
         try
         {
-            Computer pc = builder.WithMotherboard(repository.Motherboards[1])
+            Computer pc = builder.WithMotherboard(repository.Motherboards[3])
                 .WithСpu(repository.Cpus[2]).WithMemory(repository.Rams[1])
                 .WithCoolingSystem(repository.CpuCoolingSystems[2]).WithHdd(repository.Hdds[0])
                 .WithComputerCase(repository.ComputerCases[0])

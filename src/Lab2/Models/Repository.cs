@@ -56,6 +56,9 @@ public class Repository
         Motherboard thirdType = builder.WithFormFactor(miniATX).WithSocket("LGA 1155").WithPcieLines(2).WithSataPorts(4)
             .WithAllowedDdr("DDR3").WithRamQuantity(2).WithChipset(intelH61).WithBios(amiBios).Build();
         Motherboards.Add(thirdType);
+        Motherboard fourthType = builder.WithFormFactor(microATX).WithSocket("AM4").WithPcieLines(1).WithSataPorts(4)
+            .WithAllowedDdr("DDR3").WithRamQuantity(2).WithChipset(intelG41).WithBios(amiBios).Build();
+        Motherboards.Add(fourthType);
     }
 
     private void InitializeСpu()
