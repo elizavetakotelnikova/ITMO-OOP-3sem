@@ -43,7 +43,7 @@ public class Repository
         var amiBios = new Bios(
             "AMI",
             "Intel-1.0",
-            new List<string>() { "Intel core i3-10105", "Intel core i5-12400" });
+            new List<string>() { "Intel core i3-10105", "Intel core i5-12400", "Intel core i6-12400" });
         var intelG41 = new Chipset("Intel G41", new List<double>() { 1600 }, true);
         Motherboard firstType = builder.WithFormFactor(microATX).WithSocket("LGA 775").WithPcieLines(1).WithSataPorts(4)
             .WithAllowedDdr("DDR3").WithRamQuantity(2).WithChipset(intelG41).WithBios(amiBios).Build();
@@ -70,6 +70,9 @@ public class Repository
         Cpu thirdType = builder.WithName("AMD Ryzen 5 5600X").WithSocket("AM4").WithCoresQuantity(6)
             .WithClockRate(4600).WithIRamSupport(3200).WithIGpu(true).WithTdp(65).WithConsumedPower(65).Build();
         Cpus.Add(thirdType);
+        Cpu fourthType = builder.WithName("Intel core i6-12400").WithSocket("LGA 1700").WithCoresQuantity(6)
+            .WithClockRate(4300).WithIRamSupport(2666).WithIGpu(false).WithTdp(117).WithConsumedPower(65).Build();
+        Cpus.Add(fourthType);
     }
 
     private void InitializeBioses()

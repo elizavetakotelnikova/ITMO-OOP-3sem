@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -36,7 +37,7 @@ public static class ValidateComputer
 
     private static void ValidateMotherboard(Motherboard? motherboard, Cpu? cpu,  IComputerBuilder builder)
     {
-        if (builder is null) return;
+        if (builder is null) throw new ArgumentNullException(nameof(builder));
         if (motherboard is null || cpu is null)
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
@@ -62,7 +63,7 @@ public static class ValidateComputer
 
     private static void ValidateCpu(Motherboard? motherboard, Cpu? cpu, IComputerBuilder builder)
     {
-        if (builder is null) return;
+        if (builder is null) throw new ArgumentNullException(nameof(builder));
         if (motherboard is null || cpu is null)
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
@@ -75,8 +76,6 @@ public static class ValidateComputer
             builder.BuildingReport.Status = BuildingStatus.Failed;
             builder.BuildingReport.Notes = "Cpu is not suitable for this motherboard type";
             throw new InvalidDataException("Object can not be created because of cpu");
-
-            // return;
         }
 
         if (motherboard.Bios is null ||
@@ -90,7 +89,7 @@ public static class ValidateComputer
 
     private static void ValidateCoolingSystem(CpuCoolingSystem? cpuCoolingSystem, Cpu? cpu, IComputerBuilder builder)
     {
-        if (builder is null) return;
+        if (builder is null) throw new ArgumentNullException(nameof(builder));
         if (cpu is null || cpuCoolingSystem is null)
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
@@ -106,7 +105,7 @@ public static class ValidateComputer
 
     private static void ValidateMemory(Motherboard? motherboard, Memory? memory, XmpProfile? xmpProfile, IComputerBuilder? builder)
     {
-        if (builder is null) return;
+        if (builder is null) throw new ArgumentNullException(nameof(builder));
         if (memory is null)
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
@@ -150,7 +149,7 @@ public static class ValidateComputer
 
     private static void ValidateXmpProfile(XmpProfile? xmpProfile, Memory? memory, IComputerBuilder builder)
     {
-        if (builder is null) return;
+        if (builder is null) throw new ArgumentNullException(nameof(builder));
         if (memory is not null && xmpProfile is not null && xmpProfile.Name is not null)
         {
             if (!memory.SupportedXmp.Contains(xmpProfile.Name))
@@ -162,12 +161,12 @@ public static class ValidateComputer
 
     private static void ValidateGraphicsCard(GraphicsCard? graphicsCard, Cpu? cpu, IComputerBuilder builder)
     {
-        if (builder is null) return;
+        if (builder is null) throw new ArgumentNullException(nameof(builder));
         if (cpu is null)
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
             builder.BuildingReport.Notes = "Mandatory components are not set";
-            return;
+            throw new InvalidDataException("Object can not be created because mandatory components are not set");
         }
 
         if (!cpu.HasIGpu)
@@ -175,7 +174,7 @@ public static class ValidateComputer
             if (graphicsCard is null)
             {
                 builder.BuildingReport.Status = BuildingStatus.Failed;
-                builder.BuildingReport.Notes = "Should have graphics card";
+                builder.BuildingReport.Notes = "Should have a graphics card";
                 throw new InvalidDataException("Object can not be created because graphics card is not set");
             }
         }
@@ -183,16 +182,23 @@ public static class ValidateComputer
 
     private static void ValidateComputerCase(ComputerCase? computerCase, Motherboard? motherboard, GraphicsCard? graphicsCard, IComputerBuilder builder)
     {
-        if (builder is null) return;
-        if (computerCase is null || graphicsCard is null || graphicsCard.Height > computerCase.Size.Height ||
-            graphicsCard.Width > computerCase.Size.Width)
+        if (builder is null) throw new ArgumentNullException(nameof(builder));
+        if (computerCase is null || motherboard is null)
+        {
+            builder.BuildingReport.Status = BuildingStatus.Failed;
+            builder.BuildingReport.Notes = "Not all mandatory components are set";
+            throw new InvalidDataException("Object can not be created because not all mandatory objects are set");
+        }
+
+        if (graphicsCard is not null && (graphicsCard.Height > computerCase.Size.Height ||
+                                         graphicsCard.Width > computerCase.Size.Width))
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
             builder.BuildingReport.Notes = "Graphics card is too big";
             throw new InvalidDataException("Object can not be created because graphics card it too big for a computer case");
         }
 
-        if (motherboard is null || motherboard.FormFactor is null ||
+        if (motherboard.FormFactor is null ||
             !computerCase.AllowedFormFactors.Contains(motherboard.FormFactor.Name))
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
@@ -203,7 +209,7 @@ public static class ValidateComputer
 
     private static void ValidatePowerCase(PowerCase? powerCase, Cpu? cpu, Memory? memory, Ssd? ssd, Hdd? hdd, WiFiAdapter? wifiAdapter, IComputerBuilder builder)
     {
-        if (builder is null) return;
+        if (builder is null) throw new ArgumentNullException(nameof(builder));
         if (powerCase is null || cpu is null || memory is null || (ssd is null && hdd is null))
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
@@ -230,7 +236,7 @@ public static class ValidateComputer
 
     private static void ValidateDrivenDisks(Ssd? ssd, Hdd? hdd, IComputerBuilder builder)
     {
-        if (builder is null) return;
+        if (builder is null) throw new ArgumentNullException(nameof(builder));
         if (ssd is null && hdd is null)
         {
             builder.BuildingReport.Status = BuildingStatus.Failed;
