@@ -6,6 +6,11 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Models;
 
 public class Repository
 {
+    private static Repository? _instance;
+    private Repository()
+    {
+    }
+
     public IList<Motherboard> Motherboards { get; } = new List<Motherboard>();
     public IList<Cpu> Cpus { get; } = new List<Cpu>();
     public IList<CpuCoolingSystem> CpuCoolingSystems { get; } = new List<CpuCoolingSystem>();
@@ -18,6 +23,16 @@ public class Repository
     public IList<Hdd> Hdds { get; } = new List<Hdd>();
     public IList<WiFiAdapter> WiFiAdapters { get; } = new List<WiFiAdapter>();
     public IList<XmpProfile> XmpProfile { get; } = new List<XmpProfile>();
+    public static Repository ReturnInstance()
+    {
+        if (_instance is not null)
+        {
+            return _instance;
+        }
+
+        _instance = new Repository();
+        return _instance;
+    }
 
     public void InitRepository()
     {

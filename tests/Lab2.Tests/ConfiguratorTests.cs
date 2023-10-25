@@ -12,7 +12,7 @@ public class ConfiguratorTests
     public void ConfiguratorTestsRightComponentsPassedShouldReturnSuccess()
     {
         // we can iterate over the repository like this: repository.Cpus.Where(cpu => cpu.Name == "Intel core i3-10105")
-        var repository = new Repository();
+        var repository = Repository.ReturnInstance();
         repository.InitRepository(); // setting all components that were added from the beginning as "current"
         var builder = new ComputerBuilder();
         try
@@ -35,7 +35,7 @@ public class ConfiguratorTests
     public void ConfiguratorTestsNotEnoughTdpFromCoolerPassedShouldReturnNoGuarantee()
     {
         // we can iterate over the repository like this: repository.Cpus.Where(cpu => cpu.Name == "Intel core i3-10105")
-        var repository = new Repository();
+        var repository = Repository.ReturnInstance();
         repository.InitRepository(); // setting all components that were added from the beginning as "current"
         var builder = new ComputerBuilder();
         string notes = "Because of not enough tdp of CoolingSystem the guarantee could not be provided";
@@ -61,7 +61,7 @@ public class ConfiguratorTests
     public void ConfiguratorTestsNotEnoughPowerCaseMaxLoadPassedShouldReturnWarning()
     {
         // we can iterate over the repository like this: repository.Cpus.Where(cpu => cpu.Name == "Intel core i3-10105")
-        var repository = new Repository();
+        var repository = Repository.ReturnInstance();
         repository.InitRepository(); // setting all components that were added from the beginning as "current"
         var builder = new ComputerBuilder();
         string notes = "Recommended power is more than max load of power case";
@@ -87,7 +87,7 @@ public class ConfiguratorTests
     public void ConfiguratorTestsNotValidSocketsPassedShouldReturnFailed()
     {
         // we can iterate over the repository like this: repository.Cpus.Where(cpu => cpu.Name == "Intel core i3-10105")
-        var repository = new Repository();
+        var repository = Repository.ReturnInstance();
         repository.InitRepository(); // setting all components that were added from the beginning as "current"
         var builder = new ComputerBuilder();
         string notes = "Cpu is not suitable for this motherboard type";
@@ -113,7 +113,7 @@ public class ConfiguratorTests
     public void ConfiguratorTestsGraphicsCardNotPassedShouldReturnFailed()
     {
         // we can iterate over the repository like this: repository.Cpus.Where(cpu => cpu.Name == "Intel core i3-10105")
-        var repository = new Repository();
+        var repository = Repository.ReturnInstance();
         repository.InitRepository(); // setting all components that were added from the beginning as "current"
         var builder = new ComputerBuilder();
         string notes = "Should have a graphics card";
@@ -139,7 +139,7 @@ public class ConfiguratorTests
     public void ConfiguratorTestsBiosNotAllowCpuPassedShouldReturnFailed()
     {
         // we can iterate over the repository like this: repository.Cpus.Where(cpu => cpu.Name == "Intel core i3-10105")
-        var repository = new Repository();
+        var repository = Repository.ReturnInstance();
         repository.InitRepository(); // setting all components that were added from the beginning as "current"
         var builder = new ComputerBuilder();
         string notes = "Bios and cpu are not suitable";
