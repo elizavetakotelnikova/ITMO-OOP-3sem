@@ -4,4 +4,12 @@
         <RootNamespace>Itmo.ObjectOrientedProgramming.Lab3</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Services\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Crayon" />
+    </ItemGroup>
+
 </Project>
