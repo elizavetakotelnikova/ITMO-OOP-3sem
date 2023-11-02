@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Itmo.ObjectOrientedProgramming.Lab3.Entities.Receiver;
 using Itmo.ObjectOrientedProgramming.Lab3.Messages;
 
-namespace Itmo.ObjectOrientedProgramming.Lab3.Entities.Topic;
+namespace Itmo.ObjectOrientedProgramming.Lab3.Entities;
 
 public class Topic<TReceiver>
     where TReceiver : class

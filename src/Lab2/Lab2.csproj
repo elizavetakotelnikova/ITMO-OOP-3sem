@@ -2,17 +2,7 @@
 
     <PropertyGroup>
         <RootNamespace>Itmo.ObjectOrientedProgramming.Lab2</RootNamespace>
-
-
-
-
-
-
-
-
-    <ItemGroup>
-      <PackageReference Include="Crayon" />
-    </ItemGroup>
+        
 
     </PropertyGroup>
 

@@ -1,25 +1,24 @@
-using Itmo.ObjectOrientedProgramming.Lab3.Models;
+using Crayon;
+using Itmo.ObjectOrientedProgramming.Lab3.Messages;
+namespace Itmo.ObjectOrientedProgramming.Lab3.Entities;
 
-namespace Itmo.ObjectOrientedProgramming.Lab3.Entities.Display;
-
-public class DriverDisplay : IShow
+public class DriverDisplay : IDisplay
 {
-    private readonly Display? _display;
+    private readonly IDisplay? _display;
 
-    public DriverDisplay(Display display)
+    public DriverDisplay(IDisplay display, IOutput color)
     {
         _display = display;
+        Color = color;
     }
 
-    public Colors Color { get; set; }
+    public IOutput Color { get; set; }
 
-    public void DisplayMessage()
+    public void DisplayMessage(Message currentMessage)
     {
-        _display?.DisplayMessage();
-    }
-
-    public void DisplayColorMessage(Colors color)
-    {
-        _display?.DisplayColorMessage(color);
+        if (currentMessage is null) return;
+        if (currentMessage.Heading is not null) currentMessage.Heading = Color.Text(currentMessage.Heading);
+        if (currentMessage.MainPart is not null) currentMessage.MainPart = Color.Text(currentMessage.MainPart);
+        _display?.DisplayMessage(currentMessage);
     }
 }

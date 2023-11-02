@@ -1,4 +1,5 @@
-using Itmo.ObjectOrientedProgramming.Lab3.Entities.Topic;
+using Itmo.ObjectOrientedProgramming.Lab3.Entities;
+using Itmo.ObjectOrientedProgramming.Lab3.Entities.Receiver;
 
 namespace Itmo.ObjectOrientedProgramming.Lab3.Messages;
 
@@ -9,15 +10,13 @@ public class Message
         Heading = heading;
         MainPart = mainPart;
         ImportanceLevel = importanceLevel;
-        IsRead = false;
     }
 
-    public string? Heading { get; }
-    public string? MainPart { get; } // или переделать в абзацы
+    public string? Heading { get; set; }
+    public string? MainPart { get; set; } // или переделать в абзацы
     public int ImportanceLevel { get; }
-    public bool IsRead { get; set; }
 
-    public void SendToTopic(Topic topic)
+    public void SendToTopic(Topic<MessengerReceiver> topic)
     {
         topic?.MessagesList.Add(this);
     }

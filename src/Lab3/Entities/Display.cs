@@ -3,30 +3,27 @@ using Crayon;
 using Itmo.ObjectOrientedProgramming.Lab3.Messages;
 using Itmo.ObjectOrientedProgramming.Lab3.Models;
 
-namespace Itmo.ObjectOrientedProgramming.Lab3.Entities.Display;
+namespace Itmo.ObjectOrientedProgramming.Lab3.Entities;
 
-public class Display : IShow
+public class Display : IDisplay
 {
-    public Display(Message message)
-    {
-        Message = message;
-    }
-
     public Message? Message { get; set; }
     public Colors MessageColor { get; set; }
 
-    public void DisplayMessage()
+    public void DisplayMessage(Message currentMessage)
     {
         Console.Clear();
-        if (Message is null) return;
+        if (currentMessage is null) return;
+        Message = currentMessage;
         if (Message.Heading is not null) Console.WriteLine(Message.Heading);
         if (Message.MainPart is not null) Console.WriteLine(Message.MainPart);
     }
 
-    public void DisplayColorMessage(Colors color)
+    public void DisplayColorMessage(Message currentMessage, Colors color)
     {
         Console.Clear();
-        if (Message is null) return;
+        if (currentMessage is null) return;
+        Message = currentMessage;
         switch (color)
         {
             case Colors.Yellow:

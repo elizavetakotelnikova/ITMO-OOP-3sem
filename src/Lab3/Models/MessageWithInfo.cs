@@ -2,16 +2,16 @@ using Itmo.ObjectOrientedProgramming.Lab3.Messages;
 
 namespace Itmo.ObjectOrientedProgramming.Lab3.Models;
 
-public class MessageInformation
+public class MessageWithInfo
 {
-    public MessageInformation(Message message, string id)
+    public MessageWithInfo(Message message, string tag)
     {
-        MessageID = id;
+        MessageTag = tag;
         Message = message;
         IsRead = false;
     }
 
-    public string MessageID { get; }
+    public string MessageTag { get; }
     public Message? Message { get; set; }
     public bool IsRead { get; set; }
 }
