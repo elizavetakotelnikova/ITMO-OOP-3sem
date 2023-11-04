@@ -8,20 +8,23 @@ public class DriverDisplay : IDisplay
 {
     private readonly IDisplay? _display;
 
-    public DriverDisplay(IDisplay display, IOutput color)
+    public DriverDisplay(IDisplay display, IOutput color, IOutput secondColor)
     {
         _display = display;
-        Color = color;
+        HeadingColor = color;
+        MainPartColor = secondColor;
     }
 
-    public DriverDisplay(IDisplay display, IOutput color, bool flag)
+    public DriverDisplay(IDisplay display, IOutput color, IOutput secondColor, bool flag)
     {
         _display = display;
-        Color = color;
+        HeadingColor = color;
+        MainPartColor = secondColor;
         ShouldBeWritten = flag;
     }
 
-    public IOutput Color { get; set; }
+    public IOutput HeadingColor { get; set; }
+    public IOutput MainPartColor { get; set; }
 
     public bool ShouldBeWritten { get; set; }
 
@@ -29,20 +32,20 @@ public class DriverDisplay : IDisplay
     {
         Console.Clear(); // clearing display's console
         if (currentMessage is null) return;
-        if (currentMessage.Heading is not null) currentMessage.Heading = Color.Text(currentMessage.Heading);
-        if (currentMessage.MainPart is not null) currentMessage.MainPart = Color.Text(currentMessage.MainPart);
+        if (currentMessage.Heading is not null) currentMessage.Heading = HeadingColor.Text(currentMessage.Heading);
+        if (currentMessage.MainPart is not null) currentMessage.MainPart = MainPartColor.Text(currentMessage.MainPart);
+        string path = Path.Combine(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..")), "DisplayConsole");
+        File.WriteAllText(path, string.Empty);
         _display?.DisplayMessage(currentMessage);
         if (ShouldBeWritten)
         {
-            var file = new StreamWriter("DisplayWrittenText", true);  // "writting in the file"
+            path = Path.Combine(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..")), "DisplayWrittenText");
+            var file = new StreamWriter(@path, true);  // "writting in the file"
+            File.WriteAllText(path, string.Empty);
             file.WriteLine(currentMessage.Heading);
             file.WriteLine(currentMessage.MainPart);
             file.WriteLine();
-            file.Dispose();
+            file.Close();
         }
-
-        var fs = new FileStream("DisplayConsole", FileMode.Open); // clearing the display's "console"-file
-        fs.SetLength(0);
-        fs.Dispose();
     }
 }

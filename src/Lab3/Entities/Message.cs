@@ -11,7 +11,7 @@ public class Message
     }
 
     public string? Heading { get; set; }
-    public string? MainPart { get; set; } // или переделать в абзацы
+    public string? MainPart { get; set; }
     public int ImportanceLevel { get; }
 
     public void SendToTopic(Topic topic)

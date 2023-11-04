@@ -6,6 +6,11 @@ namespace Itmo.ObjectOrientedProgramming.Lab3.Entities.Receiver;
 
 public class GroupReceiver : ISendToConcreteAddressee
 {
+    public GroupReceiver(IList<ISendToConcreteAddressee> addressees)
+    {
+        ConcreteAddressee = addressees;
+    }
+
     public IList<ISendToConcreteAddressee> ConcreteAddressee { get; } = new List<ISendToConcreteAddressee>();
 
     public void SendMessage(Message message)

@@ -4,6 +4,11 @@ namespace Itmo.ObjectOrientedProgramming.Lab3.Entities.Receiver;
 
 public class DisplayReceiver : ISendToConcreteAddressee
 {
+    public DisplayReceiver(IDisplay display)
+    {
+        ConcreteAddressee = display;
+    }
+
     public IDisplay? ConcreteAddressee { get; set; }
 
     public void SendMessage(Message message)

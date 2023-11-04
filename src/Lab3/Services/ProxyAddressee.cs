@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Itmo.ObjectOrientedProgramming.Lab3.Entities;
 using Itmo.ObjectOrientedProgramming.Lab3.Entities.Receiver;
@@ -36,12 +37,15 @@ public class ProxyAddressee : ISend
         if (CheckPriority(message, CurrentPriority) && Addressee is not null)
         {
             Addressee.SendMessage(message);
-            if (ShouldBeLogged)
-            {
-                var file = new StreamWriter("LogsFile", true);
-                file.WriteLine("New message for " + Addressee.GetAddresseeName());
-                file.Dispose();
-            }
+            if (ShouldBeLogged) WriteNewMessageLog();
         }
+    }
+
+    public virtual void WriteNewMessageLog()
+    {
+        string path = Path.Combine(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..")), "LogsFile");
+        var file = new StreamWriter(path, true);
+        file.WriteLine("New message for " + Addressee.GetAddresseeName());
+        file.Dispose();
     }
 }

@@ -12,7 +12,8 @@ public class Display : IDisplay
     {
         if (currentMessage is null) return;
         Message = currentMessage;
-        var file = new StreamWriter("DisplayConsole", true);
+        string path = Path.Combine(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..")), "DisplayConsole");
+        var file = new StreamWriter(@path, true);
         if (Message.Heading is not null)
         {
             Console.WriteLine(Message.Heading);
@@ -25,6 +26,6 @@ public class Display : IDisplay
             file.WriteLine(Message.MainPart);
         }
 
-        file.Dispose();
+        file.Close();
     }
 }
