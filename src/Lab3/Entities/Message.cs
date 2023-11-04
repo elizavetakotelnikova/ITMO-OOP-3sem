@@ -1,6 +1,4 @@
 using Itmo.ObjectOrientedProgramming.Lab3.Entities;
-using Itmo.ObjectOrientedProgramming.Lab3.Entities.Receiver;
-
 namespace Itmo.ObjectOrientedProgramming.Lab3.Messages;
 
 public class Message
@@ -16,7 +14,7 @@ public class Message
     public string? MainPart { get; set; } // или переделать в абзацы
     public int ImportanceLevel { get; }
 
-    public void SendToTopic(Topic<MessengerReceiver> topic)
+    public void SendToTopic(Topic topic)
     {
         topic?.MessagesList.Add(this);
     }

@@ -1,3 +1,5 @@
+using System.IO;
+using Itmo.ObjectOrientedProgramming.Lab3.Entities;
 using Itmo.ObjectOrientedProgramming.Lab3.Entities.Receiver;
 using Itmo.ObjectOrientedProgramming.Lab3.Messages;
 
@@ -5,20 +7,23 @@ namespace Itmo.ObjectOrientedProgramming.Lab3.Services;
 
 public class ProxyAddressee : ISend
 {
-    public ProxyAddressee(ISend addressee)
+    public ProxyAddressee(ISendToConcreteAddressee addressee)
     {
         Addressee = addressee;
         CurrentPriority = 0;
+        ShouldBeLogged = false;
     }
 
-    public ProxyAddressee(ISend addressee, int currentPriority)
+    public ProxyAddressee(ISendToConcreteAddressee addressee, int currentPriority)
     {
         Addressee = addressee;
         CurrentPriority = currentPriority;
+        ShouldBeLogged = true;
     }
 
     public int CurrentPriority { get; set; }
-    public ISend Addressee { get; set; }
+    public ISendToConcreteAddressee Addressee { get; set; }
+    public bool ShouldBeLogged { get; set; }
 
     public static bool CheckPriority(Message message, int priority)
     {
@@ -26,13 +31,17 @@ public class ProxyAddressee : ISend
         return false;
     }
 
-    public void SendMessageWithPriority(Message message)
-    {
-        if (CheckPriority(message, CurrentPriority)) Addressee?.SendMessage(message);
-    }
-
     public void SendMessage(Message message)
     {
-        Addressee?.SendMessage(message);
+        if (CheckPriority(message, CurrentPriority) && Addressee is not null)
+        {
+            Addressee.SendMessage(message);
+            if (ShouldBeLogged)
+            {
+                var file = new StreamWriter("LogsFile", true);
+                file.WriteLine("New message for " + Addressee.GetAddresseeName());
+                file.Dispose();
+            }
+        }
     }
 }

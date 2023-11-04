@@ -4,23 +4,22 @@ using Itmo.ObjectOrientedProgramming.Lab3.Services;
 
 namespace Itmo.ObjectOrientedProgramming.Lab3.Entities.Receiver;
 
-public class GroupReceiver : ISend
+public class GroupReceiver : ISendToConcreteAddressee
 {
-    public IList<ISend> ConcreteAddressee { get; } = new List<ISend>();
+    public IList<ISendToConcreteAddressee> ConcreteAddressee { get; } = new List<ISendToConcreteAddressee>();
+
     public void SendMessage(Message message)
     {
         if (ConcreteAddressee is null) return;
-        foreach (ISend addressee in ConcreteAddressee)
+        foreach (ISendToConcreteAddressee addressee in ConcreteAddressee)
         {
-            if (addressee is not GroupReceiver)
-            {
-                var proxyAddressee = new ProxyAddressee(addressee);
-                proxyAddressee.SendMessage(message);
-            }
-            else
-            {
-                addressee.SendMessage(message);
-            }
+            var proxyAddressee = new ProxyAddressee(addressee);
+            proxyAddressee.SendMessage(message);
         }
+    }
+
+    public string GetAddresseeName()
+    {
+        return "Group of addressees";
     }
 }

@@ -19,7 +19,7 @@ public class User
 
     public void SetRead(Message message)
     {
-        MessageWithInfo? selectedMessage = MessageInfo.First(element => element.Message == message && !element.IsRead);
+        MessageWithInfo? selectedMessage = MessageInfo.FirstOrDefault(element => element.Message == message && !element.IsRead);
         if (selectedMessage is null) throw new InvalidOperationException("Message is already read");
         selectedMessage.IsRead = true;
     }

@@ -2,7 +2,7 @@ using Itmo.ObjectOrientedProgramming.Lab3.Messages;
 
 namespace Itmo.ObjectOrientedProgramming.Lab3.Entities.Receiver;
 
-public class DisplayReceiver : ISend
+public class DisplayReceiver : ISendToConcreteAddressee
 {
     public IDisplay? ConcreteAddressee { get; set; }
 
@@ -10,5 +10,10 @@ public class DisplayReceiver : ISend
     {
         if (ConcreteAddressee is null) return;
         ConcreteAddressee.DisplayMessage(message);
+    }
+
+    public string GetAddresseeName()
+    {
+        return "Display";
     }
 }
