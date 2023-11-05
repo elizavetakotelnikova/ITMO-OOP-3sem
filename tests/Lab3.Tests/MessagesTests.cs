@@ -77,7 +77,7 @@ public class MessagesTests
         var firstUser = new User(200);
         var userReceiver = new UserReceiver(firstUser);
         var display = new Display();
-        var displayDriver = new DriverDisplay(display, Color.Gold, Color.Chartreuse);
+        var displayDriver = new DriverDisplay(display, new ColorModifier(Color.Gold), new ColorModifier(Color.Chartreuse));
 
         var messageBuilder = new MessageBuilder();
         Message firstMessage = messageBuilder.WithHeading("New meeting on Saturday")

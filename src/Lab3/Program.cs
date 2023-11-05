@@ -12,7 +12,7 @@ public static class Program
     public static void Main()
     {
         var display = new Display();
-        var displayDriver = new DriverDisplay(display, Color.BlueViolet, Color.Navy, true);
+        var displayDriver = new DriverDisplay(display, new ColorModifier(Color.BlueViolet), new ColorModifier(Color.Aqua), true);
         var messageBuilder = new MessageBuilder();
         Message firstMessage = messageBuilder.WithHeading("New meeting on Saturday")
             .WithMainPart("Hello, colleagues! On Saturday we will have a common meeting at 20.00")
