@@ -1,3 +1,4 @@
+using Itmo.ObjectOrientedProgramming.Lab3.Entities.DisplayDirectory;
 using Itmo.ObjectOrientedProgramming.Lab3.Messages;
 
 namespace Itmo.ObjectOrientedProgramming.Lab3.Entities.Receiver;

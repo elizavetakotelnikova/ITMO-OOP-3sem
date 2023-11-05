@@ -1,6 +1,6 @@
 using System.IO;
-
-namespace Itmo.ObjectOrientedProgramming.Lab3.Messages;
+using Itmo.ObjectOrientedProgramming.Lab3.Messages;
+namespace Itmo.ObjectOrientedProgramming.Lab3.Entities;
 
 public class MessageBuilder
 {

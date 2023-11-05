@@ -7,7 +7,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab3.Entities.MessengerDirectory;
 public class Messenger
 {
     public IList<Message> MessagesList { get; } = new List<Message>();
-    public virtual void DisplayMessage(Message message)
+    public virtual void DisplayMessage(Message message) // virtual method because of the mock-testing (without virtual, there was an error)
     {
         Console.WriteLine("Messenger:");
         Console.WriteLine(message?.Heading);

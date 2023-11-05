@@ -1,5 +1,6 @@
-using Crayon;
+using System.Drawing;
 using Itmo.ObjectOrientedProgramming.Lab3.Entities;
+using Itmo.ObjectOrientedProgramming.Lab3.Entities.DisplayDirectory;
 using Itmo.ObjectOrientedProgramming.Lab3.Entities.Receiver;
 using Itmo.ObjectOrientedProgramming.Lab3.Messages;
 using Itmo.ObjectOrientedProgramming.Lab3.Services;
@@ -11,7 +12,7 @@ public static class Program
     public static void Main()
     {
         var display = new Display();
-        var displayDriver = new DriverDisplay(display, Output.Yellow(), Output.Cyan());
+        var displayDriver = new DriverDisplay(display, Color.BlueViolet, Color.Navy, true);
         var messageBuilder = new MessageBuilder();
         Message firstMessage = messageBuilder.WithHeading("New meeting on Saturday")
             .WithMainPart("Hello, colleagues! On Saturday we will have a common meeting at 20.00")

@@ -1,7 +1,8 @@
 using System;
+using System.Drawing;
 using System.Linq;
-using Crayon;
 using Itmo.ObjectOrientedProgramming.Lab3.Entities;
+using Itmo.ObjectOrientedProgramming.Lab3.Entities.DisplayDirectory;
 using Itmo.ObjectOrientedProgramming.Lab3.Entities.MessengerDirectory;
 using Itmo.ObjectOrientedProgramming.Lab3.Entities.Receiver;
 using Itmo.ObjectOrientedProgramming.Lab3.Messages;
@@ -76,7 +77,7 @@ public class MessagesTests
         var firstUser = new User(200);
         var userReceiver = new UserReceiver(firstUser);
         var display = new Display();
-        var displayDriver = new DriverDisplay(display, Output.Yellow(), Output.Cyan());
+        var displayDriver = new DriverDisplay(display, Color.Gold, Color.Chartreuse);
 
         var messageBuilder = new MessageBuilder();
         Message firstMessage = messageBuilder.WithHeading("New meeting on Saturday")
