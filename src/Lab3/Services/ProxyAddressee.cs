@@ -44,7 +44,7 @@ public class ProxyAddressee : ISend
     public virtual void WriteNewMessageLog()
     {
         string path = Path.Combine(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..")), "LogsFile");
-        var file = new StreamWriter(path, true);
+        var file = new StreamWriter(@path, true);
         file.WriteLine("New message for " + Addressee.GetAddresseeName());
         file.Dispose();
     }
