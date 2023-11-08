@@ -18,10 +18,12 @@ public class Display : IDisplay
     public void DisplayInFile(Message currentMessage)
     {
         string path = Path.Combine(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..")), "DisplayConsole");
-        var file = new StreamWriter(@path, true);
+        var fileStream = new FileStream(@path, FileMode.OpenOrCreate);
+        var streamWriter = new StreamWriter(fileStream);
         Message = currentMessage;
-        if (Message.Heading is not null) file.WriteLine(Message.Heading);
-        if (Message.MainPart is not null) file.WriteLine(Message.MainPart);
-        file.Close();
+        if (Message.Heading is not null) streamWriter.WriteLine(Message.Heading);
+        if (Message.MainPart is not null) streamWriter.WriteLine(Message.MainPart);
+        streamWriter.Close();
+        fileStream.Close();
     }
 }
