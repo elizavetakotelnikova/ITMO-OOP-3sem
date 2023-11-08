@@ -43,13 +43,13 @@ public class ProxyAddressee : ISend
 
     public virtual void WriteNewMessageLog()
     {
-        string path = Path.Combine(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..")), "LogsFile");
+        /*string path = Path.Combine(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..")), "LogsFile");
         var fileStream = new FileStream(@path, FileMode.OpenOrCreate, FileAccess.Write);
         var streamWriter = new StreamWriter(fileStream);
         fileStream.Seek(fileStream.Length, SeekOrigin.Begin);
         streamWriter.WriteLine("New message for " + Addressee.GetAddresseeName());
         streamWriter.Close();
-        fileStream.Close();
+        fileStream.Close();*/
         Console.WriteLine("New message for " + Addressee.GetAddresseeName());
     }
 }
