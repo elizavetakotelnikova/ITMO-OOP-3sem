@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 
-namespace Itmo.ObjectOrientedProgramming.Lab4;
+namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
 public interface ICommand
 {
     void Execute(ExecutionContext context);
-    void SetArguments(IList<string> arguments);
+    bool AreValidArguments(IList<string> arguments);
+    bool IsValidFlag(IList<string> flagArguments);
 }

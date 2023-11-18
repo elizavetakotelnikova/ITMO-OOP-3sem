@@ -18,18 +18,27 @@ public class FileCopyCommand : ICommand
 
     public string? SourcePath { get; set; }
     public string? DestinationPath { get; set; }
-
-    public void SetArguments(IList<string> arguments)
+    public bool AreValidArguments(IList<string> arguments)
     {
-        if (arguments is null || arguments.Count < 2) return;
+        if (arguments is null) throw new ArgumentNullException(nameof(arguments));
+        if (arguments.Count != 2) return false;
         SourcePath = arguments[0];
         DestinationPath = arguments[1];
+        return true;
+    }
+
+    public bool IsValidFlag(IList<string> flagArguments)
+    {
+        if (flagArguments is null) throw new ArgumentNullException(nameof(flagArguments));
+        if (flagArguments.Count >= 1) return false;
+        return true;
     }
 
     public void Execute(ExecutionContext context)
     {
         if (SourcePath is null || DestinationPath is null) throw new ArgumentException("Path is not set");
         SetPath(context);
+        if (!System.IO.File.Exists(SourcePath)) throw new ArgumentException("Wrong source path");
         System.IO.File.Copy(SourcePath, DestinationPath);
     }
 

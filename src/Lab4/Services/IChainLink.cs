@@ -1,7 +1,9 @@
+using Itmo.ObjectOrientedProgramming.Lab4.Models;
+
 namespace Itmo.ObjectOrientedProgramming.Lab4.Services;
 
 public interface IChainLink
 {
-    void AddNext(IChainLink link);
-    void Handle(Request request);
+    IChainLink AddNext(IChainLink link);
+    void Handle(ParsingRequest request);
 }

@@ -18,6 +18,32 @@ public class ConnectCommand : ICommand
     public string? Address { get; set; }
     public Mode Mode { get; set; } = Mode.Local;
 
+    public bool AreValidArguments(IList<string> arguments)
+    {
+        if (arguments is null) throw new ArgumentNullException(nameof(arguments));
+        if (arguments.Count < 1) return false;
+        Address = arguments[0];
+        return true;
+    }
+
+    public bool IsValidFlag(IList<string> flagArguments)
+    {
+        if (flagArguments is null) throw new ArgumentNullException(nameof(flagArguments));
+        switch (flagArguments[0])
+        {
+            case "-m":
+                if (flagArguments[1] == "Local")
+                {
+                    Mode = Mode.Local;
+                    return true;
+                }
+
+                break;
+        }
+
+        return false;
+    }
+
     public void SetAddress(ExecutionContext context)
     {
         if (context is null) throw new ArgumentNullException(nameof(context));
@@ -30,15 +56,5 @@ public class ConnectCommand : ICommand
     {
         if (Address is null) return;
         SetAddress(context);
-    }
-
-    public void SetArguments(IList<string> arguments)
-    {
-        if (arguments is null || arguments.Count < 1) return;
-        Address = arguments[0];
-        if (arguments.Count > 1)
-        {
-            if (arguments[1] == "local") Mode = Mode.Local;
-        }
     }
 }

@@ -20,11 +20,20 @@ public class FileRenameCommand : ICommand
 
     public string? NewName { get; set; }
 
-    public void SetArguments(IList<string> arguments)
+    public bool AreValidArguments(IList<string> arguments)
     {
-        if (arguments is null || arguments.Count < 2) return;
+        if (arguments is null) throw new ArgumentNullException(nameof(arguments));
+        if (arguments.Count != 2) return false;
         FilePath = arguments[0];
         NewName = arguments[1];
+        return true;
+    }
+
+    public bool IsValidFlag(IList<string> flagArguments)
+    {
+        if (flagArguments is null) throw new ArgumentNullException(nameof(flagArguments));
+        if (flagArguments.Count >= 1) return false;
+        return true;
     }
 
     public void Execute(ExecutionContext context)

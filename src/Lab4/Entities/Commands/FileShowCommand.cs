@@ -25,14 +25,29 @@ public class FileShowCommand : ICommand
     public string? Path { get; set; }
     public ShowMode Mode { get; set; } = ShowMode.Console;
 
-    public void SetArguments(IList<string> arguments)
+    public bool AreValidArguments(IList<string> arguments)
     {
-        if (arguments is null || arguments.Count < 1) return;
+        if (arguments is null || arguments.Count < 1) return false;
         Path = arguments[0];
-        if (arguments.Count > 1)
+        return true;
+    }
+
+    public bool IsValidFlag(IList<string> flagArguments)
+    {
+        if (flagArguments is null) return true;
+        switch (flagArguments[0])
         {
-            if (arguments[1] == "console") Mode = ShowMode.Console;
+            case "-m":
+                if (flagArguments[1] == "Console")
+                {
+                    Mode = ShowMode.Console;
+                    return true;
+                }
+
+                break;
         }
+
+        return false;
     }
 
     public void Execute(ExecutionContext context)

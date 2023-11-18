@@ -1,22 +1,33 @@
 using System;
+using System.IO;
+using Itmo.ObjectOrientedProgramming.Lab4.Services;
+
 namespace Itmo.ObjectOrientedProgramming.Lab4;
 
 internal class Program
 {
     public static void Main()
     {
-        Parserhandler commandsParser = new ConsoleCommandsParser();
-        while (commandsParser.Parse())
+        var parser = new ConsoleCommandParser();
+        var appContext = new ExecutionContext(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..")));
+        var invoker = new CommandInvoker(appContext);
+        while (true)
         {
+            try
+            {
+                invoker.Consume(parser.Parse());
+            }
+            catch (ArgumentException exception)
+            {
+                Console.WriteLine(exception.Message);
+                break;
+            }
 
-            Parser.Default
-                .ParseArguments<CliCommands>(args)
-                .WithParsed(RunProgram)
-                .WithNotParsed(x => new LocalState().ListCommands());
+            invoker.Consume(parser.Parse());
         }
     }
 
-    private static void RunProgram(CliCommands options)
+    /*private static void RunProgram(CliCommands options)
     {
         var cfgChain = Chain.CreateChain<string, IApplicationState>
         (
@@ -25,22 +36,22 @@ internal class Program
                 .Then<DevelopmentLink>()
                 .FinishWith(() => new UnknownState())
         );
-        
+
         var applicationState = cfgChain.Process(options.Environment);
         if (applicationState.CurrentEnvironment is Environment.Unknown)
         {
             throw new Exception("User must specify environment");
         }
-        
+
         Console.WriteLine($"Application context is {applicationState.CurrentEnvironment}");
         if (options.ShouldSayHello)
         {
             applicationState.SayHello();
         }
-        
+
         if (options.WantHelp)
         {
             applicationState.ListCommands();
         }
-    }
+    }*/
 }

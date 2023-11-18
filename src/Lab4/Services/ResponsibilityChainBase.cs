@@ -1,9 +1,11 @@
+using Itmo.ObjectOrientedProgramming.Lab4.Models;
+
 namespace Itmo.ObjectOrientedProgramming.Lab4.Services;
 
 public abstract class ResponsibilityChainBase : IChainLink
 {
     protected IChainLink? Next { get; set; }
-    public void AddNext(IChainLink link)
+    public IChainLink AddNext(IChainLink link)
     {
         if (Next is null)
         {
@@ -13,7 +15,9 @@ public abstract class ResponsibilityChainBase : IChainLink
         {
             Next.AddNext(link);
         }
+
+        return this;
     }
 
-    public abstract void Handle(Request request);
+    public abstract void Handle(ParsingRequest request);
 }

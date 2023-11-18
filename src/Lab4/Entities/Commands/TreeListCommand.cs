@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using Itmo.ObjectOrientedProgramming.Lab4.Composite;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
@@ -17,13 +16,27 @@ public class TreeListCommand : ICommand
         Depth = depth;
     }
 
-    public IList<List<IComponent>> Directories { get; } = new List<List<IComponent>>();
+    // public IList<List<IComponent>> Directories { get; } = new List<List<IComponent>>();
     public int Depth { get; set; } = 1;
 
-    public void SetArguments(IList<string> arguments)
+    public bool AreValidArguments(IList<string> arguments)
     {
-        if (arguments is null) return;
-        if (arguments.Count > 0) Depth = int.Parse(arguments[0], NumberFormatInfo.InvariantInfo);
+        if (arguments is null) throw new ArgumentNullException(nameof(arguments));
+        if (arguments.Count >= 1) return false;
+        return true;
+    }
+
+    public bool IsValidFlag(IList<string> flagArguments)
+    {
+        if (flagArguments is null) throw new ArgumentNullException(nameof(flagArguments));
+        switch (flagArguments[0])
+        {
+            case "-d":
+                Depth = int.Parse(flagArguments[1], NumberFormatInfo.InvariantInfo);
+                break;
+        }
+
+        return false;
     }
 
     public void Execute(ExecutionContext context)

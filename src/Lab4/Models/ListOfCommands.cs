@@ -6,7 +6,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab4.Models;
 
 public record ListOfCommands
 {
-    public Dictionary<string, Func<ICommand>> ListedCommands { get; } = new Dictionary<string, Func<ICommand>>()
+    public Dictionary<string, Func<ICommand>> CommandsDictionary { get; } = new Dictionary<string, Func<ICommand>>()
     {
         ["connect"] = () => new ConnectCommand(),
         ["disconnect"] = () => new DisconnectCommand(),

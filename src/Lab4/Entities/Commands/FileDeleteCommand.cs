@@ -17,16 +17,26 @@ public class FileDeleteCommand : ICommand
 
     public string? FilePath { get; set; }
 
-    public void SetArguments(IList<string> arguments)
+    public bool AreValidArguments(IList<string> arguments)
     {
-        if (arguments is null || arguments.Count < 1) return;
+        if (arguments is null) throw new ArgumentNullException(nameof(arguments));
+        if (arguments.Count != 1) return false;
         FilePath = arguments[0];
+        return true;
+    }
+
+    public bool IsValidFlag(IList<string> flagArguments)
+    {
+        if (flagArguments is null) throw new ArgumentNullException(nameof(flagArguments));
+        if (flagArguments.Count >= 1) return false;
+        return true;
     }
 
     public void Execute(ExecutionContext context)
     {
         if (FilePath is null) throw new ArgumentException("FilePath is not set");
         SetPath(context);
+        if (!System.IO.File.Exists(FilePath)) throw new ArgumentException("Wrong file path");
         System.IO.File.Delete(FilePath);
     }
 
