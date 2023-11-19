@@ -7,11 +7,13 @@
 
     <ItemGroup>
       <PackageReference Include="Crayon" />
+      <PackageReference Include="Moq" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Entities\" />
-      <Folder Include="Filesystem\" />
+      <Folder Include="Filesystem\Testing\TestingLevel2\" />
+      <Folder Include="Filesystem\TestSecond\" />
     </ItemGroup>
 
 </Project>

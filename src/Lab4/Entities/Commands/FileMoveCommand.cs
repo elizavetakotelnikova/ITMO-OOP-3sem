@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using Itmo.ObjectOrientedProgramming.Lab4.Models;
+using Itmo.ObjectOrientedProgramming.Lab4.Services;
+
 namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
 public class FileMoveCommand : ICommand
@@ -36,19 +38,20 @@ public class FileMoveCommand : ICommand
 
     public void Execute(ExecutionContext context)
     {
+        if (context?.CurrentPath is null) throw new ArgumentNullException(nameof(context));
         if (SourcePath is null || DestinationPath is null) throw new ArgumentException("Path is not set");
         SetPath(context);
-        if (!System.IO.File.Exists(SourcePath)) throw new ArgumentException("Wrong source path");
-        System.IO.File.Move(SourcePath, DestinationPath);
+        if (!System.IO.File.Exists(@SourcePath)) throw new ArgumentException("Wrong source path");
+        System.IO.File.Move(@SourcePath, @DestinationPath);
     }
 
     private void SetPath(ExecutionContext context)
     {
         if (context is null || SourcePath is null || DestinationPath is null) throw new ArgumentNullException(nameof(context));
-        var absolutePath = new Regex("[A-Z]{:}{\\}"); // сделать абстракцию на проверку абсолютности пути
+        var checker = new WindowsPathChecker();
 
         // if (Path is not null && absolutePath.IsMatch(Path)) context.CurrentPath = Address;
-        if (!absolutePath.IsMatch(SourcePath)) SourcePath = context.CurrentPath + SourcePath;
-        if (!absolutePath.IsMatch(DestinationPath)) DestinationPath = context.CurrentPath + DestinationPath;
+        if (!checker.IsValidAbsolutePath(SourcePath)) SourcePath = context.CurrentPath + SourcePath;
+        if (!checker.IsValidAbsolutePath(DestinationPath)) DestinationPath = context.CurrentPath + DestinationPath;
     }
 }

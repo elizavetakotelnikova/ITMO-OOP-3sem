@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 using Itmo.ObjectOrientedProgramming.Lab4.Models;
 
@@ -13,17 +14,24 @@ public class CommandHandler : ResponsibilityChainBase
         if (request.TokenizedLine.Count == 0) throw new ArgumentException("Command is not set");
 
         string commandPart = string.Empty;
+        var listToRemove = new List<string>();
         foreach (string part in request.TokenizedLine)
         {
             commandPart += part;
             if (_allCommands.CommandsDictionary.TryGetValue(commandPart, out Func<ICommand>? commandDelegate))
             {
                 request.Command = commandDelegate();
-                request.TokenizedLine.Remove(part);
+                listToRemove.Add(part);
+                foreach (string item in listToRemove)
+                {
+                    request.TokenizedLine.Remove(item);
+                }
+
                 Next?.Handle(request);
+                return;
             }
 
-            request.TokenizedLine.Remove(part);
+            listToRemove.Add(part);
             commandPart += " ";
         }
 

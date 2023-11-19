@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using Itmo.ObjectOrientedProgramming.Lab4.Models;
+using Itmo.ObjectOrientedProgramming.Lab4.Services;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
@@ -34,14 +35,15 @@ public class GoToCommand : ICommand
 
     public void SetAddress(ExecutionContext context)
     {
-        if (context is null) throw new ArgumentNullException(nameof(context));
-        var absolutePath = new Regex("[A-Z]{:}{\\}"); // сделать абстракцию на проверку абсолютности пути
-        if (Path is not null && absolutePath.IsMatch(Path)) context.CurrentPath = Path;
+        if (context is null || Path is null) throw new ArgumentNullException(nameof(context)); // посмотреть что с нулем делать
+        var checker = new WindowsPathChecker();
+        if (checker.IsValidAbsolutePath(Path)) context.CurrentPath = Path;
         else context.CurrentPath += Path;
     }
 
     public void Execute(ExecutionContext context)
     {
+        if (context?.CurrentPath is null) throw new ArgumentNullException(nameof(context));
         if (Path is null) throw new ArgumentException("Path is not set");
         SetAddress(context);
     }

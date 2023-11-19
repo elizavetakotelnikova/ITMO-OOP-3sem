@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using Itmo.ObjectOrientedProgramming.Lab4.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
@@ -29,11 +30,12 @@ public class TreeListCommand : ICommand
     public bool IsValidFlag(IList<string> flagArguments)
     {
         if (flagArguments is null) throw new ArgumentNullException(nameof(flagArguments));
+        if (flagArguments.Count == 0) return true;
         switch (flagArguments[0])
         {
             case "-d":
                 Depth = int.Parse(flagArguments[1], NumberFormatInfo.InvariantInfo);
-                break;
+                return true;
         }
 
         return false;
@@ -49,7 +51,7 @@ public class TreeListCommand : ICommand
     {
         if (!System.IO.Directory.Exists(pathToRootDirectory)) return;
         var rootDirectory = new DirectoryInfo(pathToRootDirectory);
-        PrintCurrentDirectory(rootDirectory, 0);
+        PrintCurrentDirectory(@rootDirectory, 0);
     }
 
     private void PrintCurrentDirectory(DirectoryInfo directory, int currentDepth)

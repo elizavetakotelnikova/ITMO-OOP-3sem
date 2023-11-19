@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
+using Itmo.ObjectOrientedProgramming.Lab4.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
@@ -8,8 +8,10 @@ public class DisconnectCommand : ICommand
 {
     public void Execute(ExecutionContext context)
     {
-        if (context is null) throw new ArgumentNullException(nameof(context));
-        context.CurrentPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\.."));
+        if (context?.CurrentPath is null) throw new ArgumentNullException(nameof(context));
+        context.CurrentPath = null; // next command should be connect, or an exception will be thrown
+
+        // context.CurrentPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\.."));
     }
 
     public bool AreValidArguments(IList<string> arguments)

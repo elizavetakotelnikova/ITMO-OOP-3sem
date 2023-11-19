@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Itmo.ObjectOrientedProgramming.Lab4.Models;
 using Itmo.ObjectOrientedProgramming.Lab4.Services;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4;
@@ -22,8 +23,6 @@ internal class Program
                 Console.WriteLine(exception.Message);
                 break;
             }
-
-            invoker.Consume(parser.Parse());
         }
     }
 

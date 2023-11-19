@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 using Itmo.ObjectOrientedProgramming.Lab4.Models;
 
@@ -28,7 +29,8 @@ public class ConsoleCommandParser : IParseCommand
         IChainLink commandHandler = new CommandHandler().
                 AddNext(new ArgumentsHandler()).
                 AddNext(new FlagsHandler());
-        var parsingRequest = new ParsingRequest(null, arguments);
+        var listArguments = arguments.ToList();
+        var parsingRequest = new ParsingRequest(null, listArguments);
         commandHandler.Handle(parsingRequest);
         return parsingRequest.Command;
     }

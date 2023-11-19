@@ -11,13 +11,21 @@ public class FlagsHandler : ResponsibilityChainBase
     {
         if (request is null || request.Command is null) throw new ArgumentNullException(nameof(request));
 
-        var flagsRegex = new Regex("{-}{-}[a-z]");
+        var flagsRegex = new Regex("[-][a-z]");
         var flagsList = new List<string>();
         foreach (string flagPart in request.TokenizedLine)
         {
-            if (flagsRegex.IsMatch(flagPart)) flagsList.Clear();
-
-            if (!request.Command.IsValidFlag(flagsList)) throw new ArgumentException("Invalid command");
+            if (flagsRegex.IsMatch(flagPart))
+            {
+                if (flagsList.Count != 0 && !request.Command.IsValidFlag(flagsList))
+                    throw new ArgumentException("Invalid command");
+                flagsList.Clear();
+                flagsList.Add(flagPart);
+            }
+            else
+            {
+                flagsList.Add(flagPart);
+            }
         }
 
         if (!request.Command.IsValidFlag(flagsList)) throw new ArgumentException("Invalid command");

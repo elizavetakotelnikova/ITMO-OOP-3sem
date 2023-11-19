@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
+using Itmo.ObjectOrientedProgramming.Lab4.Models;
+using Itmo.ObjectOrientedProgramming.Lab4.Services;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
@@ -52,6 +53,7 @@ public class FileShowCommand : ICommand
 
     public void Execute(ExecutionContext context)
     {
+        if (context?.CurrentPath is null) throw new ArgumentNullException(nameof(context));
         SetAddress(context);
         if (Path is null) throw new ArgumentNullException(nameof(context));
         switch (Mode)
@@ -70,10 +72,10 @@ public class FileShowCommand : ICommand
 
     private void SetAddress(ExecutionContext context)
     {
-        if (context is null) throw new ArgumentNullException(nameof(context));
-        var absolutePath = new Regex("[A-Z]{:}{\\}"); // сделать абстракцию на проверку абсолютности пути
+        if (context is null || Path is null) throw new ArgumentNullException(nameof(context));
+        var checker = new WindowsPathChecker();
 
         // if (Path is not null && absolutePath.IsMatch(Path)) context.CurrentPath = Address;
-        if (Path is not null && !absolutePath.IsMatch(Path)) Path = context.CurrentPath + Path;
+        if (!checker.IsValidAbsolutePath(Path)) Path = context.CurrentPath + Path;
     }
 }
