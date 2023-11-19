@@ -4,7 +4,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab4.Services;
 
 public abstract class ResponsibilityChainBase : IChainLink
 {
-    protected IChainLink? Next { get; set; }
+    protected IChainLink? Next { get; private set; }
     public IChainLink AddNext(IChainLink link)
     {
         if (Next is null)

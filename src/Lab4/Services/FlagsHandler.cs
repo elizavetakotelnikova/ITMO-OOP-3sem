@@ -9,7 +9,7 @@ public class FlagsHandler : ResponsibilityChainBase
 {
     public override void Handle(ParsingRequest request)
     {
-        if (request is null || request.Command is null) throw new ArgumentNullException(nameof(request));
+        if (request?.Command is null) throw new ArgumentNullException(nameof(request));
 
         var flagsRegex = new Regex("[-][a-z]");
         var flagsList = new List<string>();

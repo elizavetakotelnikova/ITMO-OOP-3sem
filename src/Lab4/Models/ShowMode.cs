@@ -1,4 +1,4 @@
-namespace Itmo.ObjectOrientedProgramming.Lab4;
+namespace Itmo.ObjectOrientedProgramming.Lab4.Models;
 
 public enum ShowMode
 {

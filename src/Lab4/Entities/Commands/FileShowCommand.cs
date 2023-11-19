@@ -8,40 +8,40 @@ namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
 public class FileShowCommand : ICommand
 {
+    private string? _path;
+    private ShowMode _mode = ShowMode.Console;
     public FileShowCommand()
     {
     }
 
     public FileShowCommand(string? path, ShowMode mode)
     {
-        Path = path; // может надо добавить условие что путь не может быть пустой строкой
-        Mode = mode;
+        _path = path;
+        _mode = mode;
     }
 
     public FileShowCommand(string? path)
     {
-        Path = path; // может надо добавить условие что путь не может быть пустой строкой
+        _path = path;
     }
-
-    public string? Path { get; set; }
-    public ShowMode Mode { get; set; } = ShowMode.Console;
 
     public bool AreValidArguments(IList<string> arguments)
     {
         if (arguments is null || arguments.Count < 1) return false;
-        Path = arguments[0];
+        _path = arguments[0];
         return true;
     }
 
     public bool IsValidFlag(IList<string> flagArguments)
     {
-        if (flagArguments is null) return true;
+        if (flagArguments is null) throw new ArgumentNullException(nameof(flagArguments));
+        if (flagArguments.Count == 0) return true;
         switch (flagArguments[0])
         {
             case "-m":
                 if (flagArguments[1] == "Console")
                 {
-                    Mode = ShowMode.Console;
+                    _mode = ShowMode.Console;
                     return true;
                 }
 
@@ -55,11 +55,11 @@ public class FileShowCommand : ICommand
     {
         if (context?.CurrentPath is null) throw new ArgumentNullException(nameof(context));
         SetAddress(context);
-        if (Path is null) throw new ArgumentNullException(nameof(context));
-        switch (Mode)
+        if (_path is null) throw new ArgumentNullException(nameof(context));
+        switch (_mode)
         {
-            case ShowMode.Console: // предполагаемое расширение в количестве способов вывода
-                var file = new StreamReader(Path);
+            case ShowMode.Console:
+                var file = new StreamReader(_path);
                 while (!file.EndOfStream)
                 {
                     Console.WriteLine(file.ReadLine());
@@ -72,10 +72,8 @@ public class FileShowCommand : ICommand
 
     private void SetAddress(ExecutionContext context)
     {
-        if (context is null || Path is null) throw new ArgumentNullException(nameof(context));
+        if (context is null || _path is null) throw new ArgumentNullException(nameof(context));
         var checker = new WindowsPathChecker();
-
-        // if (Path is not null && absolutePath.IsMatch(Path)) context.CurrentPath = Address;
-        if (!checker.IsValidAbsolutePath(Path)) Path = context.CurrentPath + Path;
+        if (!checker.IsValidAbsolutePath(_path)) _path = context.CurrentPath + _path;
     }
 }

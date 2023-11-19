@@ -8,17 +8,23 @@ namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
 public class TreeListCommand : ICommand
 {
+    /*private IDictionary<string, string> _allowedFlags = new Dictionary<string, string>()
+    {
+        ["-d"] = "1",
+    };*/
+
+    // why i decided to use private fields for flags instead of map:
+    // because in dictionary we can only store string objects and I dont find it convenient in many cases,
+    // when flags mean different types of parameters for program executing
+    private int _depth = 1;
     public TreeListCommand()
     {
     }
 
     public TreeListCommand(int depth)
     {
-        Depth = depth;
+        _depth = depth;
     }
-
-    // public IList<List<IComponent>> Directories { get; } = new List<List<IComponent>>();
-    public int Depth { get; set; } = 1;
 
     public bool AreValidArguments(IList<string> arguments)
     {
@@ -34,11 +40,11 @@ public class TreeListCommand : ICommand
         switch (flagArguments[0])
         {
             case "-d":
-                Depth = int.Parse(flagArguments[1], NumberFormatInfo.InvariantInfo);
+                _depth = int.Parse(flagArguments[1], NumberFormatInfo.InvariantInfo);
                 return true;
         }
 
-        return false;
+        return true;
     }
 
     public void Execute(ExecutionContext context)
@@ -49,14 +55,14 @@ public class TreeListCommand : ICommand
 
     public void PrintDirectoryTree(string pathToRootDirectory)
     {
-        if (!System.IO.Directory.Exists(pathToRootDirectory)) return;
+        if (!Directory.Exists(pathToRootDirectory)) return;
         var rootDirectory = new DirectoryInfo(pathToRootDirectory);
         PrintCurrentDirectory(@rootDirectory, 0);
     }
 
     private void PrintCurrentDirectory(DirectoryInfo directory, int currentDepth)
     {
-        if (currentDepth > Depth) return;
+        if (currentDepth > _depth) return;
         string indentation = string.Empty;
         for (int i = 0; i < currentDepth; i++) indentation += '\t';
 
@@ -67,61 +73,4 @@ public class TreeListCommand : ICommand
             PrintCurrentDirectory(subDirectory, nextDepth);
         }
     }
-
-    /*public static List<IComponent> AddAllInDirectory(string currentPath)
-    {
-        string[] subDirectories = System.IO.Directory.GetDirectories(currentPath);
-        var allComponents = new List<IComponent>();
-        foreach (string name in subDirectories)
-        {
-            var currentDirectory = new Directory(name); // получаем все директории
-            allComponents.Add(currentDirectory);
-        }
-
-        string[] subFiles = System.IO.Directory.GetFiles(currentPath);
-
-        // var allFiles = new List<Composite.File>();
-        foreach (string name in subFiles)
-        {
-            var currentFile = new Composite.File(name); // получаем все файлы
-            allComponents.Add(currentFile);
-        }
-
-        return allComponents;
-    }*/
-
-    /*public void AddCatalogs(ExecutionContext context)
-    {
-        if (context?.CurrentPath is null) throw new ArgumentNullException(nameof(context));
-        string currentPath = context.CurrentPath;
-        List<IComponent> currentInsides = AddAllInDirectory(currentPath);
-        for (int i = 0; i < Depth; i++)
-        {
-        }
-    }*/
-
-    /*public void AddCatalogs(ExecutionContext context)
-    {
-        if (context?.CurrentPath is null) throw new ArgumentNullException(nameof(context));
-        string currentPath = context.CurrentPath;
-        for (int i = 0; i < Depth; i++)
-        {
-            string[] subDirectories = System.IO.Directory.GetDirectories(currentPath);
-            var allComponents = new List<IComponent>();
-            foreach (string name in subDirectories)
-            {
-                var currentDirectory = new Directory(name); // получаем все директории
-                allComponents.Add(currentDirectory);
-            }
-
-            string[] subFiles = System.IO.Directory.GetFiles(currentPath);
-
-            // var allFiles = new List<Composite.File>();
-            foreach (string name in subFiles)
-            {
-                var currentFile = new Composite.File(name); // получаем все файлы
-                allComponents.Add(currentFile);
-            }
-        }
-    }*/
 }

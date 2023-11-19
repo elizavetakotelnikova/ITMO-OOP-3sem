@@ -17,8 +17,6 @@ public class ArgumentsHandler : ResponsibilityChainBase
         {
             if (flagsRegex.IsMatch(part)) break;
             arguments.Add(part);
-
-            // request.TokenizedLine.Remove(part);
         }
 
         foreach (string item in arguments)

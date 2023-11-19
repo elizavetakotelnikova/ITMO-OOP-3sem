@@ -7,6 +7,10 @@ namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
 public class ConnectCommand : ICommand
 {
+    /*private readonly IDictionary<string, string?> _allowedFlags = new Dictionary<string, string?>()
+    {
+        ["-m"] = null,
+    };*/
     private string? _address;
     private Mode? _mode;
     public ConnectCommand()
@@ -36,13 +40,17 @@ public class ConnectCommand : ICommand
             case "-m":
                 if (flagArguments[1] == "local")
                 {
-                    _mode = Lab4.Mode.Local;
+                    _mode = Mode.Local;
                     return true;
                 }
 
                 break;
         }
 
+        /*if (!_allowedFlags.TryGetValue(flagArguments[0], out string? exists)) return false;
+        if (exists is not null) return false;
+        _allowedFlags[flagArguments[0]] = flagArguments[1];
+        return true;*/
         return false;
     }
 
@@ -56,7 +64,7 @@ public class ConnectCommand : ICommand
 
     public void Execute(ExecutionContext context)
     {
-        if (_address is null || _mode is null) return;
+        if (_address is null || _mode is null) throw new ArgumentNullException(nameof(context));
         SetAddress(context);
     }
 }
