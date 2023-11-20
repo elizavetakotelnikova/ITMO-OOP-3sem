@@ -8,17 +8,19 @@ namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
 public class TreeListCommand : ICommand
 {
-    /*private IDictionary<string, string> _allowedFlags = new Dictionary<string, string>()
-    {
-        ["-d"] = "1",
-    };*/
-
     // why i decided to use private fields for flags instead of map:
-    // because in dictionary we can only store string objects and I dont find it convenient in many cases,
+    // because in dictionary we can only store object of one type, I dont find it convenient in many cases,
     // when flags mean different types of parameters for program executing
     private int _depth = 1;
+    private TreeListCommandParameters _treeParameters = new TreeListCommandParameters((char)220, (char)48, '-');
     public TreeListCommand()
     {
+    }
+
+    public TreeListCommand(TreeListCommandParameters? parameters)
+    {
+        if (parameters is null) throw new ArgumentNullException(nameof(parameters));
+        _treeParameters = parameters;
     }
 
     public TreeListCommand(int depth)
@@ -66,11 +68,16 @@ public class TreeListCommand : ICommand
         string indentation = string.Empty;
         for (int i = 0; i < currentDepth; i++) indentation += '\t';
 
-        Console.WriteLine($"{indentation}-{directory.Name}");
+        Console.WriteLine($"{indentation}{_treeParameters.Indentation}-{_treeParameters.DirectorySymbol} {directory.Name}");
         int nextDepth = currentDepth + 1;
         foreach (DirectoryInfo subDirectory in directory.GetDirectories())
         {
             PrintCurrentDirectory(subDirectory, nextDepth);
+        }
+
+        foreach (FileInfo fileInfo in directory.GetFiles())
+        {
+            Console.WriteLine($"{indentation}{_treeParameters.Indentation}-{_treeParameters.FileSymbol} {fileInfo.Name}");
         }
     }
 }

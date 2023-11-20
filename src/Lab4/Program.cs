@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 using Itmo.ObjectOrientedProgramming.Lab4.Models;
 using Itmo.ObjectOrientedProgramming.Lab4.Services;
 
@@ -9,6 +10,8 @@ internal class Program
 {
     public static void Main()
     {
+        var treeListParams = new TreeListCommandParameters((char)120, (char)66, '-');
+        ListOfCommands.ReturnInstance(treeListParams);
         var parser = new ConsoleCommandParser();
         var appContext = new ExecutionContext(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..")));
         var invoker = new CommandInvoker(appContext);
@@ -16,7 +19,9 @@ internal class Program
         {
             try
             {
-                invoker.Consume(parser.Parse());
+                ICommand command = parser.Parse();
+                invoker.Consume(command);
+                if (command is DisconnectCommand) break;
             }
             catch (ArgumentException exception)
             {

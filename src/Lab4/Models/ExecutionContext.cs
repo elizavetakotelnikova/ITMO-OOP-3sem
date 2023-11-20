@@ -8,6 +8,4 @@ public class ExecutionContext
     }
 
     public string? CurrentPath { get; set; }
-
-    // public string? CurrentPath { get; set; } = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\.."));
 }

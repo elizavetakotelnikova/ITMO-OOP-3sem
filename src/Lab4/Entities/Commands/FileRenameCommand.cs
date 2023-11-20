@@ -38,7 +38,7 @@ public class FileRenameCommand : ICommand
     {
         if (context?.CurrentPath is null) throw new ArgumentNullException(nameof(context));
         if (_filePath is null || _newName is null) throw new ArgumentException("Parameters are not set");
-        SetPath(context); // посмотреть про два варианта написания пути директории
+        SetPath(context);
         if (!System.IO.File.Exists(@_filePath)) throw new ArgumentException("Wrong source path");
         System.IO.File.Move(@_filePath, System.IO.Path.GetDirectoryName(@_filePath) + '\\' + _newName);
     }

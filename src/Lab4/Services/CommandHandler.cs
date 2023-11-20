@@ -7,7 +7,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab4.Services;
 
 public class CommandHandler : ResponsibilityChainBase
 {
-    private readonly ListOfCommands _allCommands = new ListOfCommands();
+    private readonly ListOfCommands _allCommands = ListOfCommands.ReturnInstance(new TreeListCommandParameters((char)250, (char)120, '-'));
     public override void Handle(ParsingRequest request)
     {
         if (request is null) throw new ArgumentNullException(nameof(request));

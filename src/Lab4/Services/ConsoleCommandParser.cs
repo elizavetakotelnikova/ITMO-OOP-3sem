@@ -18,7 +18,7 @@ public class ConsoleCommandParser : IParseCommand
     public string[]? GetLine()
     {
         string? line = Console.ReadLine();
-        if (line is null) return null; // надо посмотреть что возвращать
+        if (line is null) return null;
         string[] arguments = line.Split(' ');
         return arguments;
     }

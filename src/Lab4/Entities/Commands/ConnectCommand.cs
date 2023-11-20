@@ -7,10 +7,6 @@ namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
 public class ConnectCommand : ICommand
 {
-    /*private readonly IDictionary<string, string?> _allowedFlags = new Dictionary<string, string?>()
-    {
-        ["-m"] = null,
-    };*/
     private string? _address;
     private Mode? _mode;
     public ConnectCommand()
@@ -47,10 +43,6 @@ public class ConnectCommand : ICommand
                 break;
         }
 
-        /*if (!_allowedFlags.TryGetValue(flagArguments[0], out string? exists)) return false;
-        if (exists is not null) return false;
-        _allowedFlags[flagArguments[0]] = flagArguments[1];
-        return true;*/
         return false;
     }
 
