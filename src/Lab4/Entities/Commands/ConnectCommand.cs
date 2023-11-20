@@ -16,9 +16,8 @@ public class ConnectCommand : ICommand
 
     public ConnectCommand(IImplementFileSystem? receiver, string? address, Mode mode)
     {
-        if (receiver is null) throw new ArgumentNullException(nameof(receiver));
-        _receiver = receiver;
-        _address = address; // может надо добавить условие что путь не может быть пустой строкой
+        _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
+        _address = address;
         _mode = mode;
     }
 

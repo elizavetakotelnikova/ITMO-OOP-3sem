@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 using Itmo.ObjectOrientedProgramming.Lab4.Models;
 using Itmo.ObjectOrientedProgramming.Lab4.Services;
@@ -10,12 +9,15 @@ internal class Program
 {
     public static void Main()
     {
+        // configure
         var treeListParams = new TreeListCommandParameters((char)120, (char)66, '-');
         var localFileSystem = new Filesystem();
         ListOfCommands.ReturnInstance(treeListParams, localFileSystem);
         var parser = new ConsoleCommandParser();
-        var appContext = new ExecutionContext(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..")));
+        var appContext = new ExecutionContext(null);
         var invoker = new CommandInvoker(appContext);
+
+        // commands parsing
         while (true)
         {
             try

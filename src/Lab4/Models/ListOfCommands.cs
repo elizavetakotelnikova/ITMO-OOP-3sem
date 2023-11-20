@@ -28,6 +28,10 @@ public record ListOfCommands
         ["tree goto"] = () => new GoToCommand(_fileSystem),
         ["file rename"] = () => new FileRenameCommand(_fileSystem),
     };
+    public static void ChangeFilesystem(IImplementFileSystem fileSystem)
+    {
+        _fileSystem = fileSystem;
+    }
 
     public static ListOfCommands ReturnInstance(TreeListCommandParameters parameters, IImplementFileSystem fileSystem)
     {
