@@ -66,32 +66,6 @@ public class ParserTests
     }
 
     [Fact]
-    public void ConnectAndFileRenameCommandsPassedShouldRenameFile()
-    {
-        Console.SetIn(new StringReader("connect C:\\Users\\Ryzen\\Desktop\\university\\OOP\\elizavetakotelnikova\\src\\Lab4\\Filesystem -m local"));
-        var parser = new ConsoleCommandParser();
-        ICommand result = parser.Parse();
-        var invoker = new CommandInvoker(new ExecutionContext(null));
-        invoker.Consume(result);
-        Assert.True(result is ConnectCommand);
-        Assert.Equal("C:\\Users\\Ryzen\\Desktop\\university\\OOP\\elizavetakotelnikova\\src\\Lab4\\Filesystem", invoker.Context.CurrentPath);
-        Console.SetIn(new StringReader("file rename \\text.txt NewNaming.txt"));
-        result = parser.Parse();
-        string filePath = "C:\\Users\\Ryzen\\Desktop\\university\\OOP\\elizavetakotelnikova\\src\\Lab4\\Filesystem\\text.txt";
-        var fileInfo = new FileInfo(filePath);
-        using (File.Create(filePath))
-        {
-        }
-
-        invoker.Consume(result);
-        Assert.True(result is FileRenameCommand);
-        Assert.Equal("C:\\Users\\Ryzen\\Desktop\\university\\OOP\\elizavetakotelnikova\\src\\Lab4\\Filesystem", invoker.Context.CurrentPath);
-        Assert.True(System.IO.File.Exists(@"C:\Users\Ryzen\Desktop\university\OOP\elizavetakotelnikova\src\Lab4\Filesystem\\NewNaming.txt"));
-        fileInfo.Delete();
-        File.Delete(@"C:\Users\Ryzen\Desktop\university\OOP\elizavetakotelnikova\src\Lab4\Filesystem\\NewNaming.txt");
-    }
-
-    [Fact]
     public void ConnectAndTreeListPassedShouldReturnPrintedOnce()
     {
         Console.SetIn(new StringReader("connect C:\\Users\\Ryzen\\Desktop\\university\\OOP\\elizavetakotelnikova\\src\\Lab4\\Filesystem -m local"));
@@ -110,6 +84,37 @@ public class ParserTests
     }
 
     /*[Fact]
+    public void ConnectAndFileRenameCommandsPassedShouldRenameFile()
+    {
+        Console.SetIn(new StringReader(
+            "connect C:\\Users\\Ryzen\\Desktop\\university\\OOP\\elizavetakotelnikova\\src\\Lab4\\Filesystem -m local"));
+        var parser = new ConsoleCommandParser();
+        ICommand result = parser.Parse();
+        var invoker = new CommandInvoker(new ExecutionContext(null));
+        invoker.Consume(result);
+        Assert.True(result is ConnectCommand);
+        Assert.Equal("C:\\Users\\Ryzen\\Desktop\\university\\OOP\\elizavetakotelnikova\\src\\Lab4\\Filesystem",
+            invoker.Context.CurrentPath);
+        Console.SetIn(new StringReader("file rename \\text.txt NewNaming.txt"));
+        result = parser.Parse();
+        string filePath =
+            "C:\\Users\\Ryzen\\Desktop\\university\\OOP\\elizavetakotelnikova\\src\\Lab4\\Filesystem\\text.txt";
+        var fileInfo = new FileInfo(filePath);
+        using (File.Create(filePath))
+        {
+        }
+
+        invoker.Consume(result);
+        Assert.True(result is FileRenameCommand);
+        Assert.Equal("C:\\Users\\Ryzen\\Desktop\\university\\OOP\\elizavetakotelnikova\\src\\Lab4\\Filesystem",
+            invoker.Context.CurrentPath);
+        Assert.True(System.IO.File.Exists(
+            @"C:\Users\Ryzen\Desktop\university\OOP\elizavetakotelnikova\src\Lab4\Filesystem\\NewNaming.txt"));
+        fileInfo.Delete();
+        File.Delete(@"C:\Users\Ryzen\Desktop\university\OOP\elizavetakotelnikova\src\Lab4\Filesystem\\NewNaming.txt");
+    }
+
+    [Fact]
     public void ConnectAndFileCopyCommandsPassedShouldCopyFile()
     {
         Console.SetIn(new StringReader("connect C:\\Users\\Ryzen\\Desktop\\university\\OOP\\elizavetakotelnikova\\src\\Lab4\\Filesystem -m local"));
