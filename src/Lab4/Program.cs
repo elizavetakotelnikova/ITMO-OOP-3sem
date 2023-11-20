@@ -11,7 +11,8 @@ internal class Program
     public static void Main()
     {
         var treeListParams = new TreeListCommandParameters((char)120, (char)66, '-');
-        ListOfCommands.ReturnInstance(treeListParams);
+        var localFileSystem = new Filesystem();
+        ListOfCommands.ReturnInstance(treeListParams, localFileSystem);
         var parser = new ConsoleCommandParser();
         var appContext = new ExecutionContext(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..")));
         var invoker = new CommandInvoker(appContext);

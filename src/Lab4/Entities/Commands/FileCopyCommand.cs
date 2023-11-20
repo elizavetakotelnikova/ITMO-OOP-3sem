@@ -1,20 +1,22 @@
 using System;
 using System.Collections.Generic;
 using Itmo.ObjectOrientedProgramming.Lab4.Models;
-using Itmo.ObjectOrientedProgramming.Lab4.Services;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
 public class FileCopyCommand : ICommand
 {
+    private IImplementFileSystem _receiver;
     private string? _sourcePath;
     private string? _destinationPath;
-    public FileCopyCommand()
+    public FileCopyCommand(IImplementFileSystem? receiver)
     {
+        _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
     }
 
-    public FileCopyCommand(string? sourcePath, string? destinationPath)
+    public FileCopyCommand(IImplementFileSystem? receiver, string? sourcePath, string? destinationPath)
     {
+        _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
         _sourcePath = sourcePath ?? throw new ArgumentNullException(nameof(sourcePath));
         _destinationPath = destinationPath ?? throw new ArgumentNullException(nameof(destinationPath));
     }
@@ -37,18 +39,6 @@ public class FileCopyCommand : ICommand
     public void Execute(ExecutionContext context)
     {
         if (_sourcePath is null || _destinationPath is null) throw new ArgumentException("Path is not set");
-        SetPath(context);
-        if (!System.IO.File.Exists(@_sourcePath)) throw new ArgumentException("Wrong source path");
-        System.IO.File.Copy(@_sourcePath, @_destinationPath);
-    }
-
-    private void SetPath(ExecutionContext context)
-    {
-        if (context?.CurrentPath is null || _sourcePath is null || _destinationPath is null) throw new ArgumentNullException(nameof(context));
-        var checker = new WindowsPathChecker();
-
-        if (!checker.IsValidAbsolutePath(_sourcePath)) _sourcePath = context.CurrentPath + _sourcePath;
-        if (!checker.IsValidAbsolutePath(_destinationPath)) _destinationPath = context.CurrentPath + _destinationPath;
-        _destinationPath += "\\" + System.IO.Path.GetFileName(_sourcePath);
+        _receiver.CopyFile(context, _sourcePath, _destinationPath);
     }
 }

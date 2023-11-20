@@ -6,10 +6,17 @@ namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
 public class DisconnectCommand : ICommand
 {
+    private IImplementFileSystem _receiver;
+
+    public DisconnectCommand(IImplementFileSystem? receiver)
+    {
+        _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
+    }
+
     public void Execute(ExecutionContext context)
     {
         if (context?.CurrentPath is null) throw new ArgumentNullException(nameof(context));
-        context.CurrentPath = null; // next command should be connect, or an exception will be thrown
+        _receiver.Disconnect(context);
     }
 
     public bool AreValidArguments(IList<string> arguments)

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using Itmo.ObjectOrientedProgramming.Lab4.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
@@ -11,20 +10,23 @@ public class TreeListCommand : ICommand
     // why i decided to use private fields for flags instead of map:
     // because in dictionary we can only store object of one type, I dont find it convenient in many cases,
     // when flags mean different types of parameters for program executing
+    private IImplementFileSystem _receiver;
     private int _depth = 1;
     private TreeListCommandParameters _treeParameters = new TreeListCommandParameters((char)220, (char)48, '-');
-    public TreeListCommand()
+    public TreeListCommand(IImplementFileSystem? receiver)
     {
+        _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
     }
 
-    public TreeListCommand(TreeListCommandParameters? parameters)
+    public TreeListCommand(IImplementFileSystem? receiver, TreeListCommandParameters? parameters)
     {
-        if (parameters is null) throw new ArgumentNullException(nameof(parameters));
-        _treeParameters = parameters;
+        _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
+        _treeParameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
     }
 
-    public TreeListCommand(int depth)
+    public TreeListCommand(IImplementFileSystem? receiver, int depth)
     {
+        _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
         _depth = depth;
     }
 
@@ -52,32 +54,6 @@ public class TreeListCommand : ICommand
     public void Execute(ExecutionContext context)
     {
         if (context?.CurrentPath is null) throw new ArgumentNullException(nameof(context));
-        PrintDirectoryTree(context.CurrentPath);
-    }
-
-    public void PrintDirectoryTree(string pathToRootDirectory)
-    {
-        if (!Directory.Exists(pathToRootDirectory)) return;
-        var rootDirectory = new DirectoryInfo(pathToRootDirectory);
-        PrintCurrentDirectory(@rootDirectory, 0);
-    }
-
-    private void PrintCurrentDirectory(DirectoryInfo directory, int currentDepth)
-    {
-        if (currentDepth > _depth) return;
-        string indentation = string.Empty;
-        for (int i = 0; i < currentDepth; i++) indentation += '\t';
-
-        Console.WriteLine($"{indentation}{_treeParameters.Indentation}-{_treeParameters.DirectorySymbol} {directory.Name}");
-        int nextDepth = currentDepth + 1;
-        foreach (DirectoryInfo subDirectory in directory.GetDirectories())
-        {
-            PrintCurrentDirectory(subDirectory, nextDepth);
-        }
-
-        foreach (FileInfo fileInfo in directory.GetFiles())
-        {
-            Console.WriteLine($"{indentation}{_treeParameters.Indentation}-{_treeParameters.FileSymbol} {fileInfo.Name}");
-        }
+        _receiver.PrintTreeList(context, _depth, _treeParameters);
     }
 }

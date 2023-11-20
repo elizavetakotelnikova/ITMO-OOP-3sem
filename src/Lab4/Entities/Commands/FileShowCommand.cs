@@ -1,27 +1,29 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Itmo.ObjectOrientedProgramming.Lab4.Models;
-using Itmo.ObjectOrientedProgramming.Lab4.Services;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
 public class FileShowCommand : ICommand
 {
+    private IImplementFileSystem _receiver;
     private string? _path;
     private ShowMode _mode = ShowMode.Console;
-    public FileShowCommand()
+    public FileShowCommand(IImplementFileSystem? receiver)
     {
+        _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
     }
 
-    public FileShowCommand(string? path, ShowMode mode)
+    public FileShowCommand(IImplementFileSystem? receiver, string? path, ShowMode mode)
     {
+        _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
         _path = path;
         _mode = mode;
     }
 
-    public FileShowCommand(string? path)
+    public FileShowCommand(IImplementFileSystem receiver, string? path)
     {
+        _receiver = receiver;
         _path = path;
     }
 
@@ -53,27 +55,7 @@ public class FileShowCommand : ICommand
 
     public void Execute(ExecutionContext context)
     {
-        if (context?.CurrentPath is null) throw new ArgumentNullException(nameof(context));
-        SetAddress(context);
-        if (_path is null) throw new ArgumentNullException(nameof(context));
-        switch (_mode)
-        {
-            case ShowMode.Console:
-                var file = new StreamReader(_path);
-                while (!file.EndOfStream)
-                {
-                    Console.WriteLine(file.ReadLine());
-                }
-
-                file.Close();
-                break;
-        }
-    }
-
-    private void SetAddress(ExecutionContext context)
-    {
-        if (context is null || _path is null) throw new ArgumentNullException(nameof(context));
-        var checker = new WindowsPathChecker();
-        if (!checker.IsValidAbsolutePath(_path)) _path = context.CurrentPath + _path;
+        if (context?.CurrentPath is null || _path is null) throw new ArgumentNullException(nameof(context));
+        _receiver.ShowFile(context, _path, _mode);
     }
 }

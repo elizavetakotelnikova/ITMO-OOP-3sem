@@ -93,8 +93,7 @@ public class ParserTests
         var invoker = new CommandInvoker(new ExecutionContext(null));
         invoker.Consume(result);
         Assert.True(result is ConnectCommand);
-        Assert.Equal("C:\\Users\\Ryzen\\Desktop\\university\\OOP\\elizavetakotelnikova\\src\\Lab4\\Filesystem",
-            invoker.Context.CurrentPath);
+        Assert.Equal("C:\\Users\\Ryzen\\Desktop\\university\\OOP\\elizavetakotelnikova\\src\\Lab4\\Filesystem", invoker.Context.CurrentPath);
         Console.SetIn(new StringReader("file rename \\text.txt NewNaming.txt"));
         result = parser.Parse();
         string filePath =
@@ -106,8 +105,7 @@ public class ParserTests
 
         invoker.Consume(result);
         Assert.True(result is FileRenameCommand);
-        Assert.Equal("C:\\Users\\Ryzen\\Desktop\\university\\OOP\\elizavetakotelnikova\\src\\Lab4\\Filesystem",
-            invoker.Context.CurrentPath);
+        Assert.Equal("C:\\Users\\Ryzen\\Desktop\\university\\OOP\\elizavetakotelnikova\\src\\Lab4\\Filesystem", invoker.Context.CurrentPath);
         Assert.True(System.IO.File.Exists(
             @"C:\Users\Ryzen\Desktop\university\OOP\elizavetakotelnikova\src\Lab4\Filesystem\\NewNaming.txt"));
         fileInfo.Delete();

@@ -1,19 +1,21 @@
 using System;
 using System.Collections.Generic;
 using Itmo.ObjectOrientedProgramming.Lab4.Models;
-using Itmo.ObjectOrientedProgramming.Lab4.Services;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
 public class GoToCommand : ICommand
 {
+    private IImplementFileSystem _receiver;
     private string? _path;
-    public GoToCommand()
+    public GoToCommand(IImplementFileSystem? receiver)
     {
+        _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
     }
 
-    public GoToCommand(string? path)
+    public GoToCommand(IImplementFileSystem? receiver, string? path)
     {
+        _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
         _path = path;
     }
 
@@ -31,18 +33,10 @@ public class GoToCommand : ICommand
         return flagArguments.Count == 0;
     }
 
-    public void SetAddress(ExecutionContext context)
-    {
-        if (context is null || _path is null) throw new ArgumentNullException(nameof(context));
-        var checker = new WindowsPathChecker();
-        if (checker.IsValidAbsolutePath(_path)) context.CurrentPath = _path;
-        else context.CurrentPath += _path;
-    }
-
     public void Execute(ExecutionContext context)
     {
         if (context?.CurrentPath is null) throw new ArgumentNullException(nameof(context));
         if (_path is null) throw new ArgumentException("Path is not set");
-        SetAddress(context);
+        _receiver.GoToCommand(context, _path);
     }
 }

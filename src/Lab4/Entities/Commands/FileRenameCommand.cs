@@ -1,20 +1,22 @@
 using System;
 using System.Collections.Generic;
 using Itmo.ObjectOrientedProgramming.Lab4.Models;
-using Itmo.ObjectOrientedProgramming.Lab4.Services;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
 public class FileRenameCommand : ICommand
 {
+    private IImplementFileSystem _receiver;
     private string? _filePath;
     private string? _newName;
-    public FileRenameCommand()
+    public FileRenameCommand(IImplementFileSystem? receiver)
     {
+        _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
     }
 
-    public FileRenameCommand(string? filePath, string? newName)
+    public FileRenameCommand(IImplementFileSystem? receiver, string? filePath, string? newName)
     {
+        _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
         _filePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
         _newName = newName ?? throw new ArgumentNullException(nameof(newName));
     }
@@ -38,15 +40,6 @@ public class FileRenameCommand : ICommand
     {
         if (context?.CurrentPath is null) throw new ArgumentNullException(nameof(context));
         if (_filePath is null || _newName is null) throw new ArgumentException("Parameters are not set");
-        SetPath(context);
-        if (!System.IO.File.Exists(@_filePath)) throw new ArgumentException("Wrong source path");
-        System.IO.File.Move(@_filePath, System.IO.Path.GetDirectoryName(@_filePath) + '\\' + _newName);
-    }
-
-    private void SetPath(ExecutionContext context)
-    {
-        if (context is null || _filePath is null) throw new ArgumentNullException(nameof(context));
-        var checker = new WindowsPathChecker();
-        if (!checker.IsValidAbsolutePath(_filePath)) _filePath = context.CurrentPath + _filePath;
+        _receiver.RenameFile(context, _filePath, _newName);
     }
 }

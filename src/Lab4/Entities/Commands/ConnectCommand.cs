@@ -1,20 +1,23 @@
 using System;
 using System.Collections.Generic;
 using Itmo.ObjectOrientedProgramming.Lab4.Models;
-using Itmo.ObjectOrientedProgramming.Lab4.Services;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
 public class ConnectCommand : ICommand
 {
+    private IImplementFileSystem _receiver;
     private string? _address;
     private Mode? _mode;
-    public ConnectCommand()
+    public ConnectCommand(IImplementFileSystem? receiver)
     {
+        _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
     }
 
-    public ConnectCommand(string? address, Mode mode)
+    public ConnectCommand(IImplementFileSystem? receiver, string? address, Mode mode)
     {
+        if (receiver is null) throw new ArgumentNullException(nameof(receiver));
+        _receiver = receiver;
         _address = address; // может надо добавить условие что путь не может быть пустой строкой
         _mode = mode;
     }
@@ -46,17 +49,9 @@ public class ConnectCommand : ICommand
         return false;
     }
 
-    public void SetAddress(ExecutionContext context)
-    {
-        if (context is null || _address is null) throw new ArgumentNullException(nameof(context));
-        var checker = new WindowsPathChecker();
-        if (checker.IsValidAbsolutePath(_address)) context.CurrentPath = _address;
-        else context.CurrentPath += _address;
-    }
-
     public void Execute(ExecutionContext context)
     {
         if (_address is null || _mode is null) throw new ArgumentNullException(nameof(context));
-        SetAddress(context);
+        _receiver.Connect(context, _mode, _address);
     }
 }
