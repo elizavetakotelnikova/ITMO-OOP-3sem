@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 using Itmo.ObjectOrientedProgramming.Lab4.Models;
+using Itmo.ObjectOrientedProgramming.Lab4.Servies;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4.Services;
 
 public class CommandHandler : ResponsibilityChainBase
 {
-    private readonly ListOfCommands _allCommands = ListOfCommands.ReturnInstance(new TreeListCommandParameters((char)250, (char)120, '-'), new Filesystem());
+    private readonly Configure _allCommands = Configure.ReturnInstance(new TreeListCommandParameters((char)250, (char)120, '-'), new LocalFilesystem());
     public override void Handle(ParsingRequest request)
     {
         if (request is null) throw new ArgumentNullException(nameof(request));

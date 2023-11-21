@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
 using Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
+using Itmo.ObjectOrientedProgramming.Lab4.Services;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4.Models;
 
-public record ListOfCommands
+public record Configure
 {
-    private static ListOfCommands? _instance;
+    private static Configure? _instance;
     private static TreeListCommandParameters? _treeListCommandParameters;
     private static IImplementFileSystem? _fileSystem;
 
-    public ListOfCommands(TreeListCommandParameters? treeListCommandParameters, IImplementFileSystem fileSystem)
+    public Configure(TreeListCommandParameters? treeListCommandParameters, IImplementFileSystem fileSystem)
     {
         _fileSystem = fileSystem;
         _treeListCommandParameters = treeListCommandParameters;
@@ -33,14 +34,14 @@ public record ListOfCommands
         _fileSystem = fileSystem;
     }
 
-    public static ListOfCommands ReturnInstance(TreeListCommandParameters parameters, IImplementFileSystem fileSystem)
+    public static Configure ReturnInstance(TreeListCommandParameters parameters, IImplementFileSystem fileSystem)
     {
         if (_instance is not null)
         {
             return _instance;
         }
 
-        _instance = new ListOfCommands(parameters, fileSystem);
+        _instance = new Configure(parameters, fileSystem);
         return _instance;
     }
 }

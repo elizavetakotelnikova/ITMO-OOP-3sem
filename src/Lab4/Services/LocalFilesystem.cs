@@ -3,9 +3,9 @@ using System.IO;
 using Itmo.ObjectOrientedProgramming.Lab4.Models;
 using Itmo.ObjectOrientedProgramming.Lab4.Services;
 
-namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
+namespace Itmo.ObjectOrientedProgramming.Lab4.Servies;
 
-public class Filesystem : IImplementFileSystem
+public class LocalFilesystem : IImplementFileSystem
 {
     public void Connect(ExecutionContext context, Mode? mode, string address)
     {

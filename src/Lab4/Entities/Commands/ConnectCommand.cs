@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Itmo.ObjectOrientedProgramming.Lab4.Models;
+using Itmo.ObjectOrientedProgramming.Lab4.Services;
+using Itmo.ObjectOrientedProgramming.Lab4.Servies;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 
@@ -39,6 +41,7 @@ public class ConnectCommand : ICommand
                 if (flagArguments[1] == "local")
                 {
                     _mode = Mode.Local;
+                    Configure.ChangeFilesystem(new LocalFilesystem());
                     return true;
                 }
 

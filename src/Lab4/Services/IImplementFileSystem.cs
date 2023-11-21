@@ -1,7 +1,7 @@
 using System.IO;
 using Itmo.ObjectOrientedProgramming.Lab4.Models;
 
-namespace Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
+namespace Itmo.ObjectOrientedProgramming.Lab4.Services;
 
 public interface IImplementFileSystem
 {

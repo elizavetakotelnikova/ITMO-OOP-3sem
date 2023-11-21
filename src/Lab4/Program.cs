@@ -2,6 +2,7 @@ using System;
 using Itmo.ObjectOrientedProgramming.Lab4.Entities.Commands;
 using Itmo.ObjectOrientedProgramming.Lab4.Models;
 using Itmo.ObjectOrientedProgramming.Lab4.Services;
+using Itmo.ObjectOrientedProgramming.Lab4.Servies;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4;
 
@@ -11,8 +12,8 @@ internal class Program
     {
         // configure
         var treeListParams = new TreeListCommandParameters((char)120, (char)66, '-');
-        var localFileSystem = new Filesystem();
-        ListOfCommands.ReturnInstance(treeListParams, localFileSystem);
+        var localFileSystem = new LocalFilesystem();
+        Configure.ReturnInstance(treeListParams, localFileSystem);
         var parser = new ConsoleCommandParser();
         var appContext = new ExecutionContext(null);
         var invoker = new CommandInvoker(appContext);
