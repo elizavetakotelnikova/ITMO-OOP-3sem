@@ -2,10 +2,17 @@
 
     <PropertyGroup>
         <RootNamespace>Itmo.ObjectOrientedProgramming.Lab4</RootNamespace>
+        <OutputType>Exe</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Crayon" />
+      <PackageReference Include="Moq" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Filesystem\Testing\TestingLevel2\" />
+      <Folder Include="Filesystem\TestSecond\" />
     </ItemGroup>
 
 </Project>
