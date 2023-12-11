@@ -7,13 +7,14 @@ public class TopUpCommand : ICommand
 {
     private ITopUp _receiver;
     private int _amount;
+    private long _accountId;
 
-    public TopUpCommand(ITopUp receiver)
+    public TopUpCommand(ITopUp? receiver)
     {
         _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
     }
 
-    public TopUpCommand(ITopUp receiver, int amount)
+    public TopUpCommand(ITopUp? receiver, int amount)
     {
         _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
         _amount = amount;
@@ -31,6 +32,7 @@ public class TopUpCommand : ICommand
     {
         if (_amount == 0) throw new ArgumentException("Amount is not set");
         if (context?.AtmUser is null || context.AtmUser.Account is null) throw new ArgumentNullException(nameof(context));
+        _accountId = context.AtmUser.Account.AccountId;
         _receiver.TopUp(context.AtmUser.Account, _amount);
     }
 }

@@ -1,15 +1,14 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using Adapters;
-using Adapters.Persistence;
 using Adapters.UI;
+using Application.Commands;
 using Application.Migration;
+using Application.Models;
 using DomainLayer.Models;
-using FluentMigrator.Runner; // using Itmo.Dev.Platform.Postgres.Extensions;
 using Microsoft.Extensions.DependencyInjection;
-using NSubstitute.Extensions;
-using Ports.Input.Logging;
-
+using Ports.Repositories;
+using ExecutionContext = DomainLayer.Models.ExecutionContext;
 internal class Program
 {
     public static void Main()
@@ -33,14 +32,13 @@ internal class Program
         ServiceProvider provider = collection.BuildServiceProvider();
         IServiceScope scope = provider.CreateScope();
         /*IMigrationRunner runner = provider.GetRequiredService<IMigrationRunner>();
-         runner.MigrateUp();*/
+        runner.MigrateUp();*/
         scope.UseInfrastructureDataAccess();
         scope.Dispose();
-        var configure = new Configure(provider.GetService<ILogUser>());
-        ExecutionContext appContext = new ExecutionContext();
+        var configure = new Configure(provider);
         var parser = new ConsoleCommandParser();
-        var appContext = new ExecutionContext(null);
-        var invoker = new CommandInvoker(appContext);
+        var appContext = new ExecutionContext(UserRole.User, null);
+        var invoker = new CommandInvoker(provider?.GetService<ITransactionsRepository>(), appContext);
 
         // commands parsing
         while (true)

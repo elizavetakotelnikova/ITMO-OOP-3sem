@@ -36,7 +36,8 @@ public class Initial : SqlMigration
     (
         user_id bigint primary key generated always as identity,
         user_name text not null ,
-        user_role user_role not null 
+        user_role user_role not null,
+        user_password text not null
     );
     
     create table accounts_data

@@ -1,3 +1,4 @@
+using Application.Models;
 using Application.Repositories;
 using DomainLayer.ValueObjects;
 using Itmo.Dev.Platform.Postgres.Connection;
@@ -67,4 +68,86 @@ public class DataBaseAccountRepository : IAccountsRepository
         if (reader.Read() is false)
             throw new ArgumentException("Operation cannot be done");
     }
+
+    public void Add(Account account, User user)
+    {
+        if (account is null || user is null) throw new ArgumentException("Operation cannot be done");
+
+        // не факт что так будет работать без переменной аккаунт айди
+        const string sql = """
+                           INSERT INTO accounts_data(account_id, SecondName) VALUES(@account.AccountId, @account.AccountPincode);
+                           """;
+
+        NpgsqlConnection connection = _connectionProvider
+            .GetConnectionAsync(default)
+            .AsTask()
+            .GetAwaiter()
+            .GetResult();
+
+        using var command = new NpgsqlCommand(sql, connection);
+
+        // command.AddParameter("accountId", currentId);
+        using NpgsqlDataReader reader = command.ExecuteReader();
+        command.Dispose();
+        if (reader.Read() is false)
+            throw new ArgumentException("Operation cannot be done");
+
+        const string sqlSecond = """
+                           INSERT INTO accounts(user_id, account_id) VALUES(@user.user_id, @account.AccountId);
+                           """;
+
+        using var commandSecond = new NpgsqlCommand(sqlSecond, connection);
+
+        // command.AddParameter("accountId", currentId);
+        using NpgsqlDataReader secondReader = commandSecond.ExecuteReader();
+        commandSecond.Dispose();
+        if (secondReader.Read() is false)
+            throw new ArgumentException("Operation cannot be done");
+    }
+
+    public long SelectNextAccountId()
+    {
+        const string sql = """
+                           SELECT LAST_VALUE(account_id) PARTITION BY(account_id)
+                           """;
+
+        NpgsqlConnection connection = _connectionProvider
+            .GetConnectionAsync(default)
+            .AsTask()
+            .GetAwaiter()
+            .GetResult();
+
+        using var command = new NpgsqlCommand(sql, connection);
+
+        using NpgsqlDataReader reader = command.ExecuteReader();
+        command.Dispose();
+        if (reader.Read() is false)
+            throw new ArgumentException("Operation cannot be done");
+
+        return reader.GetInt64(0);
+    }
+
+    /*public void InsertTransaction(Account account)
+    {
+        if (account is null) throw new ArgumentException("Operation cannot be done");
+
+        // не факт что так будет работать без переменной аккаунт айди
+        const string sql = """
+                           INSERT INTO accounts_data(account_id, SecondName) VALUES(@(SELECT LAST_VALUE(account_id) PARTITION BY(account_id)), @account.AccountPincode);
+                           """;
+
+        NpgsqlConnection connection = _connectionProvider
+            .GetConnectionAsync(default)
+            .AsTask()
+            .GetAwaiter()
+            .GetResult();
+
+        using var command = new NpgsqlCommand(sql, connection);
+
+        // command.AddParameter("accountId", currentId);
+        using NpgsqlDataReader reader = command.ExecuteReader();
+        command.Dispose();
+        if (reader.Read() is false)
+            throw new ArgumentException("Operation cannot be done");
+    }*/
 }

@@ -8,13 +8,14 @@ public class WithdrawCommand : ICommand
 {
     private IWithdrawMoney _receiver;
     private int _amount;
+    private long _accountId;
 
-    public WithdrawCommand(IWithdrawMoney receiver)
+    public WithdrawCommand(IWithdrawMoney? receiver)
     {
         _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
     }
 
-    public WithdrawCommand(IWithdrawMoney receiver, int amount)
+    public WithdrawCommand(IWithdrawMoney? receiver, int amount)
     {
         _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
         _amount = amount;
@@ -33,6 +34,7 @@ public class WithdrawCommand : ICommand
         if (_amount == 0) throw new ArgumentException("Amount is not set");
         if (context?.AtmUser is null || context.AtmUser.Account is null)
             throw new ArgumentNullException(nameof(context));
+        _accountId = context.AtmUser.Account.AccountId;
         _receiver.WithdrawMoney(context.AtmUser.Account, _amount);
     }
 }

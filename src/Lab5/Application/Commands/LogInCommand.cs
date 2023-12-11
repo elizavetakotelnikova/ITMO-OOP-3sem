@@ -25,12 +25,7 @@ public class LogInCommand : ICommand
     public bool ValidateArguments(IList<string> arguments)
     {
         if (arguments is null) return false;
-        string providedRole = arguments[0];
-        if (providedRole != UserRole.User.ToString() && providedRole != UserRole.Admin.ToString())
-        {
-            return false;
-        }
-
+        if (!UserRole.TryParse(arguments[0], out _role)) return false;
         return true;
     }
 

@@ -6,17 +6,17 @@ namespace Application.Commands;
 public class ShowBalanceCommand : ICommand
 {
     private IShowBalance _receiver;
-    private long _requestedAccount;
+    private long _requestedAccountId;
 
-    public ShowBalanceCommand(IShowBalance receiver)
+    public ShowBalanceCommand(IShowBalance? receiver)
     {
         _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
     }
 
-    public ShowBalanceCommand(IShowBalance receiver, long accountId)
+    public ShowBalanceCommand(IShowBalance? receiver, long accountId)
     {
         _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
-        _requestedAccount = accountId;
+        _requestedAccountId = accountId;
     }
 
     public bool ValidateArguments(IList<string> arguments)
@@ -24,17 +24,17 @@ public class ShowBalanceCommand : ICommand
         if (arguments is null) throw new ArgumentNullException(nameof(arguments));
         if (arguments.Count > 1) return false;
         if (arguments.Count == 1)
-            if (!long.TryParse(arguments[0], out _requestedAccount)) return false;
+            if (!long.TryParse(arguments[0], out _requestedAccountId)) return false;
         return true;
     }
 
     public void Execute(ExecutionContext context)
     {
         if (context is null) throw new ArgumentNullException(nameof(context));
-        if (_requestedAccount != 0)
+        if (_requestedAccountId != 0)
         {
             if (context.CurrentMode != UserRole.Admin) return;
-            _receiver.ShowBalance(_requestedAccount);
+            _receiver.ShowBalance(_requestedAccountId);
             return;
         }
 
