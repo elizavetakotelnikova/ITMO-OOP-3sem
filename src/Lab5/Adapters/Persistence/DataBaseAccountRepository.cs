@@ -1,5 +1,6 @@
 using Application.Models;
 using Application.Repositories;
+using DomainLayer.Models;
 using DomainLayer.ValueObjects;
 using Itmo.Dev.Platform.Postgres.Connection;
 using Itmo.Dev.Platform.Postgres.Extensions;
@@ -50,8 +51,8 @@ public class DataBaseAccountRepository : IAccountsRepository
         // не факт что так будет работать без переменной аккаунт айди
         const string sql = """
                            update accounts_data
-                           set account_amount += amount
-                           where account_id = :account.AccountId;
+                           set account_amount = account_amount + @amount
+                           where account_id = :accountId;
                            """;
 
         NpgsqlConnection connection = _connectionProvider
@@ -62,20 +63,18 @@ public class DataBaseAccountRepository : IAccountsRepository
 
         using var command = new NpgsqlCommand(sql, connection);
 
-        // command.AddParameter("accountId", currentId);
+        command.AddParameter("accountId", account.AccountId);
+        command.AddParameter("amount", amount);
         using NpgsqlDataReader reader = command.ExecuteReader();
         command.Dispose();
-        if (reader.Read() is false)
-            throw new ArgumentException("Operation cannot be done");
     }
 
     public void Add(Account account, User user)
     {
         if (account is null || user is null) throw new ArgumentException("Operation cannot be done");
-
-        // не факт что так будет работать без переменной аккаунт айди
         const string sql = """
-                           INSERT INTO accounts_data(account_id, SecondName) VALUES(@account.AccountId, @account.AccountPincode);
+                           INSERT INTO accounts_data(account_pin, account_amount, user_id) VALUES(@account.AccountPincode, @account.Amount, @user_id)
+                           RETURNING account_id;
                            """;
 
         NpgsqlConnection connection = _connectionProvider
@@ -86,24 +85,79 @@ public class DataBaseAccountRepository : IAccountsRepository
 
         using var command = new NpgsqlCommand(sql, connection);
 
-        // command.AddParameter("accountId", currentId);
+        command.AddParameter("@user_id", user.Id);
+        command.AddParameter("@account.AccountPincode", account.AccountPinCode);
+        command.AddParameter("@account.Amount", account.Amount);
+        using NpgsqlDataReader reader = command.ExecuteReader();
+        command.Dispose();
+        if (reader.Read() is false)
+            throw new ArgumentException("Operation cannot be done");
+        account.AccountId = reader.GetInt64(0);
+    }
+
+    public void Add(AvailableAccountInfo account, User user)
+    {
+        if (account is null || user is null) throw new ArgumentException("Operation cannot be done");
+        const string sql = """
+                           INSERT INTO accounts_data(account_pin, account_amount, user_id) VALUES(@account.AccountPincode, @account.Amount, @user_id)
+                           RETURNING account_id;
+                           """;
+
+        NpgsqlConnection connection = _connectionProvider
+            .GetConnectionAsync(default)
+            .AsTask()
+            .GetAwaiter()
+            .GetResult();
+
+        using var command = new NpgsqlCommand(sql, connection);
+
+        command.AddParameter("@user_id", user.Id);
+        command.AddParameter("@account.AccountPincode", account.AccountPinCode);
+        command.AddParameter("@account.Amount", account.Amount);
+        using NpgsqlDataReader reader = command.ExecuteReader();
+        command.Dispose();
+        if (reader.Read() is false)
+            throw new ArgumentException("Operation cannot be done");
+        account.AccountId = reader.GetInt64(0);
+    }
+
+    /*public void Add(int pinCode, User user)
+    {
+        if (user is null) throw new ArgumentException("Operation cannot be done");
+
+        // не факт что так будет работать без переменной аккаунт айди
+        const string sql = """
+                           INSERT INTO accounts_data(account_pin, account_amount) VALUES(@account.AccountPincode, @account.Amount)
+                           RETURNING account_id;
+                           """;
+
+        NpgsqlConnection connection = _connectionProvider
+            .GetConnectionAsync(default)
+            .AsTask()
+            .GetAwaiter()
+            .GetResult();
+
+        using var command = new NpgsqlCommand(sql, connection);
+        command.AddParameter("@account.AccountPincode", pinCode);
+        command.AddParameter("@account.Amount", 0);
         using NpgsqlDataReader reader = command.ExecuteReader();
         command.Dispose();
         if (reader.Read() is false)
             throw new ArgumentException("Operation cannot be done");
 
         const string sqlSecond = """
-                           INSERT INTO accounts(user_id, account_id) VALUES(@user.user_id, @account.AccountId);
-                           """;
+                                 INSERT INTO accounts(user_id, account_id) VALUES(@user.user_id, @AccountId);
+                                 """;
 
         using var commandSecond = new NpgsqlCommand(sqlSecond, connection);
 
-        // command.AddParameter("accountId", currentId);
+        command.AddParameter("AccountId", reader.GetInt64(0));
+        command.AddParameter("user.user_id", user.Id);
         using NpgsqlDataReader secondReader = commandSecond.ExecuteReader();
         commandSecond.Dispose();
         if (secondReader.Read() is false)
             throw new ArgumentException("Operation cannot be done");
-    }
+    }*/
 
     public long SelectNextAccountId()
     {

@@ -1,7 +1,6 @@
 using FluentMigrator;
 using Itmo.Dev.Platform.Postgres.Migrations;
 namespace Application.Migration;
-#pragma warning disable SA1649
 [Migration(1, "Initial")]
 public class Initial : SqlMigration
 {
@@ -23,41 +22,31 @@ public class Initial : SqlMigration
     (
        'view',
        'withdraw',
-       'top_up'
-    );
-    
-    create type order_result_state as enum
-    (
-        'completed',
-        'rejected'
+       'topUp',
+       'login',
+       'creation'
     );
 
     create table users
     (
         user_id bigint primary key generated always as identity,
-        user_name text not null ,
+        user_name text,
         user_role user_role not null,
-        user_password text not null
+        user_password text
     );
     
     create table accounts_data
     (
         account_id bigint primary key generated always as identity,
-        account_pin int 
-    );
-    
-    create table accounts
-    (
-        user_id bigint not null references users(user_id),
-        account_id bigint not null references accounts_data(account_id),
-        
-        primary key(user_id, account_id)
+        account_pin int,
+        account_amount int,
+        user_id bigint not null references users(user_id)
     );
 
     create table transactions_info
     (
         transaction_id bigint primary key generated always as identity ,
-        transaction_account bigint not null references accounts_data(account_id),
+        transaction_account bigint references accounts_data(account_id),
         transaction_type transaction_type not null,
         transaction_state transaction_state not null 
     );

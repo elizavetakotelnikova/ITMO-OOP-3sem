@@ -30,14 +30,14 @@ internal class LogUserService : ILogUser
     {
         _outputDisplayer.DisplayMessage("ENTER ACCOUNT ID AND PIN CODE IN THE NEXT LINE");
         IList<string> tokenizedLine = _parser.GetLine();
-        Account? account = _accountsRepository.FindAccountByNumber(long.Parse(tokenizedLine[0], new NumberFormatInfo()));
+        Account? account = _accountsRepository.FindAccountByNumber(int.Parse(tokenizedLine[0], new NumberFormatInfo()));
 
         if (account is null)
         {
             return SearchResult.NotFound;
         }
 
-        if (account.AccountPinCode != long.Parse(tokenizedLine[1], new NumberFormatInfo())) return SearchResult.NotFound;
+        if (account.AccountPinCode != int.Parse(tokenizedLine[1], new NumberFormatInfo())) return SearchResult.NotFound;
         _currentUser = new AtmUser(account, UserRole.User); // или это в контекст закинуть
         context.AtmUser = _currentUser; // или тут не статика должна быть
         return SearchResult.Success;
@@ -54,7 +54,8 @@ internal class LogUserService : ILogUser
         }
 
         _currentUser = new AtmUser(null, UserRole.Admin); // или это в контекст закинуть
-        context.AtmUser = _currentUser; // или тут не статика должна быть
+        context.AtmUser = _currentUser;
+        context.CurrentMode = UserRole.Admin;
         return SearchResult.Success;
     }
 

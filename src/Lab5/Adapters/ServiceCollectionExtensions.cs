@@ -5,10 +5,12 @@ using Application.Migration;
 using Application.Models;
 using Application.Repositories;
 using Application.Services.ATMCommandServices;
+using DomainLayer.ValueObjects;
 using Itmo.Dev.Platform.Postgres.Extensions;
 using Itmo.Dev.Platform.Postgres.Models;
 using Itmo.Dev.Platform.Postgres.Plugins;
 using Microsoft.Extensions.DependencyInjection;
+using Ports.Input;
 using Ports.Input.Logging;
 using Ports.Output;
 using Ports.Repositories;
@@ -20,7 +22,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddApplication(this IServiceCollection collection)
     {
         collection.AddScoped<ILogUser, LogUserService>();
-
+        collection.AddScoped<AtmUser, AtmUser>();
+        collection.AddScoped<Account, Account>();
         collection.AddScoped<IUsersRepository, DataBaseUserRepository>();
         collection.AddScoped<IAccountsRepository, DataBaseAccountRepository>();
         collection.AddScoped<ITransactionsRepository, DataBaseTransactionsRepository>();
@@ -40,6 +43,7 @@ public static class ServiceCollectionExtensions
         collection.AddScoped<ITopUp, AtmTopUpService>();
         collection.AddScoped<IWithdrawMoney, AtmWithdrawMoney>();
         collection.AddScoped<IDisplayMessage, ConsoleDisplayer>();
+        collection.AddScoped<IParse, ConsoleCommandParser>();
         return collection;
     }
 

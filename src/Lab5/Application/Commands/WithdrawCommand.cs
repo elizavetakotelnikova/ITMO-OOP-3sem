@@ -8,7 +8,7 @@ public class WithdrawCommand : ICommand
 {
     private IWithdrawMoney _receiver;
     private int _amount;
-    private long _accountId;
+    private long? _accountId;
 
     public WithdrawCommand(IWithdrawMoney? receiver)
     {

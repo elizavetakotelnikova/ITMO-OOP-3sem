@@ -7,7 +7,7 @@ public class TopUpCommand : ICommand
 {
     private ITopUp _receiver;
     private int _amount;
-    private long _accountId;
+    private long? _accountId;
 
     public TopUpCommand(ITopUp? receiver)
     {

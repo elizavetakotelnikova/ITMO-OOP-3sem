@@ -17,6 +17,7 @@ public class AtmWithdrawMoney : IWithdrawMoney
         if (account is null) throw new ArgumentNullException(nameof(account));
         if (amount > account.Amount) throw new ArgumentException("Operation cannot be done");
         account.Amount -= amount;
+        amount *= -1;
         _repository.UpdateAmount(account, amount);
     }
 }

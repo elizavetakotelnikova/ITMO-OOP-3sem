@@ -1,5 +1,4 @@
 // using Application.Models;
-
 using Application.Models;
 using Application.Repositories;
 using Itmo.Dev.Platform.Postgres.Connection;
@@ -47,7 +46,7 @@ public class DataBaseUserRepository : IUsersRepository
     public string? FindPasswordByUsername(string username)
     {
         const string sql = """
-                           select user_id, user_name, user_password,
+                           select user_id, user_name, user_password
                            from users
                            where user_name = :username;
                            """;
@@ -68,8 +67,9 @@ public class DataBaseUserRepository : IUsersRepository
         return reader.GetString(2);
     }
 
-    public bool ExistsId(long id)
+    public bool ExistsId(long? id)
     {
+        if (id is null) return false;
         const string sql = """
                            select user_id
                            from users
@@ -83,6 +83,7 @@ public class DataBaseUserRepository : IUsersRepository
             .GetResult();
 
         using var command = new NpgsqlCommand(sql, connection);
+        command.AddParameter("id", id);
         using NpgsqlDataReader reader = command.ExecuteReader();
         command.Dispose();
         if (reader.Read() is false)
@@ -95,9 +96,9 @@ public class DataBaseUserRepository : IUsersRepository
     {
         if (user is null) throw new ArgumentException("Operation cannot be done");
 
-        // не факт что так будет работать без переменной аккаунт айди
         const string sql = """
-                           INSERT INTO users(users_id, user_name, user_role) VALUES(@user.UserId, @NULL, @user.Role);
+                           INSERT INTO users(user_name, user_role, user_password) VALUES(@user.Name, @user.Role, @user.Password)
+                           RETURNING user_id;
                            """;
 
         NpgsqlConnection connection = _connectionProvider
@@ -107,9 +108,13 @@ public class DataBaseUserRepository : IUsersRepository
             .GetResult();
 
         using var command = new NpgsqlCommand(sql, connection);
+        command.AddParameter("@user.Name", user.Name);
+        command.AddParameter("@user.Role", user.Role);
+        command.AddParameter("@user.Password", user.Password);
         using NpgsqlDataReader reader = command.ExecuteReader();
         command.Dispose();
         if (reader.Read() is false)
-            throw new ArgumentException("Operation cannot be done");
+            return;
+        user.Id = reader.GetInt64(0);
     }
 }

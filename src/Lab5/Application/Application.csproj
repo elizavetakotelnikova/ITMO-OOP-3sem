@@ -33,6 +33,9 @@
     <ItemGroup>
       <ProjectReference Include="..\DomainLayer\DomainLayer.csproj" />
       <ProjectReference Include="..\Ports\Ports.csproj" />
+
+
+
     </ItemGroup>
 
 

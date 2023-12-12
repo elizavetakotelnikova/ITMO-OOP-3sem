@@ -19,10 +19,12 @@ public class AtmCreateAccountService : ICreateAccount
     {
         if (account is null) throw new ArgumentNullException(nameof(account));
         if (user is null) throw new ArgumentNullException(nameof(user));
-        if (context?.CurrentMode is UserRole.User) throw new ArgumentException("Operation cannot be done");
-        account.AccountId = _accountsRepository.SelectNextAccountId();
+        if (context is null) throw new ArgumentNullException(nameof(context));
+        if (context.CurrentMode is UserRole.User) throw new ArgumentException("Operation cannot be done");
         bool existsUser = _usersRepository.ExistsId(user.Id);
         if (!existsUser) _usersRepository.Add(user);
         _accountsRepository.Add(account, user);
+        if (context.AtmUser is null) throw new ArgumentNullException(nameof(context));
+        context.AtmUser.Account = account;
     }
 }

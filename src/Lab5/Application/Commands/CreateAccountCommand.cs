@@ -1,5 +1,6 @@
 using Application.Models;
 using Application.Services.ATMCommandServices;
+using Application.Services.Builder;
 using DomainLayer.ValueObjects;
 using ExecutionContext = DomainLayer.Models.ExecutionContext;
 namespace Application.Commands;
@@ -26,9 +27,9 @@ public class CreateAccountCommand : ICommand
         if (arguments is null) throw new ArgumentNullException(nameof(arguments));
         if (arguments.Count != 2) return false;
         if (!int.TryParse(arguments[0], out int userId)) return false;
-        if (!int.TryParse(arguments[0], out int pinCode)) return false;
-        _user = new User(userId, UserRole.User); // вот тут надо подумать над админами
-        _account = new Account(0, pinCode, 0);
+        if (!int.TryParse(arguments[1], out int pinCode)) return false;
+        _user = new UserBuilder().WithId(userId).WithRole(UserRole.User).Build(); // вот тут надо подумать над админами
+        _account = new AccountBuilder().WithPinCode(pinCode).WithAmount(0).Build();
         return true;
     }
 

@@ -2,7 +2,9 @@ namespace DomainLayer.ValueObjects;
 
 public enum TransactionType
 {
-    Creation,
-    TopUp,
+    View,
     Withdraw,
+    TopUp,
+    Login,
+    Creation,
 }

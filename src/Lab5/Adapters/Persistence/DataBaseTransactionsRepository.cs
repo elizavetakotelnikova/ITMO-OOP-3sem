@@ -1,6 +1,9 @@
+using System.Globalization;
 using Application.Commands;
 using Application.Models;
+using DomainLayer.ValueObjects;
 using Itmo.Dev.Platform.Postgres.Connection;
+using Itmo.Dev.Platform.Postgres.Extensions;
 using Npgsql;
 using Ports.Repositories;
 using ExecutionContext = DomainLayer.Models.ExecutionContext;
@@ -19,26 +22,34 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
     public void Add(ExecutionContext context, ICommand command)
     {
         if (context is null || command is null) throw new ArgumentException("Operation cannot be done");
-        string? type = null;
+        if (context.AtmUser?.Account is null) return;
+        TransactionType transactionType = TransactionType.View;
+        string transactionTypeString = "view";
         switch (command)
         {
             case LogInCommand:
-                type = "login";
+                transactionType = TransactionType.Login;
+                transactionTypeString = "login";
                 break;
             case CreateAccountCommand:
-                type = "creation";
+                transactionType = TransactionType.Creation;
+                transactionTypeString = "creation";
                 break;
             case TopUpCommand:
-                type = "top up";
+                transactionType = TransactionType.TopUp;
+                transactionTypeString = "topUp";
                 break;
             case WithdrawCommand:
-                type = "withdraw";
+                transactionType = TransactionType.Withdraw;
+                transactionTypeString = "withdraw";
                 break;
+            case DisconnectCommand:
+                return;
         }
 
-        if (type is null) return;
+        string type = transactionType.ToString().ToLower(new CultureInfo("en-US", false));
         const string sql = """
-                           INSERT INTO transactions_info(transaction_account, transaction_type) VALUES(@context.AtmUser.AccountId, @type, "commit");
+                           INSERT INTO transactions_info(transaction_account, transaction_type, transaction_state, transaction_userId) VALUES(@accountId, CAST(@transaction.Type as transaction_type), CAST(@commit as "transaction_state"), "@userId");
                            """;
 
         NpgsqlConnection connection = _connectionProvider
@@ -48,12 +59,15 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
             .GetResult();
 
         using var commandSql = new NpgsqlCommand(sql, connection);
+        commandSql.AddParameter("@accountId", context.AtmUser?.Account?.AccountId);
+        commandSql.AddParameter("@transaction.Type", transactionTypeString);
+        /*commandSql.Parameters.Add("@transaction.Type", NpgsqlDbType.Numeric);
+        commandSql.Parameters["@transaction.Type"].Value = transactionType;*/
+        commandSql.AddParameter("@commit", "commit");
 
-        // command.AddParameter("TransactionsId", currentId);
+        // commandSql.AddParameter("@commit", context.AtmUser.User);
         using NpgsqlDataReader reader = commandSql.ExecuteReader();
         commandSql.Dispose();
-        if (reader.Read() is false)
-            throw new ArgumentException("Operation cannot be done");
     }
 
     public IList<string>? GetInfo(ExecutionContext context)
@@ -63,7 +77,7 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
         const string sql = """
                            select transaction_account, transaction_type, transaction_state
                            from transactions_info
-                           where account_id = :context.AtmUser.accountId;
+                           where transaction_account = :id;
                            """;
 
         NpgsqlConnection connection = _connectionProvider
@@ -73,6 +87,7 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
             .GetResult();
 
         using var command = new NpgsqlCommand(sql, connection);
+        command.AddParameter("id", context.AtmUser.Account.AccountId);
         using NpgsqlDataReader reader = command.ExecuteReader();
         command.Dispose();
         if (reader.Read() is false)
