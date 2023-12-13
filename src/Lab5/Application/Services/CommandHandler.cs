@@ -1,11 +1,9 @@
-using Application.Models;
 using DomainLayer.Models;
 
 namespace Application.Services;
 
 public class CommandHandler : ResponsibilityChainBase
 {
-    // private readonly Configure _allCommands;
     public override void Handle(Request request)
     {
         if (request is null) throw new ArgumentNullException(nameof(request));

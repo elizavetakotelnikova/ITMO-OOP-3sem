@@ -3,8 +3,6 @@ using Adapters.UI;
 using Application.Extensions;
 using Application.Migration;
 using Application.Models;
-using Application.Repositories;
-using Application.Services.ATMCommandServices;
 using DomainLayer.ValueObjects;
 using Itmo.Dev.Platform.Postgres.Extensions;
 using Itmo.Dev.Platform.Postgres.Models;
@@ -19,29 +17,15 @@ namespace Adapters;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddApplication(this IServiceCollection collection)
+    public static IServiceCollection AddAdapters(this IServiceCollection collection)
     {
         collection.AddScoped<ILogUser, LogUserService>();
+        collection.AddScoped<IAuthorizeUser, LogUserService>();
         collection.AddScoped<AtmUser, AtmUser>();
         collection.AddScoped<Account, Account>();
         collection.AddScoped<IUsersRepository, DataBaseUserRepository>();
         collection.AddScoped<IAccountsRepository, DataBaseAccountRepository>();
         collection.AddScoped<ITransactionsRepository, DataBaseTransactionsRepository>();
-
-        return collection;
-    }
-
-    public static IServiceCollection AddPresentationConsole(this IServiceCollection collection)
-    {
-        /*collection.AddScoped<ScenarioRunner>();
-
-        collection.AddScoped<IScenarioProvider, LoginScenarioProvider>();*/
-        collection.AddScoped<ICreateAccount, AtmCreateAccountService>();
-        collection.AddScoped<IDisconnect, AtmDisconnect>();
-        collection.AddScoped<ISeeHistory, AtmSeeHistory>();
-        collection.AddScoped<IShowBalance, AtmShowBalance>();
-        collection.AddScoped<ITopUp, AtmTopUpService>();
-        collection.AddScoped<IWithdrawMoney, AtmWithdrawMoney>();
         collection.AddScoped<IDisplayMessage, ConsoleDisplayer>();
         collection.AddScoped<IParse, ConsoleCommandParser>();
         return collection;

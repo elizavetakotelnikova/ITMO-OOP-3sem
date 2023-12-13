@@ -1,6 +1,6 @@
 using System.Globalization;
 using Application.Commands;
-using Application.Models;
+using DomainLayer.Models;
 using DomainLayer.ValueObjects;
 using Itmo.Dev.Platform.Postgres.Connection;
 using Itmo.Dev.Platform.Postgres.Extensions;
@@ -22,7 +22,6 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
     public void Add(ExecutionContext context, ICommand command)
     {
         if (context is null || command is null) throw new ArgumentException("Operation cannot be done");
-        if (context.AtmUser?.Account is null) return;
         TransactionType transactionType = TransactionType.View;
         string transactionTypeString = "view";
         switch (command)
@@ -49,7 +48,7 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
 
         string type = transactionType.ToString().ToLower(new CultureInfo("en-US", false));
         const string sql = """
-                           INSERT INTO transactions_info(transaction_account, transaction_type, transaction_state, transaction_userId) VALUES(@accountId, CAST(@transaction.Type as transaction_type), CAST(@commit as "transaction_state"), "@userId");
+                           INSERT INTO transactions_info(transaction_account, transaction_type, transaction_state, transaction_userId) VALUES(@accountId, CAST(@transaction.Type as transaction_type), CAST(@commit as "transaction_state"), @userId);
                            """;
 
         NpgsqlConnection connection = _connectionProvider
@@ -65,7 +64,7 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
         commandSql.Parameters["@transaction.Type"].Value = transactionType;*/
         commandSql.AddParameter("@commit", "commit");
 
-        // commandSql.AddParameter("@commit", context.AtmUser.User);
+        commandSql.AddParameter("@userId", context.AtmUser?.User?.Id);
         using NpgsqlDataReader reader = commandSql.ExecuteReader();
         commandSql.Dispose();
     }

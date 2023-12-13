@@ -48,7 +48,8 @@ public class Initial : SqlMigration
         transaction_id bigint primary key generated always as identity ,
         transaction_account bigint references accounts_data(account_id),
         transaction_type transaction_type not null,
-        transaction_state transaction_state not null 
+        transaction_state transaction_state not null,
+        transaction_userId bigint not null references users(user_id)
     );
     """;
 

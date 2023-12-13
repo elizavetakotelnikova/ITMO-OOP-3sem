@@ -1,4 +1,4 @@
-namespace Application.Models;
+namespace DomainLayer.Models;
 
 public enum DataCheckResult
 {

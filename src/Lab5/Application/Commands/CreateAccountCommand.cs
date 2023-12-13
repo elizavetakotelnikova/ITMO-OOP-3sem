@@ -1,6 +1,7 @@
 using Application.Models;
 using Application.Services.ATMCommandServices;
 using Application.Services.Builder;
+using DomainLayer.Models;
 using DomainLayer.ValueObjects;
 using ExecutionContext = DomainLayer.Models.ExecutionContext;
 namespace Application.Commands;

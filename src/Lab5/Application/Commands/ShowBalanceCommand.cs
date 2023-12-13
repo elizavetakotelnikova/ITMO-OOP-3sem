@@ -1,5 +1,6 @@
 using Application.Models;
 using Application.Services.ATMCommandServices;
+using DomainLayer.Models;
 using ExecutionContext = DomainLayer.Models.ExecutionContext;
 namespace Application.Commands;
 
@@ -38,7 +39,7 @@ public class ShowBalanceCommand : ICommand
             return;
         }
 
-        if (context.AtmUser?.Account is null) throw new ArgumentNullException(nameof(context));
+        if (context.AtmUser?.Account is null) throw new ArgumentException("Account is not specified, please enter account id");
         _receiver.ShowBalance(context.AtmUser.Account);
     }
 }

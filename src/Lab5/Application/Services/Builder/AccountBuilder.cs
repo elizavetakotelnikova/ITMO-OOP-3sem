@@ -12,6 +12,14 @@ public class AccountBuilder
     {
     }
 
+    public AccountBuilder(Account account)
+    {
+        if (account is null) throw new ArgumentNullException(nameof(account));
+        _id = account.AccountId;
+        _pinCode = account.AccountPinCode;
+        _amount = account.Amount;
+    }
+
     public AccountBuilder WithAmount(int amount)
     {
         _amount = amount;

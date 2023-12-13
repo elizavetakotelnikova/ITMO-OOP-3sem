@@ -1,10 +1,10 @@
 using Application.Commands;
-using Application.Models;
 using Application.Services.ATMCommandServices;
+using DomainLayer.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Ports.Input.Logging;
 
-namespace DomainLayer.Models;
+namespace Application.Services;
 
 public class Configure
 {

@@ -1,10 +1,10 @@
 using Application.Models;
-using Application.Repositories;
 using DomainLayer.Models;
 using DomainLayer.ValueObjects;
 using Itmo.Dev.Platform.Postgres.Connection;
 using Itmo.Dev.Platform.Postgres.Extensions;
 using Npgsql;
+using Ports.Repositories;
 
 namespace Adapters.Persistence;
 
@@ -44,11 +44,43 @@ public class DataBaseAccountRepository : IAccountsRepository
             reader.GetInt32(2));
     }
 
+    public User? FindUserByAccountId(long? accountId)
+    {
+        const string sql = """
+                           With tmp(userId)
+                           AS (select user_id FROM accounts_data
+                           where account_id = :accountId)
+                           
+                           select user_id, user_role, user_name, user_password
+                           from users
+                           INNER JOIN tmp AS tmp
+                           ON tmp.userId = users.user_id
+                           where user_id = userId;
+                           """;
+
+        NpgsqlConnection connection = _connectionProvider
+            .GetConnectionAsync(default)
+            .AsTask()
+            .GetAwaiter()
+            .GetResult();
+
+        using var command = new NpgsqlCommand(sql, connection);
+        command.AddParameter("accountId", accountId);
+        using NpgsqlDataReader reader = command.ExecuteReader();
+        command.Dispose();
+        if (reader.Read() is false)
+            return null;
+
+        return new User(
+            reader.GetInt64(0),
+            reader.GetFieldValue<UserRole>(1),
+            reader.GetValue(2).ToString(),
+            reader.GetValue(3).ToString());
+    }
+
     public void UpdateAmount(Account account, int amount)
     {
         if (account is null) throw new ArgumentException("Operation cannot be done");
-
-        // не факт что так будет работать без переменной аккаунт айди
         const string sql = """
                            update accounts_data
                            set account_amount = account_amount + @amount

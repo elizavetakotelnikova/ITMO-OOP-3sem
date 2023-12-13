@@ -13,6 +13,15 @@ public class UserBuilder
     {
     }
 
+    public UserBuilder(User user)
+    {
+        if (user is null) throw new ArgumentNullException(nameof(user));
+        _id = user.Id;
+        _name = user.Name;
+        _role = user.Role;
+        _password = user.Password;
+    }
+
     public UserBuilder WithRole(UserRole role)
     {
         _role = role;

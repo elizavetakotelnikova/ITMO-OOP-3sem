@@ -1,4 +1,5 @@
 using Application.Models;
+using DomainLayer.Models;
 using Ports.Input.Logging;
 using ExecutionContext = DomainLayer.Models.ExecutionContext;
 namespace Application.Commands;
@@ -29,8 +30,8 @@ public class LogInCommand : ICommand
         return true;
     }
 
-    public void Execute(ExecutionContext context) // или контекст
+    public void Execute(ExecutionContext context)
     {
-        _logger.LogIn(_role, context);
+        if (_logger.LogIn(_role, context) == LogInResult.NotFound) throw new ArgumentException("Wrong pinCode");
     }
 }

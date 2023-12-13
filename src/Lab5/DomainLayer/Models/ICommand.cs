@@ -1,5 +1,4 @@
-using ExecutionContext = DomainLayer.Models.ExecutionContext;
-namespace Application.Models;
+namespace DomainLayer.Models;
 
 public interface ICommand
 {

@@ -8,20 +8,12 @@ public record AtmUser
     {
     }
 
-    public AtmUser(Account? account, UserRole role)
+    public AtmUser(Account? account, User? user)
     {
         Account = account;
-        Role = role;
-    }
-
-    public AtmUser(Account? account, UserRole role, User user)
-    {
-        Account = account;
-        Role = role;
         User = user;
     }
 
     public Account? Account { get; set; }
     public User? User { get; set; }
-    public UserRole Role { get; set; }
 }

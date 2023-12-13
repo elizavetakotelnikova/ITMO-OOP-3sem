@@ -1,19 +1,20 @@
 using System.Globalization;
 using Application.Models;
-using Application.Repositories;
+using DomainLayer.Models;
 using DomainLayer.ValueObjects;
 using Ports.Input;
 using Ports.Input.Logging;
 using Ports.Output;
+using Ports.Repositories;
 using ExecutionContext = DomainLayer.Models.ExecutionContext;
 
 namespace Adapters.Persistence;
 
-internal class LogUserService : ILogUser
+internal class LogUserService : IAuthorizeUser
 {
     private readonly IUsersRepository _userRepository;
     private readonly IAccountsRepository _accountsRepository;
-    private AtmUser? _currentUser; // пока непонятно зачем здесь делать интефрейс
+    private AtmUser? _currentUser;
     private IParse _parser;
     private IDisplayMessage _outputDisplayer;
 
@@ -31,15 +32,16 @@ internal class LogUserService : ILogUser
         _outputDisplayer.DisplayMessage("ENTER ACCOUNT ID AND PIN CODE IN THE NEXT LINE");
         IList<string> tokenizedLine = _parser.GetLine();
         Account? account = _accountsRepository.FindAccountByNumber(int.Parse(tokenizedLine[0], new NumberFormatInfo()));
-
         if (account is null)
         {
             return SearchResult.NotFound;
         }
 
         if (account.AccountPinCode != int.Parse(tokenizedLine[1], new NumberFormatInfo())) return SearchResult.NotFound;
-        _currentUser = new AtmUser(account, UserRole.User); // или это в контекст закинуть
-        context.AtmUser = _currentUser; // или тут не статика должна быть
+        User? user = _accountsRepository.FindUserByAccountId(account.AccountId);
+        _currentUser = new AtmUser(account, user);
+        context.CurrentMode = UserRole.User;
+        context.AtmUser = _currentUser;
         return SearchResult.Success;
     }
 
@@ -53,7 +55,8 @@ internal class LogUserService : ILogUser
             return SearchResult.NotFound;
         }
 
-        _currentUser = new AtmUser(null, UserRole.Admin); // или это в контекст закинуть
+        User? user = _userRepository.FindUserByUsername("admin");
+        _currentUser = new AtmUser(null, user); // или это в контекст закинуть
         context.AtmUser = _currentUser;
         context.CurrentMode = UserRole.Admin;
         return SearchResult.Success;

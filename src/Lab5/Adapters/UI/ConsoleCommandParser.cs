@@ -1,4 +1,3 @@
-using Application.Models;
 using Application.Services;
 using DomainLayer.Models;
 using Ports.Input;

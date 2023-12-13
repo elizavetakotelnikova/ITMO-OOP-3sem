@@ -1,5 +1,5 @@
-using Application.Models;
 using Application.Services.ATMCommandServices;
+using DomainLayer.Models;
 using ExecutionContext = DomainLayer.Models.ExecutionContext;
 
 namespace Application.Commands;
@@ -7,7 +7,6 @@ public class TopUpCommand : ICommand
 {
     private ITopUp _receiver;
     private int _amount;
-    private long? _accountId;
 
     public TopUpCommand(ITopUp? receiver)
     {
@@ -32,7 +31,6 @@ public class TopUpCommand : ICommand
     {
         if (_amount == 0) throw new ArgumentException("Amount is not set");
         if (context?.AtmUser is null || context.AtmUser.Account is null) throw new ArgumentNullException(nameof(context));
-        _accountId = context.AtmUser.Account.AccountId;
         _receiver.TopUp(context.AtmUser.Account, _amount);
     }
 }
