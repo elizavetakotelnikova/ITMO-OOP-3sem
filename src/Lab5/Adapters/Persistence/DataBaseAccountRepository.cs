@@ -1,5 +1,5 @@
-using Application.Models;
 using DomainLayer.Models;
+using DomainLayer.ValueObjects;
 using Itmo.Dev.Platform.Postgres.Connection;
 using Itmo.Dev.Platform.Postgres.Extensions;
 using Npgsql;
@@ -19,7 +19,7 @@ public class DataBaseAccountRepository : IAccountsRepository
     public Account? FindAccountByAccountId(long accountId)
     {
         const string sql = """
-                           select account_id, account_pin, account_amount
+                           select account_id, account_pin, account_amount, user_id
                            from accounts_data
                            where account_id = :accountId;
                            """;
@@ -40,7 +40,8 @@ public class DataBaseAccountRepository : IAccountsRepository
         return new Account(
             reader.GetInt64(0),
             reader.GetInt32(1),
-            reader.GetInt32(2));
+            reader.GetInt32(2),
+            reader.GetInt64(3));
     }
 
     public User? FindUserByAccountId(long? accountId)
@@ -100,9 +101,9 @@ public class DataBaseAccountRepository : IAccountsRepository
         command.Dispose();
     }
 
-    public void Add(Account account, User user)
+    public void Add(Account account)
     {
-        if (account is null || user is null) throw new ArgumentException("Operation cannot be done");
+        if (account is null) throw new ArgumentException("Operation cannot be done");
         const string sql = """
                            INSERT INTO accounts_data(account_pin, account_amount, user_id) VALUES(@pinCode, @balance, @user_id)
                            RETURNING account_id;
@@ -117,11 +118,31 @@ public class DataBaseAccountRepository : IAccountsRepository
         using var command = new NpgsqlCommand(sql, connection);
         command.AddParameter("@pinCode", account.PinCode);
         command.AddParameter("@balance", account.Balance);
-        command.AddParameter("@user_id", user.Id);
+        command.AddParameter("@user_id", account.UserId);
         using NpgsqlDataReader reader = command.ExecuteReader();
         command.Dispose();
         if (reader.Read() is false)
             throw new ArgumentException("Operation cannot be done");
         account.Id = reader.GetInt64(0);
+    }
+
+    public void Delete(Account account)
+    {
+        if (account is null || account.Id == 0) throw new ArgumentException("Operation cannot be done");
+        const string sql = """
+                           DELETE FROM accounts_data
+                           WHERE account_id = :accountId
+                           """;
+
+        NpgsqlConnection connection = _connectionProvider
+            .GetConnectionAsync(default)
+            .AsTask()
+            .GetAwaiter()
+            .GetResult();
+
+        using var command = new NpgsqlCommand(sql, connection);
+        command.AddParameter("accountId", account.Id);
+        using NpgsqlDataReader reader = command.ExecuteReader();
+        command.Dispose();
     }
 }

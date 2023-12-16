@@ -1,12 +1,12 @@
-using Application.Models;
 using Application.Services.ATMCommandServices;
 using DomainLayer.Models;
+using DomainLayer.ValueObjects;
 using ExecutionContext = DomainLayer.Models.ExecutionContext;
 namespace Application.Commands;
 
 public class ShowBalanceCommand : ICommand
 {
-    private IShowBalance _receiver;
+    private readonly IShowBalance _receiver;
     private long _requestedAccountId;
 
     public ShowBalanceCommand(IShowBalance? receiver)

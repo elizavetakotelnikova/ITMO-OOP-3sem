@@ -1,4 +1,5 @@
-using Application.Models;
+using DomainLayer.Models;
+using DomainLayer.ValueObjects;
 
 namespace Application.Services.Builders;
 

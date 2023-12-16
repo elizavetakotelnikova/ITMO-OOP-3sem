@@ -1,6 +1,6 @@
 using Adapters;
 using Application.Migration;
-using Application.ServiceCollectionExtensions;
+using Application.ServiceCollectionConfigurator;
 using Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 

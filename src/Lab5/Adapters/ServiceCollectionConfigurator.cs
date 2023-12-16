@@ -2,7 +2,6 @@ using Adapters.Persistence;
 using Adapters.UI;
 using Application.Extensions;
 using Application.Migration;
-using DomainLayer.Models;
 using Itmo.Dev.Platform.Postgres.Extensions;
 using Itmo.Dev.Platform.Postgres.Models;
 using Itmo.Dev.Platform.Postgres.Plugins;
@@ -20,8 +19,6 @@ public static class ServiceCollectionConfigurator
     {
         collection.AddScoped<ILogUser, LogUserService>();
         collection.AddScoped<IAuthorizeUser, LogUserService>();
-        collection.AddScoped<AtmUser, AtmUser>();
-        collection.AddScoped<Account, Account>();
         collection.AddScoped<IUsersRepository, DataBaseUserRepository>();
         collection.AddScoped<IAccountsRepository, DataBaseAccountRepository>();
         collection.AddScoped<ITransactionsRepository, DataBaseTransactionsRepository>();
@@ -36,9 +33,7 @@ public static class ServiceCollectionConfigurator
     {
         collection.AddPlatformPostgres(builder => builder.Configure(configuration));
         collection.AddPlatformMigrations(typeof(Initial).Assembly);
-
         collection.AddSingleton<IDataSourcePlugin, MappingPlugin>();
-
         return collection;
     }
 }

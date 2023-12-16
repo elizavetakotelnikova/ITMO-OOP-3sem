@@ -5,7 +5,7 @@ using ExecutionContext = DomainLayer.Models.ExecutionContext;
 namespace Application.Commands;
 public class TopUpCommand : ICommand
 {
-    private ITopUp _receiver;
+    private readonly ITopUp _receiver;
     private int _amount;
 
     public TopUpCommand(ITopUp? receiver)

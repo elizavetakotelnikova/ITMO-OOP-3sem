@@ -1,25 +1,23 @@
-using Application.Models;
 using Application.Services.ATMCommandServices;
-using Application.Services.Builders;
 using DomainLayer.Models;
 using ExecutionContext = DomainLayer.Models.ExecutionContext;
 namespace Application.Commands;
 
 public class CreateAccountCommand : ICommand
 {
-    private ICreateAccount _receiver;
-    private Account? _account;
-    private User? _user;
+    private readonly ICreateAccount _receiver;
+    private int _accountPinCode;
+    private long _userId;
     public CreateAccountCommand(ICreateAccount? receiver)
     {
         _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
     }
 
-    public CreateAccountCommand(ICreateAccount? receiver, Account? account, User? user)
+    public CreateAccountCommand(ICreateAccount? receiver, int accountPinCode, long userId)
     {
         _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
-        _account = account;
-        _user = user;
+        _accountPinCode = accountPinCode;
+        _userId = userId;
     }
 
     public bool ValidateArguments(IList<string> arguments)
@@ -28,14 +26,15 @@ public class CreateAccountCommand : ICommand
         if (arguments.Count != 2) return false;
         if (!int.TryParse(arguments[0], out int userId)) return false;
         if (!int.TryParse(arguments[1], out int pinCode)) return false;
-        _user = new UserBuilder().WithId(userId).WithRole(UserRole.User).Build(); // вот тут надо подумать над админами
-        _account = new AccountBuilder().WithPinCode(pinCode).WithAmount(0).Build();
+        _userId = userId;
+        _accountPinCode = pinCode;
         return true;
     }
 
     public void Execute(ExecutionContext context)
     {
-        if (_account is null || _user is null || context is null) throw new ArgumentNullException(nameof(context));
-        _receiver.CreateAccount(context, _account, _user);
+        if (context is null) throw new ArgumentNullException(nameof(context));
+        if (_accountPinCode == 0 || _userId == 0) throw new ArgumentException("Null arguments");
+        _receiver.CreateAccount(context, _accountPinCode, _userId);
     }
 }

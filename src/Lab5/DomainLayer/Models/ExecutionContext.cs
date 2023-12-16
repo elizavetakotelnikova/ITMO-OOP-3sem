@@ -1,4 +1,4 @@
-using Application.Models;
+using DomainLayer.ValueObjects;
 
 namespace DomainLayer.Models;
 

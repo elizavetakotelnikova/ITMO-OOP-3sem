@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using Adapters.Persistence;
 using Application.Commands;
-using Application.Models;
 using Application.Services.ATMCommandServices;
 using DomainLayer.Models;
+using DomainLayer.ValueObjects;
 using NSubstitute;
 using Ports.Input;
 using Ports.Output;
@@ -20,8 +20,8 @@ public class BankTests
     {
         IList<Account> accounts = new List<Account>
         {
-            new Account(154, 3333, 21),
-            new Account(23, 3331, 0),
+            new Account(154, 3333, 21, 2),
+            new Account(23, 3331, 0, 2),
         };
         IList<User> users = new List<User>
         {
@@ -47,8 +47,8 @@ public class BankTests
     {
         IList<Account> accounts = new List<Account>
         {
-            new Account(154, 3333, 21),
-            new Account(23, 3331, 0),
+            new Account(154, 3333, 21, 2),
+            new Account(23, 3331, 0, 2),
         };
         IList<User> users = new List<User>
         {
@@ -66,10 +66,10 @@ public class BankTests
         accountsRepository.FindUserByAccountId(154).Returns(users[1]);
         parser.GetLine().Returns(new List<string>() { "154", "3333" });
 
-        var logger = new LogUserService(usersRepository, accountsRepository, null, parser, display);
+        var logger = new LogUserService(usersRepository, accountsRepository, parser, display);
         var context = new ExecutionContext(UserRole.User, new AtmUser(null, null));
         var invoker = new CommandInvoker(transactionsRepository, context);
-        var logInCommand = new LogInCommand(logger, UserRole.User, new List<string>() { "User" });
+        var logInCommand = new LogInCommand(logger, display, UserRole.User, new List<string>() { "User" });
         invoker.Consume(logInCommand);
         var withdrawCommand = new WithdrawCommand(new AtmWithdrawMoney(accountsRepository), 23);
         ArgumentException exception =
@@ -82,8 +82,8 @@ public class BankTests
     {
         IList<Account> accounts = new List<Account>
         {
-            new Account(154, 3333, 21),
-            new Account(23, 3331, 0),
+            new Account(154, 3333, 21, 2),
+            new Account(23, 3331, 0, 2),
         };
         IList<User> users = new List<User>
         {
@@ -101,10 +101,10 @@ public class BankTests
         accountsRepository.FindUserByAccountId(154).Returns(users[1]);
         parser.GetLine().Returns(new List<string>() { "154", "3333" });
 
-        var logger = new LogUserService(usersRepository, accountsRepository, null, parser, display);
+        var logger = new LogUserService(usersRepository, accountsRepository, parser, display);
         var context = new ExecutionContext(UserRole.User, new AtmUser(null, null));
         var invoker = new CommandInvoker(transactionsRepository, context);
-        var logInCommand = new LogInCommand(logger, UserRole.User, new List<string>() { "User" });
+        var logInCommand = new LogInCommand(logger, display, UserRole.User, new List<string>() { "User" });
         invoker.Consume(logInCommand);
         var withdrawCommand = new WithdrawCommand(new AtmWithdrawMoney(accountsRepository), 20);
         invoker.Consume(withdrawCommand);
@@ -116,8 +116,8 @@ public class BankTests
     {
         IList<Account> accounts = new List<Account>
         {
-            new Account(154, 3333, 21),
-            new Account(23, 3331, 0),
+            new Account(154, 3333, 21, 2),
+            new Account(23, 3331, 0, 2),
         };
         IList<User> users = new List<User>
         {

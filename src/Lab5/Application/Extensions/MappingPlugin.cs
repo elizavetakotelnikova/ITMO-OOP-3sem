@@ -1,4 +1,4 @@
-using Application.Models;
+using DomainLayer.ValueObjects;
 using Itmo.Dev.Platform.Postgres.Plugins;
 using Npgsql;
 
@@ -10,5 +10,7 @@ public class MappingPlugin : IDataSourcePlugin
     {
         if (builder is null) throw new ArgumentNullException(nameof(builder));
         builder.MapEnum<UserRole>();
+        builder.MapEnum<TransactionState>();
+        builder.MapEnum<TransactionType>();
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Adapters.UI;
 using Application.Commands;
-using Application.Models;
 using Application.Services.Builders;
 using DomainLayer.Models;
+using DomainLayer.ValueObjects;
 using Lab5;
 using Microsoft.Extensions.DependencyInjection;
 using Ports.Repositories;
@@ -11,16 +11,16 @@ internal class Program
 {
     public static void Main()
     {
-        // configure
+        // configure for live-testing (this part can be deleted)
         IServiceProvider provider = ConfigurateProvider.Configurate();
         var parser = new ConsoleCommandParser();
         var appContext = new ExecutionContext(UserRole.User, new AtmUser(null, null));
         var invoker = new CommandInvoker(provider?.GetService<ITransactionsRepository>(), appContext);
-        var userBuilder = new UserBuilder();
-        provider?.GetService<IUsersRepository>()?.Add(userBuilder.WithRole(UserRole.Admin).WithName("admin").WithPassword("12345").Build());
-        User user = new UserBuilder().WithRole(UserRole.User).Build();
-        provider?.GetService<IUsersRepository>()?.Add(user);
-        provider?.GetService<IAccountsRepository>()?.Add(new AccountBuilder().WithPinCode(1234).Build(), user);
+        AdminSettings.CreateAdmin(provider, "12347");
+        User secondUser = new UserBuilder().WithRole(UserRole.User).Build();
+        provider?.GetService<IUsersRepository>()?.Add(secondUser);
+        Account firstAccount = new AccountBuilder().WithPinCode(1234).WithUserId(secondUser.Id).Build();
+        provider?.GetService<IAccountsRepository>()?.Add(firstAccount);
 
         // commands parsing
         while (true)
@@ -37,5 +37,9 @@ internal class Program
                 break;
             }
         }
+
+        /*provider?.GetService<ITransactionsRepository>()?.DeleteByAccountId(firstAccount.Id);
+        provider?.GetService<IAccountsRepository>()?.Delete(firstAccount);
+        provider?.GetService<IUsersRepository>()?.Delete(secondUser);*/
     }
 }

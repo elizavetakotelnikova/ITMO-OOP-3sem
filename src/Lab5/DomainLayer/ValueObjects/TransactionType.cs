@@ -5,6 +5,8 @@ public enum TransactionType
     View,
     Withdraw,
     TopUp,
-    Login,
-    Creation,
+    LogIn,
+    CreateUser,
+    CreateAccount,
+    ShowBalance,
 }

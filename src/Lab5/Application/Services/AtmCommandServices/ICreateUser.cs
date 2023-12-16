@@ -1,7 +1,8 @@
 using ExecutionContext = DomainLayer.Models.ExecutionContext;
+
 namespace Application.Services.ATMCommandServices;
 
-public interface ICreateAccount
+public interface ICreateUser
 {
-    void CreateAccount(ExecutionContext context, int pinCode, long userId);
+    void CreateUser(ExecutionContext context);
 }

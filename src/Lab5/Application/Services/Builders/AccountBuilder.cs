@@ -7,6 +7,7 @@ public class AccountBuilder
     private long? _id;
     private int _pinCode;
     private int _amount;
+    private long? _userId;
 
     public AccountBuilder()
     {
@@ -18,6 +19,7 @@ public class AccountBuilder
         _id = account.Id;
         _pinCode = account.PinCode;
         _amount = account.Balance;
+        _userId = account.UserId;
     }
 
     public AccountBuilder WithAmount(int amount)
@@ -38,8 +40,15 @@ public class AccountBuilder
         return this;
     }
 
+    public AccountBuilder WithUserId(long userId)
+    {
+        _userId = userId;
+        return this;
+    }
+
     public Account Build()
     {
-        return new Account(_id, _pinCode, _amount);
+        if (_userId is null) throw new ArgumentException("userId is not specified");
+        return new Account(_id, _pinCode, _amount, _userId);
     }
 }

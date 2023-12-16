@@ -1,4 +1,5 @@
-using Application.Models;
+using DomainLayer.Models;
+using DomainLayer.ValueObjects;
 using Itmo.Dev.Platform.Postgres.Connection;
 using Itmo.Dev.Platform.Postgres.Extensions;
 using Npgsql;
@@ -121,7 +122,7 @@ public class DataBaseUserRepository : IUsersRepository
     {
         if (user is null) throw new ArgumentException("Operation cannot be done");
 
-        if (user.Name is not null && ExistsUsername(user.Name)) return;
+        if ((user.Name is not null && ExistsUsername(user.Name)) || (user.Id != 0 && ExistsId(user.Id))) return;
         const string sql = """
                            INSERT INTO users(user_name, user_role, user_password) VALUES(@username, @userRole, @userPassword)
                            RETURNING user_id;
@@ -142,5 +143,25 @@ public class DataBaseUserRepository : IUsersRepository
         if (reader.Read() is false)
             return;
         user.Id = reader.GetInt64(0);
+    }
+
+    public void Delete(User user)
+    {
+        if (user is null || user.Id == 0) throw new ArgumentException("Operation cannot be done");
+        const string sql = """
+                           DELETE FROM users
+                           WHERE user_id = :userId
+                           """;
+
+        NpgsqlConnection connection = _connectionProvider
+            .GetConnectionAsync(default)
+            .AsTask()
+            .GetAwaiter()
+            .GetResult();
+
+        using var command = new NpgsqlCommand(sql, connection);
+        command.AddParameter("userId", user.Id);
+        using NpgsqlDataReader reader = command.ExecuteReader();
+        command.Dispose();
     }
 }

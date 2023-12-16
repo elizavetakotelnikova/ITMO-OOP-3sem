@@ -5,7 +5,7 @@ namespace Application.Commands;
 
 public class DisconnectCommand : ICommand
 {
-    private IDisconnect _receiver;
+    private readonly IDisconnect _receiver;
 
     public DisconnectCommand(IDisconnect? receiver)
     {

@@ -5,7 +5,7 @@ namespace Application.Services.ATMCommandServices;
 
 public class AtmTopUp : ITopUp
 {
-    private IAccountsRepository _repository;
+    private readonly IAccountsRepository _repository;
 
     public AtmTopUp(IAccountsRepository repository)
     {
@@ -14,7 +14,7 @@ public class AtmTopUp : ITopUp
 
     public void TopUp(Account account, int amount)
     {
-        if (account is null) throw new ArgumentNullException(nameof(account));
+        if (account is null) throw new ArgumentException("Seems, you haven't logged in any account yet");
         account.Balance += amount;
         _repository.UpdateAmount(account, amount);
     }

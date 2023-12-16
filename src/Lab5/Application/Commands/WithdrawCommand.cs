@@ -6,7 +6,7 @@ namespace Application.Commands;
 
 public class WithdrawCommand : ICommand
 {
-    private IWithdrawMoney _receiver;
+    private readonly IWithdrawMoney _receiver;
     private int _amount;
 
     public WithdrawCommand(IWithdrawMoney? receiver)

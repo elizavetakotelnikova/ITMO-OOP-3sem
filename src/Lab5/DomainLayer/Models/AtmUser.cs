@@ -1,5 +1,3 @@
-using Application.Models;
-
 namespace DomainLayer.Models;
 
 public record AtmUser

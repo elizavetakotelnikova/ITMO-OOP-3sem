@@ -1,4 +1,5 @@
-using Application.Models;
+using DomainLayer.Models;
+
 namespace Ports.Repositories;
 
 public interface IUsersRepository
@@ -8,4 +9,5 @@ public interface IUsersRepository
     bool ExistsId(long? id);
     bool ExistsUsername(string username);
     void Add(User user);
+    void Delete(User user);
 }

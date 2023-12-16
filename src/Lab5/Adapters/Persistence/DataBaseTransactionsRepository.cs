@@ -1,4 +1,3 @@
-using System.Globalization;
 using Application.Commands;
 using DomainLayer.Models;
 using DomainLayer.ValueObjects;
@@ -23,32 +22,32 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
     {
         if (context is null || command is null) throw new ArgumentException("Operation cannot be done");
         TransactionType transactionType = TransactionType.View;
-        string transactionTypeString = "view";
         switch (command)
         {
             case LogInCommand:
-                transactionType = TransactionType.Login;
-                transactionTypeString = "login";
+                transactionType = TransactionType.LogIn;
                 break;
             case CreateAccountCommand:
-                transactionType = TransactionType.Creation;
-                transactionTypeString = "creation";
+                transactionType = TransactionType.CreateAccount;
+                break;
+            case CreateUserCommand:
+                transactionType = TransactionType.CreateUser;
                 break;
             case TopUpCommand:
                 transactionType = TransactionType.TopUp;
-                transactionTypeString = "topUp";
                 break;
             case WithdrawCommand:
                 transactionType = TransactionType.Withdraw;
-                transactionTypeString = "withdraw";
                 break;
             case DisconnectCommand:
                 return;
+            case ShowBalanceCommand:
+                transactionType = TransactionType.ShowBalance;
+                break;
         }
 
-        string type = transactionType.ToString().ToLower(new CultureInfo("en-US", false));
         const string sql = """
-                           INSERT INTO transactions_info(transaction_account, transaction_type, transaction_state, transaction_userId) VALUES(@accountId, CAST(@transactionType as transaction_type), CAST(@transactionState as "transaction_state"), @userId);
+                           INSERT INTO transactions_info(transaction_account, transaction_type, transaction_state, transaction_userId) VALUES(@accountId, @transactionType, @transactionState, @userId);
                            """;
 
         NpgsqlConnection connection = _connectionProvider
@@ -59,8 +58,8 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
 
         using var commandSql = new NpgsqlCommand(sql, connection);
         commandSql.AddParameter("@accountId", context.AtmUser?.Account?.Id);
-        commandSql.AddParameter("@transactionType", transactionTypeString);
-        commandSql.AddParameter("@transactionState", "commit");
+        commandSql.AddParameter("@transactionType", transactionType);
+        commandSql.AddParameter("@transactionState", TransactionState.Commit);
         commandSql.AddParameter("@userId", context.AtmUser?.User?.Id);
         using NpgsqlDataReader reader = commandSql.ExecuteReader();
         commandSql.Dispose();
@@ -69,7 +68,6 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
     public IList<string>? GetInfo(ExecutionContext context)
     {
         if (context?.AtmUser?.Account is null) throw new ArgumentException("Operation cannot be done");
-
         const string sql = """
                            select transaction_account, transaction_type, transaction_state
                            from transactions_info
@@ -96,5 +94,25 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
         }
 
         return result;
+    }
+
+    public void DeleteByAccountId(long? accountId)
+    {
+        if (accountId == 0) throw new ArgumentException("Operation cannot be done");
+        const string sql = """
+                           DELETE FROM transactions_info
+                           WHERE transaction_account = :accountId
+                           """;
+
+        NpgsqlConnection connection = _connectionProvider
+            .GetConnectionAsync(default)
+            .AsTask()
+            .GetAwaiter()
+            .GetResult();
+
+        using var command = new NpgsqlCommand(sql, connection);
+        command.AddParameter("accountId", accountId);
+        using NpgsqlDataReader reader = command.ExecuteReader();
+        command.Dispose();
     }
 }

@@ -1,4 +1,6 @@
-namespace Application.Models;
+using DomainLayer.ValueObjects;
+
+namespace DomainLayer.Models;
 
 public record User
 {

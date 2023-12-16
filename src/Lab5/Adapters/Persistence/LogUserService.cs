@@ -1,5 +1,4 @@
 using System.Globalization;
-using Application.Models;
 using DomainLayer.Models;
 using DomainLayer.ValueObjects;
 using Ports.Input;
@@ -14,15 +13,13 @@ public class LogUserService : IAuthorizeUser
 {
     private readonly IUsersRepository _userRepository;
     private readonly IAccountsRepository _accountsRepository;
-    private AtmUser? _currentUser;
     private IParse _parser;
     private IDisplayMessage _outputDisplayer;
 
-    public LogUserService(IUsersRepository userRepository, IAccountsRepository accountsRepository, AtmUser? currentAccount, IParse parse, IDisplayMessage outputDisplayer)
+    public LogUserService(IUsersRepository userRepository, IAccountsRepository accountsRepository, IParse parse, IDisplayMessage outputDisplayer)
     {
         _userRepository = userRepository;
         _accountsRepository = accountsRepository;
-        _currentUser = currentAccount;
         _parser = parse;
         _outputDisplayer = outputDisplayer;
     }
@@ -30,7 +27,7 @@ public class LogUserService : IAuthorizeUser
     public SearchResult LogInUser(ExecutionContext context)
     {
         if (context is null) throw new ArgumentNullException(nameof(context));
-        _outputDisplayer.DisplayMessage("ENTER ACCOUNT ID AND PIN CODE IN THE NEXT LINE");
+        _outputDisplayer.DisplayMessage("Enter account ID and PIN code in the next line");
         IList<string> tokenizedLine = _parser.GetLine();
         Account? account = _accountsRepository.FindAccountByAccountId(int.Parse(tokenizedLine[0], new NumberFormatInfo()));
         if (account is null)
@@ -40,16 +37,15 @@ public class LogUserService : IAuthorizeUser
 
         if (account.PinCode != int.Parse(tokenizedLine[1], new NumberFormatInfo())) return SearchResult.NotFound;
         User? user = _accountsRepository.FindUserByAccountId(account.Id);
-        _currentUser = new AtmUser(account, user);
         context.CurrentMode = UserRole.User;
-        context.AtmUser = _currentUser;
+        context.AtmUser = new AtmUser(account, user);
         return SearchResult.Success;
     }
 
     public SearchResult LogInAdmin(ExecutionContext context)
     {
         if (context is null) throw new ArgumentNullException(nameof(context));
-        _outputDisplayer.DisplayMessage("ENTER ADMIN'S PASSWORD");
+        _outputDisplayer.DisplayMessage("Enter admin's password");
         IList<string> tokenizedLine = _parser.GetLine();
         DataCheckResult check = CheckPassword("admin", tokenizedLine[0]);
         if (check is DataCheckResult.Incorrect)
@@ -58,8 +54,7 @@ public class LogUserService : IAuthorizeUser
         }
 
         User? user = _userRepository.FindUserByUsername("admin");
-        _currentUser = new AtmUser(null, user); // или это в контекст закинуть
-        context.AtmUser = _currentUser;
+        context.AtmUser = new AtmUser(null, user);
         context.CurrentMode = UserRole.Admin;
         return SearchResult.Success;
     }
@@ -76,8 +71,16 @@ public class LogUserService : IAuthorizeUser
     public LogInResult LogIn(UserRole role, ExecutionContext context)
     {
         SearchResult result = SearchResult.Success;
-        if (role == UserRole.User) result = LogInUser(context);
-        if (role == UserRole.Admin) result = LogInAdmin(context);
+        switch (role)
+        {
+            case UserRole.Admin:
+                result = LogInAdmin(context);
+                break;
+            case UserRole.User:
+                result = LogInUser(context);
+                break;
+        }
+
         if (result == SearchResult.NotFound) return LogInResult.NotFound;
         return LogInResult.Success;
     }

@@ -22,9 +22,11 @@ public class Initial : SqlMigration
     (
        'view',
        'withdraw',
-       'topUp',
-       'login',
-       'creation'
+       'top_up',
+       'log_in',
+       'create_user',
+       'create_account',
+       'show_balance'
     );
 
     create table users
