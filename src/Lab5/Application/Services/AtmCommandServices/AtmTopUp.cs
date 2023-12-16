@@ -1,13 +1,13 @@
-using DomainLayer.ValueObjects;
+using DomainLayer.Models;
 using Ports.Repositories;
 
 namespace Application.Services.ATMCommandServices;
 
-public class AtmTopUpService : ITopUp
+public class AtmTopUp : ITopUp
 {
     private IAccountsRepository _repository;
 
-    public AtmTopUpService(IAccountsRepository repository)
+    public AtmTopUp(IAccountsRepository repository)
     {
         _repository = repository;
     }
@@ -15,7 +15,7 @@ public class AtmTopUpService : ITopUp
     public void TopUp(Account account, int amount)
     {
         if (account is null) throw new ArgumentNullException(nameof(account));
-        account.Amount += amount;
+        account.Balance += amount;
         _repository.UpdateAmount(account, amount);
     }
 }

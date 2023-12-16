@@ -6,11 +6,11 @@ using Ports.Input.Logging;
 
 namespace Application.Services;
 
-public class Configure
+public class ConfigureCommands
 {
     private static ServiceProvider? _provider;
 
-    public Configure(ServiceProvider provider)
+    public ConfigureCommands(ServiceProvider provider)
     {
         _provider = provider;
     }

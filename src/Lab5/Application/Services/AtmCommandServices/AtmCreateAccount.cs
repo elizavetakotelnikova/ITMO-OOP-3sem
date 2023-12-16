@@ -1,15 +1,15 @@
 using Application.Models;
-using DomainLayer.ValueObjects;
+using DomainLayer.Models;
 using Ports.Repositories;
 using ExecutionContext = DomainLayer.Models.ExecutionContext;
 namespace Application.Services.ATMCommandServices;
 
-public class AtmCreateAccountService : ICreateAccount
+public class AtmCreateAccount : ICreateAccount
 {
     private IAccountsRepository _accountsRepository;
     private IUsersRepository _usersRepository;
 
-    public AtmCreateAccountService(IAccountsRepository accountsRepository, IUsersRepository usersRepository)
+    public AtmCreateAccount(IAccountsRepository accountsRepository, IUsersRepository usersRepository)
     {
         _accountsRepository = accountsRepository;
         _usersRepository = usersRepository;

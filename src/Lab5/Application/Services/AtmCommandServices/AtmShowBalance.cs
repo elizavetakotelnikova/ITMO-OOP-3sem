@@ -1,4 +1,4 @@
-using DomainLayer.ValueObjects;
+using DomainLayer.Models;
 using Ports.Output;
 using Ports.Repositories;
 
@@ -18,13 +18,13 @@ public class AtmShowBalance : IShowBalance
     public void ShowBalance(Account account)
     {
         if (account is null) throw new ArgumentNullException(nameof(account));
-        _display.DisplayMessage($"Account has {account.Amount}$");
+        _display.DisplayMessage($"Account has {account.Balance}$");
     }
 
     public void ShowBalance(long accountId)
     {
-        Account account = _repository.FindAccountByNumber(accountId) ??
+        Account account = _repository.FindAccountByAccountId(accountId) ??
                           throw new ArgumentException("Account not found");
-        _display.DisplayMessage($"Account has {account.Amount}$");
+        _display.DisplayMessage($"Account has {account.Balance}$");
     }
 }

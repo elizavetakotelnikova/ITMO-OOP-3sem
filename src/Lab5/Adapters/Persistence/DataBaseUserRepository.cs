@@ -1,5 +1,4 @@
 using Application.Models;
-using Application.Services.Builder;
 using Itmo.Dev.Platform.Postgres.Connection;
 using Itmo.Dev.Platform.Postgres.Extensions;
 using Npgsql;
@@ -124,7 +123,7 @@ public class DataBaseUserRepository : IUsersRepository
 
         if (user.Name is not null && ExistsUsername(user.Name)) return;
         const string sql = """
-                           INSERT INTO users(user_name, user_role, user_password) VALUES(@user.Name, @user.Role, @user.Password)
+                           INSERT INTO users(user_name, user_role, user_password) VALUES(@username, @userRole, @userPassword)
                            RETURNING user_id;
                            """;
 
@@ -135,9 +134,9 @@ public class DataBaseUserRepository : IUsersRepository
             .GetResult();
 
         using var command = new NpgsqlCommand(sql, connection);
-        command.AddParameter("@user.Name", user.Name);
-        command.AddParameter("@user.Role", user.Role);
-        command.AddParameter("@user.Password", user.Password);
+        command.AddParameter("@username", user.Name);
+        command.AddParameter("@userRole", user.Role);
+        command.AddParameter("@userPassword", user.Password);
         using NpgsqlDataReader reader = command.ExecuteReader();
         command.Dispose();
         if (reader.Read() is false)

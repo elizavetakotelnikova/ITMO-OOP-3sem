@@ -1,6 +1,6 @@
-using DomainLayer.ValueObjects;
+using DomainLayer.Models;
 
-namespace Application.Services.Builder;
+namespace Application.Services.Builders;
 
 public class AccountBuilder
 {
@@ -15,9 +15,9 @@ public class AccountBuilder
     public AccountBuilder(Account account)
     {
         if (account is null) throw new ArgumentNullException(nameof(account));
-        _id = account.AccountId;
-        _pinCode = account.AccountPinCode;
-        _amount = account.Amount;
+        _id = account.Id;
+        _pinCode = account.PinCode;
+        _amount = account.Balance;
     }
 
     public AccountBuilder WithAmount(int amount)

@@ -11,6 +11,7 @@
         <PackageReference Include="Itmo.Dev.Platform.Postgres" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
         <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="Moq" />
         <PackageReference Include="Npgsql" />
         <PackageReference Include="NSubstitute" />
         <PackageReference Include="Spectre.Console" />

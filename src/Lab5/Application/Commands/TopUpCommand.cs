@@ -29,7 +29,7 @@ public class TopUpCommand : ICommand
 
     public void Execute(ExecutionContext context)
     {
-        if (_amount == 0) throw new ArgumentException("Amount is not set");
+        if (_amount == 0) throw new ArgumentException("Balance is not set");
         if (context?.AtmUser is null || context.AtmUser.Account is null) throw new ArgumentNullException(nameof(context));
         _receiver.TopUp(context.AtmUser.Account, _amount);
     }

@@ -1,4 +1,4 @@
-namespace DomainLayer.Models;
+namespace DomainLayer.ValueObjects;
 
 public enum DataCheckResult
 {

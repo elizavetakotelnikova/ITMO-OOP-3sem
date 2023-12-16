@@ -1,6 +1,6 @@
 using Application.Models;
 
-namespace Application.Services.Builder;
+namespace Application.Services.Builders;
 
 public class UserBuilder
 {

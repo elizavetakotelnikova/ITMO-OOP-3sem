@@ -48,7 +48,7 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
 
         string type = transactionType.ToString().ToLower(new CultureInfo("en-US", false));
         const string sql = """
-                           INSERT INTO transactions_info(transaction_account, transaction_type, transaction_state, transaction_userId) VALUES(@accountId, CAST(@transaction.Type as transaction_type), CAST(@commit as "transaction_state"), @userId);
+                           INSERT INTO transactions_info(transaction_account, transaction_type, transaction_state, transaction_userId) VALUES(@accountId, CAST(@transactionType as transaction_type), CAST(@transactionState as "transaction_state"), @userId);
                            """;
 
         NpgsqlConnection connection = _connectionProvider
@@ -58,12 +58,9 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
             .GetResult();
 
         using var commandSql = new NpgsqlCommand(sql, connection);
-        commandSql.AddParameter("@accountId", context.AtmUser?.Account?.AccountId);
-        commandSql.AddParameter("@transaction.Type", transactionTypeString);
-        /*commandSql.Parameters.Add("@transaction.Type", NpgsqlDbType.Numeric);
-        commandSql.Parameters["@transaction.Type"].Value = transactionType;*/
-        commandSql.AddParameter("@commit", "commit");
-
+        commandSql.AddParameter("@accountId", context.AtmUser?.Account?.Id);
+        commandSql.AddParameter("@transactionType", transactionTypeString);
+        commandSql.AddParameter("@transactionState", "commit");
         commandSql.AddParameter("@userId", context.AtmUser?.User?.Id);
         using NpgsqlDataReader reader = commandSql.ExecuteReader();
         commandSql.Dispose();
@@ -71,7 +68,7 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
 
     public IList<string>? GetInfo(ExecutionContext context)
     {
-        if (context is null || context.AtmUser?.Account is null) throw new ArgumentException("Operation cannot be done");
+        if (context?.AtmUser?.Account is null) throw new ArgumentException("Operation cannot be done");
 
         const string sql = """
                            select transaction_account, transaction_type, transaction_state
@@ -86,7 +83,7 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
             .GetResult();
 
         using var command = new NpgsqlCommand(sql, connection);
-        command.AddParameter("id", context.AtmUser.Account.AccountId);
+        command.AddParameter("id", context.AtmUser.Account.Id);
         using NpgsqlDataReader reader = command.ExecuteReader();
         command.Dispose();
         if (reader.Read() is false)

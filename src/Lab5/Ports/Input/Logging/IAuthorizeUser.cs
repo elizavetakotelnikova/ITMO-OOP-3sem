@@ -1,4 +1,4 @@
-using DomainLayer.Models;
+using DomainLayer.ValueObjects;
 
 namespace Ports.Input.Logging;
 

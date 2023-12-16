@@ -1,13 +1,9 @@
-using DomainLayer.ValueObjects;
+using Application.Models;
 
-namespace Application.Models;
+namespace DomainLayer.Models;
 
 public record AtmUser
 {
-    public AtmUser()
-    {
-    }
-
     public AtmUser(Account? account, User? user)
     {
         Account = account;

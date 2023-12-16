@@ -30,7 +30,7 @@ public static class ConfigurateProvider
         IServiceScope scope = provider.CreateScope();
         scope.UseInfrastructureDataAccess();
         scope.Dispose();
-        var configure = new Configure(provider);
+        var configure = new ConfigureCommands(provider);
         return provider;
     }
 }

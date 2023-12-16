@@ -1,15 +1,13 @@
 using System;
-using System.IO;
-using Adapters;
-using Adapters.UI;
+using System.Collections.Generic;
+using Adapters.Persistence;
 using Application.Commands;
 using Application.Models;
-using Application.ServiceCollectionExtensions;
-using Application.Services;
-using Application.Services.Builder;
+using Application.Services.ATMCommandServices;
 using DomainLayer.Models;
-using DomainLayer.ValueObjects;
-using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
+using Ports.Input;
+using Ports.Output;
 using Ports.Repositories;
 using Xunit;
 
@@ -17,67 +15,129 @@ namespace Itmo.ObjectOrientedProgramming.Lab5.Tests;
 
 public class BankTests
 {
-    // tests with files and directories are commented because of the github check
     [Fact]
-    public void NotEnoughMoneyToWithdrawShouldReturnError()
+    public void NotEnoughMoneyToWithdrawWithoutLoggingShouldReturnError()
     {
-        var collection = new ServiceCollection();
-
-        collection
-            .AddApplication()
-            .AddInfrastructureDataAccess(configuration =>
-            {
-                configuration.Host = "localhost";
-                configuration.Port = 6432;
-                configuration.Username = "postgres";
-                configuration.Password = "postgres";
-                configuration.Database = "postgres";
-                configuration.SslMode = "Prefer";
-            })
-            .AddAdapters();
-
-        ServiceProvider provider = collection.BuildServiceProvider();
-        var configure = new Configure(provider);
+        IList<Account> accounts = new List<Account>
+        {
+            new Account(154, 3333, 21),
+            new Account(23, 3331, 0),
+        };
+        IList<User> users = new List<User>
+        {
+            new User(1, UserRole.Admin, "admin", "9999"),
+            new User(23, UserRole.User, null, null),
+        };
 
         // repository mocking
-        IUsersRepository usersRepository = NSubstitute.Substitute.For<IUsersRepository>();
-        ITransactionsRepository transactionsRepository = NSubstitute.Substitute.For<ITransactionsRepository>();
-        IAccountsRepository accountsRepository = NSubstitute.Substitute.For<IAccountsRepository>();
+        IUsersRepository usersRepository = Substitute.For<IUsersRepository>();
+        ITransactionsRepository transactionsRepository = Substitute.For<ITransactionsRepository>();
+        IAccountsRepository accountsRepository = Substitute.For<IAccountsRepository>();
 
-        // creating test entities
-        User testUser = new UserBuilder().WithRole(UserRole.User).WithName("Sam").Build();
-        Account testAccount = new AccountBuilder().WithPinCode(5643).Build();
-        usersRepository.Add(testUser);
-        accountsRepository.Add(testAccount, testUser);
-        testUser = new UserBuilder(testUser).WithId(1).Build();
-        testAccount = new AccountBuilder(testAccount).WithId(200).WithAmount(2).WithPinCode(5643).Build();
-
-        // testing itself
-        Console.SetIn(new StringReader("log in User"));
-        var parser = new ConsoleCommandParser();
-        ICommand result = parser.Parse();
-        var invoker = new CommandInvoker(transactionsRepository, new ExecutionContext(UserRole.User, new AtmUser(testAccount, testUser)));
-        Console.SetIn(new StringReader($"1 1234"));
-        invoker.Consume(result);
-        Console.SetIn(new StringReader("withdraw 23"));
-        result = parser.Parse();
+        var context = new ExecutionContext(UserRole.User, new AtmUser(accounts[0], users[1]));
+        var invoker = new CommandInvoker(transactionsRepository, context);
+        var withdrawCommand = new WithdrawCommand(new AtmWithdrawMoney(accountsRepository), 23);
         ArgumentException exception =
-            Assert.Throws<ArgumentException>(() => invoker.Consume(result));
+            Assert.Throws<ArgumentException>(() => invoker.Consume(withdrawCommand));
         Assert.Equal("Not enough money", exception.Message);
     }
 
-    /*[Fact]
-    public void FileRenameCommandWithoutConnectShouldReturnArgumentNullException()
+    [Fact]
+    public void NotEnoughMoneyToWithdrawShouldReturnError()
     {
-        var parser = new ConsoleCommandParser();
-        var invoker = new CommandInvoker(new ExecutionContext(null));
-        Console.SetIn(new StringReader("file rename \\text.txt NewNaming.txt"));
-        ICommand result = parser.Parse();
-        ArgumentNullException exception =
-            Assert.Throws<ArgumentNullException>(() => invoker.Consume(result));
+        IList<Account> accounts = new List<Account>
+        {
+            new Account(154, 3333, 21),
+            new Account(23, 3331, 0),
+        };
+        IList<User> users = new List<User>
+        {
+            new User(1, UserRole.Admin, "admin", "9999"),
+            new User(23, UserRole.User, null, null),
+        };
+
+        // repository mocking
+        IUsersRepository usersRepository = Substitute.For<IUsersRepository>();
+        ITransactionsRepository transactionsRepository = Substitute.For<ITransactionsRepository>();
+        IAccountsRepository accountsRepository = Substitute.For<IAccountsRepository>();
+        IParse parser = Substitute.For<IParse>();
+        IDisplayMessage display = Substitute.For<IDisplayMessage>();
+        accountsRepository.FindAccountByAccountId(154).Returns(accounts[0]);
+        accountsRepository.FindUserByAccountId(154).Returns(users[1]);
+        parser.GetLine().Returns(new List<string>() { "154", "3333" });
+
+        var logger = new LogUserService(usersRepository, accountsRepository, null, parser, display);
+        var context = new ExecutionContext(UserRole.User, new AtmUser(null, null));
+        var invoker = new CommandInvoker(transactionsRepository, context);
+        var logInCommand = new LogInCommand(logger, UserRole.User, new List<string>() { "User" });
+        invoker.Consume(logInCommand);
+        var withdrawCommand = new WithdrawCommand(new AtmWithdrawMoney(accountsRepository), 23);
+        ArgumentException exception =
+            Assert.Throws<ArgumentException>(() => invoker.Consume(withdrawCommand));
+        Assert.Equal("Not enough money", exception.Message);
     }
 
     [Fact]
+    public void EnoughMoneyToWithdrawShouldReturnCorrectAccountAmount()
+    {
+        IList<Account> accounts = new List<Account>
+        {
+            new Account(154, 3333, 21),
+            new Account(23, 3331, 0),
+        };
+        IList<User> users = new List<User>
+        {
+            new User(1, UserRole.Admin, "admin", "9999"),
+            new User(23, UserRole.User, null, null),
+        };
+
+        // repository mocking
+        IUsersRepository usersRepository = Substitute.For<IUsersRepository>();
+        ITransactionsRepository transactionsRepository = Substitute.For<ITransactionsRepository>();
+        IAccountsRepository accountsRepository = Substitute.For<IAccountsRepository>();
+        IParse parser = Substitute.For<IParse>();
+        IDisplayMessage display = Substitute.For<IDisplayMessage>();
+        accountsRepository.FindAccountByAccountId(154).Returns(accounts[0]);
+        accountsRepository.FindUserByAccountId(154).Returns(users[1]);
+        parser.GetLine().Returns(new List<string>() { "154", "3333" });
+
+        var logger = new LogUserService(usersRepository, accountsRepository, null, parser, display);
+        var context = new ExecutionContext(UserRole.User, new AtmUser(null, null));
+        var invoker = new CommandInvoker(transactionsRepository, context);
+        var logInCommand = new LogInCommand(logger, UserRole.User, new List<string>() { "User" });
+        invoker.Consume(logInCommand);
+        var withdrawCommand = new WithdrawCommand(new AtmWithdrawMoney(accountsRepository), 20);
+        invoker.Consume(withdrawCommand);
+        Assert.True(accounts[0].Balance == 1);
+    }
+
+    [Fact]
+    public void TopUpAccountWith0ShouldReturn50()
+    {
+        IList<Account> accounts = new List<Account>
+        {
+            new Account(154, 3333, 21),
+            new Account(23, 3331, 0),
+        };
+        IList<User> users = new List<User>
+        {
+            new User(1, UserRole.Admin, "admin", "9999"),
+            new User(23, UserRole.User, null, null),
+        };
+
+        // repository mocking
+        IUsersRepository usersRepository = Substitute.For<IUsersRepository>();
+        ITransactionsRepository transactionsRepository = Substitute.For<ITransactionsRepository>();
+        IAccountsRepository accountsRepository = Substitute.For<IAccountsRepository>();
+
+        var context = new ExecutionContext(UserRole.User, new AtmUser(accounts[1], users[1]));
+        var invoker = new CommandInvoker(transactionsRepository, context);
+        var topUpCommand = new TopUpCommand(new AtmTopUp(accountsRepository), 50);
+        invoker.Consume(topUpCommand);
+        Assert.True(accounts[1].Balance == 50);
+    }
+
+    /*[Fact]
     public void ConnectAndTreeGoToPassedShouldReturnRightPath()
     {
         Console.SetIn(new StringReader(

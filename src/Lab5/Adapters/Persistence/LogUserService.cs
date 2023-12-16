@@ -10,7 +10,7 @@ using ExecutionContext = DomainLayer.Models.ExecutionContext;
 
 namespace Adapters.Persistence;
 
-internal class LogUserService : IAuthorizeUser
+public class LogUserService : IAuthorizeUser
 {
     private readonly IUsersRepository _userRepository;
     private readonly IAccountsRepository _accountsRepository;
@@ -18,7 +18,7 @@ internal class LogUserService : IAuthorizeUser
     private IParse _parser;
     private IDisplayMessage _outputDisplayer;
 
-    public LogUserService(IUsersRepository userRepository, IAccountsRepository accountsRepository, AtmUser currentAccount, IParse parse, IDisplayMessage outputDisplayer)
+    public LogUserService(IUsersRepository userRepository, IAccountsRepository accountsRepository, AtmUser? currentAccount, IParse parse, IDisplayMessage outputDisplayer)
     {
         _userRepository = userRepository;
         _accountsRepository = accountsRepository;
@@ -29,16 +29,17 @@ internal class LogUserService : IAuthorizeUser
 
     public SearchResult LogInUser(ExecutionContext context)
     {
+        if (context is null) throw new ArgumentNullException(nameof(context));
         _outputDisplayer.DisplayMessage("ENTER ACCOUNT ID AND PIN CODE IN THE NEXT LINE");
         IList<string> tokenizedLine = _parser.GetLine();
-        Account? account = _accountsRepository.FindAccountByNumber(int.Parse(tokenizedLine[0], new NumberFormatInfo()));
+        Account? account = _accountsRepository.FindAccountByAccountId(int.Parse(tokenizedLine[0], new NumberFormatInfo()));
         if (account is null)
         {
             return SearchResult.NotFound;
         }
 
-        if (account.AccountPinCode != int.Parse(tokenizedLine[1], new NumberFormatInfo())) return SearchResult.NotFound;
-        User? user = _accountsRepository.FindUserByAccountId(account.AccountId);
+        if (account.PinCode != int.Parse(tokenizedLine[1], new NumberFormatInfo())) return SearchResult.NotFound;
+        User? user = _accountsRepository.FindUserByAccountId(account.Id);
         _currentUser = new AtmUser(account, user);
         context.CurrentMode = UserRole.User;
         context.AtmUser = _currentUser;
@@ -47,6 +48,7 @@ internal class LogUserService : IAuthorizeUser
 
     public SearchResult LogInAdmin(ExecutionContext context)
     {
+        if (context is null) throw new ArgumentNullException(nameof(context));
         _outputDisplayer.DisplayMessage("ENTER ADMIN'S PASSWORD");
         IList<string> tokenizedLine = _parser.GetLine();
         DataCheckResult check = CheckPassword("admin", tokenizedLine[0]);
@@ -67,7 +69,7 @@ internal class LogUserService : IAuthorizeUser
         string? actualPassword = _userRepository.FindPasswordByUsername(username);
 
         if (actualPassword is null) return DataCheckResult.Incorrect;
-        if (!providedPassword.Equals(actualPassword, StringComparison.Ordinal)) return DataCheckResult.Incorrect;
+        if (!actualPassword.Equals(providedPassword, StringComparison.Ordinal)) return DataCheckResult.Incorrect;
         return DataCheckResult.Correct;
     }
 

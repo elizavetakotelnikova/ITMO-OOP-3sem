@@ -1,6 +1,6 @@
 using DomainLayer.Models;
 
-namespace Application.Services;
+namespace Application.Services.CommandHandlers;
 
 public class ArgumentsHandler : ResponsibilityChainBase
 {

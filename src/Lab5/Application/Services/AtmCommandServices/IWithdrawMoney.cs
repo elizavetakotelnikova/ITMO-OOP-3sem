@@ -1,4 +1,4 @@
-using DomainLayer.ValueObjects;
+using DomainLayer.Models;
 
 namespace Application.Services.ATMCommandServices;
 

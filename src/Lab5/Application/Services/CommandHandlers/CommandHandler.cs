@@ -1,6 +1,6 @@
 using DomainLayer.Models;
 
-namespace Application.Services;
+namespace Application.Services.CommandHandlers;
 
 public class CommandHandler : ResponsibilityChainBase
 {
@@ -14,7 +14,7 @@ public class CommandHandler : ResponsibilityChainBase
         foreach (string part in request.TokenizedLine)
         {
             commandPart += part;
-            if (Configure.CommandsDictionary.TryGetValue(commandPart, out Func<ICommand>? commandDelegate))
+            if (ConfigureCommands.CommandsDictionary.TryGetValue(commandPart, out Func<ICommand>? commandDelegate))
             {
                 request.Command = commandDelegate();
                 listToRemove.Add(part);

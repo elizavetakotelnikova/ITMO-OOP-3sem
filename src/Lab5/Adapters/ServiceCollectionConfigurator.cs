@@ -2,8 +2,7 @@ using Adapters.Persistence;
 using Adapters.UI;
 using Application.Extensions;
 using Application.Migration;
-using Application.Models;
-using DomainLayer.ValueObjects;
+using DomainLayer.Models;
 using Itmo.Dev.Platform.Postgres.Extensions;
 using Itmo.Dev.Platform.Postgres.Models;
 using Itmo.Dev.Platform.Postgres.Plugins;
@@ -15,7 +14,7 @@ using Ports.Repositories;
 
 namespace Adapters;
 
-public static class ServiceCollectionExtensions
+public static class ServiceCollectionConfigurator
 {
     public static IServiceCollection AddAdapters(this IServiceCollection collection)
     {
