@@ -29,7 +29,7 @@ public class UserBuilder
         return this;
     }
 
-    public UserBuilder WithName(string name)
+    public UserBuilder WithName(string? name)
     {
         _name = name;
         return this;

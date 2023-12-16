@@ -25,6 +25,7 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
         switch (command)
         {
             case LogInCommand:
+                if (context.AtmUser.Account is null) return;
                 transactionType = TransactionType.LogIn;
                 break;
             case CreateAccountCommand:
@@ -99,7 +100,7 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
 
     public void DeleteByAccountId(long? accountId)
     {
-        if (accountId == 0) throw new ArgumentException("Operation cannot be done");
+        if (accountId is null) throw new ArgumentException("Operation cannot be done");
         const string sql = """
                            DELETE FROM transactions_info
                            WHERE transaction_account = :accountId
@@ -113,6 +114,26 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
 
         using var command = new NpgsqlCommand(sql, connection);
         command.AddParameter("accountId", accountId);
+        using NpgsqlDataReader reader = command.ExecuteReader();
+        command.Dispose();
+    }
+
+    public void DeleteByUserId(long? userId)
+    {
+        if (userId is null) throw new ArgumentException("Operation cannot be done");
+        const string sql = """
+                           DELETE FROM transactions_info
+                           WHERE transaction_userid = :userId
+                           """;
+
+        NpgsqlConnection connection = _connectionProvider
+            .GetConnectionAsync(default)
+            .AsTask()
+            .GetAwaiter()
+            .GetResult();
+
+        using var command = new NpgsqlCommand(sql, connection);
+        command.AddParameter("userId", userId);
         using NpgsqlDataReader reader = command.ExecuteReader();
         command.Dispose();
     }

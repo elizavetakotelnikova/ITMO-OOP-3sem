@@ -4,5 +4,5 @@ namespace Application.Services.ATMCommandServices;
 
 public interface ICreateUser
 {
-    void CreateUser(ExecutionContext context);
+    void CreateUser(ExecutionContext context, string? username);
 }

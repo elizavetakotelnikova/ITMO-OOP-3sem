@@ -38,8 +38,18 @@ internal class Program
             }
         }
 
+        // in case we have to demonstrate how we can change admin's password => example of deleting admin's profile
+
+        /*User? admin = provider?.GetService<IUsersRepository>()?.FindUserByUsername("admin");
+        if (admin is not null)
+        {
+            provider?.GetService<ITransactionsRepository>()?.DeleteByUserId(admin.Id);
+            provider?.GetService<IUsersRepository>()?.Delete(admin);
+        }*/
+
         /*provider?.GetService<ITransactionsRepository>()?.DeleteByAccountId(firstAccount.Id);
         provider?.GetService<IAccountsRepository>()?.Delete(firstAccount);
+        provider?.GetService<ITransactionsRepository>()?.DeleteByUserId(secondUser.Id);
         provider?.GetService<IUsersRepository>()?.Delete(secondUser);*/
     }
 }
