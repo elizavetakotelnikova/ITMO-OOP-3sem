@@ -88,9 +88,10 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
             return null;
 
         IList<string> result = new List<string>();
-        while (reader.Read())
+        while (reader.HasRows)
         {
             result.Add($"Account {reader.GetInt64(0)}, type {reader.GetString(1)}, state {reader.GetString(2)}");
+            if (reader.Read() is false) break;
         }
 
         return result;
