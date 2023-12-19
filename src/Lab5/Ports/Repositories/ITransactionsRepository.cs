@@ -9,4 +9,5 @@ public interface ITransactionsRepository
     void DeleteByAccountId(long? accountId);
     void DeleteByUserId(long? userId);
     IList<string>? GetInfo(ExecutionContext context);
+    IList<Transaction>? GetTransactionsByUserId(ExecutionContext context);
 }

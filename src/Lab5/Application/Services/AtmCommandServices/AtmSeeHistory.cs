@@ -1,3 +1,4 @@
+using DomainLayer.Models;
 using Ports.Output;
 using Ports.Repositories;
 using ExecutionContext = DomainLayer.Models.ExecutionContext;
@@ -17,13 +18,13 @@ public class AtmSeeHistory : ISeeHistory
 
     public void SeeHistory(ExecutionContext context)
     {
-        IList<string>? requestedHistory = _repository.GetInfo(context);
+        IList<Transaction>? requestedHistory = _repository.GetTransactionsByUserId(context);
         if (requestedHistory is null || requestedHistory.Count == 0)
         {
             _display.DisplayMessage("No operations yet");
             return;
         }
 
-        requestedHistory.ToList().ForEach(x => _display.DisplayMessage(x));
+        requestedHistory.ToList().ForEach(x => _display.DisplayMessage($"Account {x.AccountId}, type {x.Type}, state {x.State}"));
     }
 }

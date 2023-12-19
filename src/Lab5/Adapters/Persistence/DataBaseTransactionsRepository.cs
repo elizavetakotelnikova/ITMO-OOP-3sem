@@ -98,6 +98,38 @@ public class DataBaseTransactionsRepository : ITransactionsRepository
         return result;
     }
 
+    public IList<Transaction>? GetTransactionsByUserId(ExecutionContext context)
+    {
+        if (context?.AtmUser?.Account is null) throw new ArgumentException("Operation cannot be done");
+        const string sql = """
+                           select transaction_account, transaction_type, transaction_state
+                           from transactions_info
+                           where transaction_account = :id;
+                           """;
+
+        NpgsqlConnection connection = _connectionProvider
+            .GetConnectionAsync(default)
+            .AsTask()
+            .GetAwaiter()
+            .GetResult();
+
+        using var command = new NpgsqlCommand(sql, connection);
+        command.AddParameter("id", context.AtmUser.Account.Id);
+        using NpgsqlDataReader reader = command.ExecuteReader();
+        command.Dispose();
+        if (reader.Read() is false)
+            return null;
+
+        IList<Transaction> result = new List<Transaction>();
+        while (reader.HasRows)
+        {
+            result.Add(new Transaction(reader.GetInt64(0), reader.GetFieldValue<TransactionType>(1), reader.GetFieldValue<TransactionState>(2)));
+            if (reader.Read() is false) break;
+        }
+
+        return result;
+    }
+
     public void DeleteByAccountId(long? accountId)
     {
         if (accountId is null) throw new ArgumentException("Operation cannot be done");
