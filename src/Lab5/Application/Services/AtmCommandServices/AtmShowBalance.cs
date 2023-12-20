@@ -1,0 +1,30 @@
+using DomainLayer.Models;
+using Ports.Output;
+using Ports.Repositories;
+
+namespace Application.Services.ATMCommandServices;
+
+public class AtmShowBalance : IShowBalance
+{
+    private readonly IDisplayMessage _display;
+    private readonly IAccountsRepository _repository;
+
+    public AtmShowBalance(IDisplayMessage display, IAccountsRepository repository)
+    {
+        _display = display;
+        _repository = repository;
+    }
+
+    public void ShowBalance(Account account)
+    {
+        if (account is null) throw new ArgumentNullException(nameof(account));
+        _display.DisplayMessage($"Account has {account.Balance}$");
+    }
+
+    public void ShowBalance(long accountId)
+    {
+        Account account = _repository.FindAccountByAccountId(accountId) ??
+                          throw new ArgumentException("Account not found");
+        _display.DisplayMessage($"Account has {account.Balance}$");
+    }
+}
