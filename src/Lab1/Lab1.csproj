@@ -6,4 +6,11 @@
 
 
 
+    <ItemGroup>
+      <PackageReference Include="Crayon" />
+      <PackageReference Include="DependencyInjection.Extensions" />
+      <PackageReference Include="Itmo.Dev.Platform.Postgres" />
+      <PackageReference Include="NSubstitute" />
+    </ItemGroup>
+
 </Project>

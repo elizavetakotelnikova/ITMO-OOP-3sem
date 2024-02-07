@@ -2,6 +2,18 @@
 
     <PropertyGroup>
         <RootNamespace>Itmo.ObjectOrientedProgramming.Lab3</RootNamespace>
+        <OutputType>Exe</OutputType>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Crayon" />
+      <PackageReference Include="DependencyInjection.Extensions" />
+      <PackageReference Include="Itmo.Dev.Platform.Postgres" />
+      <PackageReference Include="Moq" />
+      <PackageReference Include="Npgsql" />
+      <PackageReference Include="NSubstitute" />
+    </ItemGroup>
+
+
 
 </Project>
